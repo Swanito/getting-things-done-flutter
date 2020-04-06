@@ -41,7 +41,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
         navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => RegisterScreen(userRepository: this.userRepository)));
         break;
       case NavigatorAction.NavigateToHome:
-        navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => HomeScreen()));
+        navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => HomeScreen(userRepository: userRepository)));
     }
   }
 }

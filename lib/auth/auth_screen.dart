@@ -28,13 +28,13 @@ class AuthScreen extends StatelessWidget {
             SizedBox(height: 60.0),
             SizedBox(
               width: double.infinity - 100,
-              height: MediaQuery.of(context).size.height / 10,
+              height: MediaQuery.of(context).size.height / 12,
               child: loginButton,
             ),
             SizedBox(height: 15.0),
             SizedBox(
               width: double.infinity - 100,
-              height: MediaQuery.of(context).size.height / 10,
+              height: MediaQuery.of(context).size.height / 12,
               child: registerButton,
             ),
           ],
@@ -46,6 +46,7 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget loginButton = RaisedButton(
+      color: Colors.white,
       onPressed: () => {
         BlocProvider.of<NavigatorBloc>(context)
             .add(NavigatorAction.NavigateToLoginEvent),
@@ -54,6 +55,7 @@ class AuthScreen extends StatelessWidget {
     );
 
     final Widget registerButton = RaisedButton(
+      color: Colors.white,
       onPressed: () => {
                 BlocProvider.of<NavigatorBloc>(context)
             .add(NavigatorAction.NavigateToRegisterEvent),

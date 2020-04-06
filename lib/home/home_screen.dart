@@ -1,40 +1,68 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gtd/auth/authentication_bloc.dart';
+import 'package:gtd/core/repositories/remote/user_repository.dart';
+import 'package:gtd/home/more/more_screen.dart';
+import 'package:gtd/home/next/next_screen.dart';
+import 'package:gtd/home/procesar/process_screen.dart';
+import 'package:gtd/home/revisar/review_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  final String name;
+class HomeScreen extends StatefulWidget {
+  final UserRepository _userRepository;
 
-  HomeScreen({Key key, @required this.name}) : super(key: key);
+  HomeScreen({Key key, UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository;
+
+  @override
+  State<StatefulWidget> createState() {
+    return HomeScreenState(userRepository: _userRepository);
+  }
+}
+
+class HomeScreenState extends State<HomeScreen> {
+  final UserRepository _userRepository;
+  int _selectedTabIndex = 0;
+
+  HomeScreenState({Key key, UserRepository userRepository})
+      : assert(userRepository != null),
+        _userRepository = userRepository;
+
+  _changeIndex(int index) {
+    setState(() {
+      _selectedTabIndex = index;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
+    List _pages = [
+      NextScreen(userRepository: _userRepository),
+      ProcessScreen(userRepository: _userRepository),
+      ReviewScreen(userRepository: _userRepository),
+      MoreScreen(userRepository: _userRepository),
+    ];
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Home'),
-        actions: <Widget>[
-          IconButton(
-            icon: Icon(Icons.exit_to_app),
-            onPressed: () {
-              BlocProvider.of<AuthenticationBloc>(context).add(
-                LoggedOut(),
-              );
-            },
-          )
+      body: Center(child: _pages[_selectedTabIndex]),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => {},
+        backgroundColor: Colors.orange,
+        child: Icon(Icons.add),
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        currentIndex: _selectedTabIndex,
+        onTap: _changeIndex,
+        type: BottomNavigationBarType.fixed,
+        selectedItemColor: Colors.orange,
+        items: [
+          BottomNavigationBarItem(
+              title: Text('Next'), icon: Icon(Icons.next_week)),
+          BottomNavigationBarItem(
+              title: Text('Procesar'), icon: Icon(Icons.store)),
+          BottomNavigationBarItem(
+              title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
+          BottomNavigationBarItem(
+              title: Text('Más'), icon: Icon(Icons.settings))
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: <Widget>[
-          Center(child: Text('Welcome $name!')),
-        ],
-      ),
-      bottomNavigationBar: BottomNavigationBar(items: [
-        BottomNavigationBarItem(title: Text('Next'), icon: Icon(Icons.next_week)),
-        BottomNavigationBarItem(title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
-        BottomNavigationBarItem(title: Text('Procesar'), icon: Icon(Icons.store)),
-        BottomNavigationBarItem(title: Text('Ajustes'), icon: Icon(Icons.settings))
-      ]),
     );
   }
 }

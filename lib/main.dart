@@ -109,7 +109,7 @@ class GTDState extends State<GTD> {
               );
             }
             if (state is Authenticated) {
-              return HomeScreen(name: state.displayName);
+              return HomeScreen(userRepository: _userRepository);
             }           
             return OnboardingScreen(userRepository: _userRepository);
           }),

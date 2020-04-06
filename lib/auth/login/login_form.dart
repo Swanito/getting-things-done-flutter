@@ -47,17 +47,38 @@ class _LoginFormState extends State<LoginForm> {
     return BlocListener<LoginBloc, LoginState>(
       listener: (context, state) {
         if (state.isFailure) {
-          Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [Text('Error iniciando sesión. Intentelo de nuevo más tarde.'), Icon(Icons.error)],
+          if (!state.areCredentialsValid) {
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('Credenciales inválidas'),
+                      Icon(Icons.error)
+                    ],
+                  ),
+                  backgroundColor: Colors.red,
                 ),
-                backgroundColor: Colors.red,
-              ),
-            );
+              );
+          } else {
+            Scaffold.of(context)
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          'Error iniciando sesión. Intentelo de nuevo más tarde.'),
+                      Icon(Icons.error)
+                    ],
+                  ),
+                  backgroundColor: Colors.red,
+                ),
+              );
+          }
         }
         if (state.isSubmitting) {
           Scaffold.of(context)
@@ -75,12 +96,14 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess && !state.isEmailVerified) {
-          BlocProvider.of<AuthenticationBloc>(context).add(ResendVerificationEmail());
+          BlocProvider.of<AuthenticationBloc>(context)
+              .add(ResendVerificationEmail());
           _showVerificationEmailSentDialog();
         }
         if (state.isSuccess && state.isEmailVerified) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-          BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigateToHome);
+          BlocProvider.of<NavigatorBloc>(context)
+              .add(NavigatorAction.NavigateToHome);
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -133,7 +156,9 @@ class _LoginFormState extends State<LoginForm> {
                   autovalidate: true,
                   autocorrect: false,
                   validator: (_) {
-                    return !state.isPasswordValid ? 'Contraseña no válida.' : null;
+                    return !state.isPasswordValid
+                        ? 'Contraseña no válida.'
+                        : null;
                   },
                 ),
                 Padding(
@@ -190,22 +215,23 @@ class _LoginFormState extends State<LoginForm> {
 
   Future<void> _showVerificationEmailSentDialog() {
     return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Hola!'),
-        content: const Text('Parece que tu cuenta no está activada aún. Te hemos enviado un correo a tu dirección de email para completar el registro.'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
-            },
-          ),
-        ],
-      );
-    },
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Hola!'),
+          content: const Text(
+              'Parece que tu cuenta no está activada aún. Te hemos enviado un correo a tu dirección de email para completar el registro.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorAction.NavigatorActionPop);
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
-
 }

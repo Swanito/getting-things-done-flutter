@@ -176,8 +176,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                 onTap: () => {
                   BlocProvider.of<LocalStatusBloc>(context)
                       .add(LocalStatusEvent.CompleteOnboardingAction),
-                  BlocProvider.of<NavigatorBloc>(context)
-                      .add(NavigatorAction.NavigateToAuthEvent),
+                  // BlocProvider.of<NavigatorBloc>(context)
+                  //     .add(NavigatorAction.NavigateToAuthEvent),
                 },
                 child: Center(
                   child: Padding(

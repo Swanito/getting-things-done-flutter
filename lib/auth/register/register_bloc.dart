@@ -77,8 +77,12 @@ class RegisterBloc extends Bloc<RegisterEvent, RegisterState> {
         password: password,
       );
       yield RegisterState.success();
-    } catch (_) {
-      yield RegisterState.failure();
+    } catch (error) {
+      if (error.code == "ERROR_EMAIL_ALREADY_IN_USE") {
+        yield RegisterState.emailInUse();
+      } else {
+        yield RegisterState.failure();
+      }
     }
   }
 }

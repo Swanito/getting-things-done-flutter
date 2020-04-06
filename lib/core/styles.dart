@@ -22,6 +22,6 @@ final kTitleStyleOrange = TextStyle(
 
 final kButtonLabel = TextStyle(
   color: Colors.orange,
-  fontFamily: 'CM Sans Serif',
-  fontSize: 14.0,
+  // fontFamily: 'CM Sans Serif',
+  fontSize: 16.0,
 );

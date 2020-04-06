@@ -56,7 +56,23 @@ class _RegisterFormState extends State<RegisterForm> {
           _showRegistrationCompletedDialog();
         }
         if (state.isFailure) {
-          Scaffold.of(context)
+          if (state.isEmailAlreadyExists) {
+            Scaffold.of(context)
+            ..hideCurrentSnackBar()
+            ..showSnackBar(
+              SnackBar(
+                content: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text('La dirección de email ya está siendo utilizada.'),
+                    Icon(Icons.error),
+                  ],
+                ),
+                backgroundColor: Colors.red,
+              ),
+            );
+          } else {
+            Scaffold.of(context)
             ..hideCurrentSnackBar()
             ..showSnackBar(
               SnackBar(
@@ -70,6 +86,8 @@ class _RegisterFormState extends State<RegisterForm> {
                 backgroundColor: Colors.red,
               ),
             );
+          }
+          
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(

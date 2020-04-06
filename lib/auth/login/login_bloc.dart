@@ -85,8 +85,12 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         await _userRepository.sendEmailVerificationLink(await _userRepository.getUserProfile());
         yield LoginState.emailNotVerified();
       }
-    } catch (_) {
-      yield LoginState.failure();
+    } catch (error) {
+      if (error.code == "ERROR_WRONG_PASSWORD" || error.code == "ERROR_USER_NOT_FOUND") {
+        yield LoginState.invalidCredentials();
+      } else {
+        yield LoginState.failure();
+      }
     }
   }
 }

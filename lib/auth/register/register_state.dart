@@ -8,6 +8,7 @@ class RegisterState {
   final bool isSubmitting;
   final bool isSuccess;
   final bool isFailure;
+  final bool isEmailAlreadyExists;
 
   bool get isFormValid => isEmailValid && isPasswordValid && isPasswordTheSame;
 
@@ -18,6 +19,7 @@ class RegisterState {
     @required this.isSubmitting,
     @required this.isSuccess,
     @required this.isFailure,
+    @required this.isEmailAlreadyExists,
   });
 
   factory RegisterState.empty() {
@@ -28,6 +30,7 @@ class RegisterState {
       isSuccess: false,
       isFailure: false,
       isPasswordTheSame: true,
+      isEmailAlreadyExists: false
     );
   }
 
@@ -39,6 +42,7 @@ class RegisterState {
       isSubmitting: true,
       isSuccess: false,
       isFailure: false,
+      isEmailAlreadyExists: false
     );
   }
 
@@ -50,6 +54,7 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: false,
       isFailure: true,
+      isEmailAlreadyExists: false
     );
   }
 
@@ -61,6 +66,19 @@ class RegisterState {
       isSubmitting: false,
       isSuccess: true,
       isFailure: false,
+      isEmailAlreadyExists: false
+    );
+  }
+
+    factory RegisterState.emailInUse() {
+    return RegisterState(
+      isEmailValid: true,
+      isPasswordValid: true,
+      isPasswordTheSame: true,
+      isSubmitting: false,
+      isSuccess: false,
+      isFailure: true,
+      isEmailAlreadyExists: true
     );
   }
 
@@ -86,6 +104,7 @@ class RegisterState {
     bool isSuccess,
     bool isFailure,
     bool isPasswordTheSame,
+    bool isEmailAlreadyExists
   }) {
     return RegisterState(
       isEmailValid: isEmailValid ?? this.isEmailValid,
@@ -94,6 +113,7 @@ class RegisterState {
       isSubmitting: isSubmitting ?? this.isSubmitting,
       isSuccess: isSuccess ?? this.isSuccess,
       isFailure: isFailure ?? this.isFailure,
+      isEmailAlreadyExists: isEmailAlreadyExists ?? this.isEmailAlreadyExists
     );
   }
 
@@ -106,6 +126,7 @@ class RegisterState {
       isSubmitting: $isSubmitting,
       isSuccess: $isSuccess,
       isFailure: $isFailure,
+      isEmailAlreadyExists: $isEmailAlreadyExists
     }''';
   }
 }
