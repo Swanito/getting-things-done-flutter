@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/common/loading_screen.dart';
+import 'package:gtd/common/next_list.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
@@ -33,24 +34,15 @@ class NextScreen extends StatelessWidget {
                 builder: (context, state) {
                   if (state is LoadingElements) {
                     return Container(
-                        decoration: BoxDecoration(color: Colors.red),
-                        height: 100,
-                        width: 100);
-                  } else if (state is SucessLoadingElements) {
-                    if (state.elements.isNotEmpty) {
-                    return Container(
-                        decoration: BoxDecoration(color: Colors.blue),
-                        height: 100,
-                        width: 100);
-                    } else {
-                      return Card(
-                        child: Padding(
-                          padding: const EdgeInsets.all(20.0),
-                          child: Text('No has creado ningún elemento todavía.'),
+                      height: MediaQuery.of(context).size.height / 2,
+                      child: Center(
+                        child: CircularProgressIndicator(
+                          backgroundColor: Colors.orange,
                         ),
-
-                      );
-                    }
+                      ),
+                    );
+                  } else if (state is SucessLoadingElements) {
+                      return NextList(state.elements);
                   } else if (state is FailedLoadingElements) {
                     _showErrorSnackbar(context);
                     return Container();
@@ -70,7 +62,8 @@ class NextScreen extends StatelessWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Error recuperarndo los elementos. Intentalo de nuevo más tarde.'),
+              Text(
+                  'Error recuperarndo los elementos. Intentalo de nuevo más tarde.'),
               Icon(Icons.error)
             ],
           ),
