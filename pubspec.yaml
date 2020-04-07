@@ -29,6 +29,7 @@ dependencies:
   bloc:
   firebase_auth:
   firebase_core:
+  cloud_firestore:
   google_sign_in:
   equatable:
   meta:

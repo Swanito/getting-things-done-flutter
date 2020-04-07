@@ -66,7 +66,7 @@ class AuthScreen extends StatelessWidget {
     return Scaffold(
       body: Container(
         decoration: BoxDecoration(
-          color: Colors.purple[600],
+          color: Colors.blue[300],
         ),
         child: ListView(
           children: <Widget>[

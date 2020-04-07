@@ -13,7 +13,7 @@ enum NavigatorAction {
   NavigateToAuthEvent,
   NavigateToLoginEvent,
   NavigateToRegisterEvent,
-  NavigateToHome
+  NavigateToHome,
 }
 
 class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
@@ -32,7 +32,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
         navigatorKey.currentState.pop();
         break;
       case NavigatorAction.NavigateToAuthEvent:
-        navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => AuthScreen()));
+        navigatorKey.currentState.pushAndRemoveUntil(MaterialPageRoute(builder: (context) => AuthScreen()), (Route<dynamic> route) => false);
         break;
       case NavigatorAction.NavigateToLoginEvent:
         navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => LoginScreen(userRepository: this.userRepository)));
@@ -42,6 +42,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
         break;
       case NavigatorAction.NavigateToHome:
         navigatorKey.currentState.push(MaterialPageRoute(builder: (context) => HomeScreen(userRepository: userRepository)));
+        break;
     }
   }
 }
