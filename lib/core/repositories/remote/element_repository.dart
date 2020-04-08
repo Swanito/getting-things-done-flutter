@@ -12,7 +12,7 @@ class ElementRepositoryImpl implements ElementRepository {
   }
 
   @override
-  Future<GTDElement> deleteElement(GTDElement element) {
+  Future<void> deleteElement(GTDElement element) {
     return elementCollection.document(element.id).delete();
   }
 
@@ -31,7 +31,7 @@ class ElementRepositoryImpl implements ElementRepository {
   }
 
   @override
-  Future<GTDElement> updateElement(GTDElement element) {
+  Future<void> updateElement(GTDElement element) {
         return elementCollection
         .document(element.id)
         .updateData(element.toEntity().toDocument());

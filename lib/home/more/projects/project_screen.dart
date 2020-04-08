@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 
-class ReviewScreen extends StatelessWidget {
-  final UserRepository _userRepository;
+class ProjectScreen extends StatefulWidget {
+  @override
+  State<StatefulWidget> createState() {
+    return ProjectScreenState();
+  }
+}
 
-  ReviewScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
-
+class ProjectScreenState extends State<ProjectScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,7 +30,11 @@ class ReviewScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Revisar'),
+          GTDAppBar(
+            title: 'Proyectos',
+            canSearch: true,
+            factor: BarSizeFactor.Small,
+          ),
         ],
       ),
     );

@@ -16,9 +16,25 @@ class MoreScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        elevation: 0,
+        backgroundColor: Colors.transparent,
+        flexibleSpace: Container(
+            decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.topRight,
+              end: Alignment.topLeft,
+              colors: [
+                Colors.orange[600],
+                Colors.orange[400],
+                Colors.orange[200],
+                // Colors.orange[100],
+              ]),
+        )),
+      ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Más'),
+          GTDAppBar(title: 'Más', factor: BarSizeFactor.Small,),
           Flexible(
             child: ListView(
               children: [
@@ -51,7 +67,9 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.lightbulb_outline),
                     title: Text('Proyectos'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigateToProjects)
+                    },
                   ),
                 ),
                 Card(

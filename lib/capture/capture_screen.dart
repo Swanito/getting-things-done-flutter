@@ -4,20 +4,24 @@ import 'package:gtd/capture/capture_bloc.dart';
 import 'package:gtd/capture/capture_form.dart';
 import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
+import 'package:gtd/core/repositories/repository.dart';
 
 class CaptureScreen extends StatelessWidget {
   final UserRepository _userRepository;
+  final ElementRepository _elementRepository;
 
-  CaptureScreen({@required userRepository})
+  CaptureScreen({@required userRepository, @required elementRepository})
       : assert(userRepository != null),
-        _userRepository = userRepository;
+      assert(elementRepository != null),
+        _userRepository = userRepository,
+        _elementRepository = elementRepository;
 
 
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
     return BlocProvider<CaptureBloc>(
-      create: (context) => CaptureBloc(userRepository: _userRepository),
+      create: (context) => CaptureBloc(userRepository: _userRepository, elementRepository: _elementRepository),
       child: CaptureForm(userRepository: _userRepository)
     );
   }

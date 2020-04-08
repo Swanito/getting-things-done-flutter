@@ -51,6 +51,31 @@ class UpdateElement extends ElementEvent {
   String toString() => 'UpdateElement { element: $element }';
 }
 
+class MarkAsCompleted extends ElementEvent {
+        final GTDElement element;
+
+  MarkAsCompleted(this.element);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'MarkAsCompleted { element: $element }';
+}
+
+class UnmarkAsCompleted extends ElementEvent {
+        final GTDElement element;
+
+  UnmarkAsCompleted(this.element);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'MarkAsCompleted { element: $element }';
+}
+
+
 class ElementsUpdated extends ElementEvent {
         final List<GTDElement> elements;
 

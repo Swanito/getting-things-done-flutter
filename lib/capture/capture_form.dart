@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
+import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/capture/capture_state.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class CaptureForm extends StatefulWidget {
@@ -81,7 +83,7 @@ class CaptureFormState extends State<CaptureForm> {
                           style: BorderStyle.solid),
                     ),
                   ),
-                  keyboardType: TextInputType.emailAddress,
+                  keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidate: true,
                 ),
@@ -228,7 +230,10 @@ class CaptureFormState extends State<CaptureForm> {
                 SizedBox(
                   height: 20,
                 ),
-                CaptureButton(),
+                RaisedButton(
+                  onPressed: _onFormSubmitted,
+                  child: Text('Crear'),
+                ),
               ],
             ),
           ),
@@ -255,6 +260,14 @@ class CaptureFormState extends State<CaptureForm> {
 
   void _onDateChanged() {}
 
+  void _onFormSubmitted() {
+    _captureBloc.add(Capture(
+      summary: _summaryController.text,
+      description: _descriptionController.text
+    ));
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+  }
+
   void _checkBoxMarked(bool newValue) => setState(() {
         isRecurrent = newValue;
 
@@ -264,12 +277,4 @@ class CaptureFormState extends State<CaptureForm> {
           // TODO: Forget the user
         }
       });
-}
-
-class CaptureButton extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return RaisedButton(onPressed: () { }, child: Text('Crear'));
-  }
-  
 }

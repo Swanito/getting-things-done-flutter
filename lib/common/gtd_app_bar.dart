@@ -1,10 +1,19 @@
 import 'package:flutter/material.dart';
 
+enum BarSizeFactor { Big, Small }
+
 class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String _title;
+  bool _canSearch;
+  BarSizeFactor _factor;
 
-  GTDAppBar({@required String title})
+  TextEditingController _searchController = TextEditingController();
+
+  GTDAppBar({@required String title, bool canSearch = false, BarSizeFactor factor = BarSizeFactor.Small})
       : assert(title != null),
+        assert(canSearch != null),
+        _canSearch = canSearch,
+        _factor = factor,
         _title = title;
 
   @override
@@ -12,12 +21,12 @@ class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
     Size media = MediaQuery.of(context).size;
 
     return SizedBox(
-      height: media.height / 3,
+      height: _factor == BarSizeFactor.Big ? media.height / 3 : media.height / 4.5,
       width: media.width,
       child: Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
-              begin: Alignment.bottomRight,
+              begin: Alignment.topRight,
               end: Alignment.topLeft,
               colors: [
                 Colors.orange[600],
@@ -33,10 +42,38 @@ class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
             )
           ],
         ),
-        child: Center(
-          child: Text(
-            _title,
-            style: TextStyle(color: Colors.white, fontSize: 52),
+        child: Padding(
+          padding: const EdgeInsets.only(left: 50.0, right: 50.0),
+          child: Center(
+            child: Column(
+              children: <Widget>[
+                Text(
+                  _title,
+                  style: TextStyle(color: Colors.white, fontSize: 52),
+                ),
+                SizedBox(height: 20,),
+                _canSearch ? TextFormField(
+                        controller: _searchController,
+                        style: new TextStyle(
+                            fontWeight: FontWeight.normal, color: Colors.white),
+                        decoration: InputDecoration(
+                          icon: Icon(Icons.search, color: Colors.white),
+                          labelStyle: TextStyle(color: Colors.white),
+                          hintStyle: TextStyle(color: Colors.white),
+                          enabledBorder: new UnderlineInputBorder(
+                            borderSide: BorderSide(
+                                color: Colors.white,
+                                width: 1.0,
+                                style: BorderStyle.solid),
+                          ),
+                        ),
+                        keyboardType: TextInputType.text,
+                        autocorrect: false,
+                        autovalidate: true,
+                      )
+                    : Container(),
+              ],
+            ),
           ),
         ),
       ),
@@ -46,4 +83,5 @@ class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
   @override
   // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(60);
+
 }

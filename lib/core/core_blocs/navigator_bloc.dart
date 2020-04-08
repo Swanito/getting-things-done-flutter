@@ -7,7 +7,9 @@ import 'package:gtd/auth/login/login_screen.dart';
 import 'package:gtd/auth/register/register_screen.dart';
 import 'package:gtd/capture/capture_screen.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
+import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/home_screen.dart';
+import 'package:gtd/home/more/projects/project_screen.dart';
 
 enum NavigatorAction {
   NavigatorActionPop,
@@ -15,14 +17,16 @@ enum NavigatorAction {
   NavigateToLoginEvent,
   NavigateToRegisterEvent,
   NavigateToHome,
-  OpenCaptureScreen
+  OpenCaptureScreen,
+  NavigateToProjects
 }
 
 class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
   final GlobalKey<NavigatorState> navigatorKey;
   final UserRepository userRepository;
+  final ElementRepository elementRepository;
 
-  NavigatorBloc({this.navigatorKey, this.userRepository});
+  NavigatorBloc({this.navigatorKey, this.userRepository, this.elementRepository});
 
   @override
   dynamic get initialState => 0;
@@ -55,7 +59,12 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
       case NavigatorAction.OpenCaptureScreen:
         navigatorKey.currentState.push(MaterialPageRoute(
             fullscreenDialog: true,
-            builder: (context) => CaptureScreen(userRepository: userRepository)));
+            builder: (context) => CaptureScreen(userRepository: userRepository, elementRepository: elementRepository,)));
+        break;
+      case NavigatorAction.NavigateToProjects:
+       navigatorKey.currentState.push(MaterialPageRoute(
+                     builder: (context) => ProjectScreen()));
+            // builder: (context) => ProjectScreen(userRepository: userRepository, projectRepository: _projectRepository)));
         break;
     }
   }

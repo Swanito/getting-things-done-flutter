@@ -10,3 +10,7 @@ class CaptureState extends Equatable {
 }
 
 class EmptyState extends CaptureState {}
+
+class Captured extends CaptureState {}
+
+class ErrorCapturing extends CaptureState {}

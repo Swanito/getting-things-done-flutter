@@ -13,7 +13,7 @@ enum ElementProcessStatus {
 
 class GTDElementEntity extends Equatable {
   final String id;
-  final ElementProcessStatus currentStatus;
+  final String currentStatus;
   final String summary;
   final String description;
   final Project project;
@@ -39,7 +39,7 @@ class GTDElementEntity extends Equatable {
 
   Map<String, Object> toDocument() {
     return {
-      "currentStatus": currentStatus,
+      "currentStatus": currentStatus.toString(),
       "summary": summary,
       "description": description,
       "project": project,
@@ -52,7 +52,7 @@ class GTDElementEntity extends Equatable {
     static GTDElementEntity fromJson(Map<String, Object> json) {
     return GTDElementEntity(
       json["id"] as String,
-      json["currentStatus"] as ElementProcessStatus,
+      json["currentStatus"] as String,
       json["summary"] as String,
       json["description"] as String,
       json["project"] as Project,

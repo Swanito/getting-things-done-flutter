@@ -33,14 +33,18 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapUpdateElementToState(event);
     } else if (event is ElementsUpdated) {
       yield* _mapElementsUpdatedToState(event);
+    } else if (event is MarkAsCompleted) {
+      yield* _mapMarkAsCompletedToState(event);
+    } else if (event is UnmarkAsCompleted) {
+      yield* _mapUnmarkAsCompletedToState(event);
     }
   }
 
   Stream<ElementState> _mapLoadEventsToState() async* {
     _elementSubscription?.cancel();
-    _elementSubscription = _elementRepository.getElements().listen(
-      (elements) => add(ElementsUpdated(elements))
-    );
+    _elementSubscription = _elementRepository
+        .getElements()
+        .listen((elements) => add(ElementsUpdated(elements)));
   }
 
   Stream<ElementState> _mapCreateElementToState(CreateElement event) async* {
@@ -48,18 +52,31 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   }
 
   Stream<ElementState> _mapDeleteElementToState(DeleteElement event) async* {
-        _elementRepository.deleteElement(event.element);
+    _elementRepository.deleteElement(event.element);
   }
 
   Stream<ElementState> _mapUpdateElementToState(UpdateElement event) async* {
     _elementRepository.updateElement(event.element);
   }
 
-    Stream<ElementState> _mapElementsUpdatedToState(ElementsUpdated event) async* {
-      yield SucessLoadingElements(event.elements);
+  Stream<ElementState> _mapElementsUpdatedToState(
+      ElementsUpdated event) async* {
+    yield SucessLoadingElements(event.elements);
   }
 
-    @override
+  Stream<ElementState> _mapMarkAsCompletedToState(MarkAsCompleted event) async* {
+    event.element.currentStatus = 'COMPLETED';
+    _elementRepository.updateElement(event.element);
+    yield LoadingElements();
+  }
+
+    Stream<ElementState> _mapUnmarkAsCompletedToState(UnmarkAsCompleted event) async* {
+    event.element.currentStatus = 'PROCESSED';
+    _elementRepository.updateElement(event.element);
+    yield LoadingElements();
+  }
+
+  @override
   Future<void> close() {
     _elementSubscription?.cancel();
     return super.close();
