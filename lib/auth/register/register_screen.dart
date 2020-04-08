@@ -16,34 +16,30 @@ class RegisterScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(color: Colors.pink[200]),
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: ListView(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    GestureDetector(
-                      onTap: () => {
-                        BlocProvider.of<NavigatorBloc>(context)
-                            .add(NavigatorAction.NavigatorActionPop)
-                      },
-                      child: Icon(Icons.arrow_back_ios, color: Colors.white),
-                    )
-                  ],
-                ),
-                Container(
-                    child: SizedBox(
-                        height: MediaQuery.of(context).size.height / 4)),
-                BlocProvider<RegisterBloc>(
-                  create: (context) =>
-                      RegisterBloc(userRepository: _userRepository),
-                  child: RegisterForm(),
-                ),
-              ],
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () => {
+            BlocProvider.of<NavigatorBloc>(context)
+                .add(NavigatorAction.NavigatorActionPop)
+          },
+          child: Icon(Icons.arrow_back_ios, color: Colors.white),
+        ),
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: ListView(
+          children: <Widget>[
+            BlocProvider<RegisterBloc>(
+              create: (context) =>
+                  RegisterBloc(userRepository: _userRepository),
+              child: RegisterForm(),
             ),
-          )),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.pink[200],
     );
   }
 }

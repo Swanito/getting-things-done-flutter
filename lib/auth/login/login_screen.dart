@@ -16,32 +16,29 @@ class LoginScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Container(
-          decoration: BoxDecoration(color: Colors.pink[200]),
-          child: Padding(
-            padding: const EdgeInsets.all(30.0),
-            child: ListView(
-              children: <Widget>[
-                Row(
-                  children: <Widget>[
-                    GestureDetector(
+      appBar: AppBar(leading: GestureDetector(
                       onTap: () => {
                         BlocProvider.of<NavigatorBloc>(context)
                             .add(NavigatorAction.NavigatorActionPop)
                       },
                       child: Icon(Icons.arrow_back_ios, color: Colors.white),
-                    )
-                  ],
-                ),
-                SizedBox(height: (MediaQuery.of(context).size.height / 10) * 2),
-                BlocProvider<LoginBloc>(
-                  create: (context) =>
-                      LoginBloc(userRepository: _userRepository),
-                  child: LoginForm(userRepository: _userRepository),
-                ),
-              ],
+                    ),
+                    backgroundColor: Colors.transparent,
+                    elevation: 0,),
+      body: Padding(
+        padding: const EdgeInsets.all(30.0),
+        child: ListView(
+          children: <Widget>[
+            SizedBox(height: (MediaQuery.of(context).size.height / 10) * 2),
+            BlocProvider<LoginBloc>(
+              create: (context) =>
+                  LoginBloc(userRepository: _userRepository),
+              child: LoginForm(userRepository: _userRepository),
             ),
-          )),
+          ],
+        ),
+      ),
+      backgroundColor: Colors.pink[200],
     );
   }
 }

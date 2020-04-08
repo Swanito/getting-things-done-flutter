@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/more/more_screen.dart';
 import 'package:gtd/home/next/next_screen.dart';
@@ -43,7 +45,9 @@ class HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Center(child: _pages[_selectedTabIndex]),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => {},
+        onPressed: () => {
+          BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.OpenCaptureScreen)
+        },
         backgroundColor: Colors.orange,
         child: Icon(Icons.add),
       ),
