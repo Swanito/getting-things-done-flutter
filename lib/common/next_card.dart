@@ -92,6 +92,8 @@ class NextCard extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Checkbox(
+                        checkColor: Colors.orange,
+                        activeColor: Colors.white,
                         value: _processedElement.currentStatus == 'COMPLETED'
                             ? true
                             : false,

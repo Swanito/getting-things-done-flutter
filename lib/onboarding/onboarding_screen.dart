@@ -175,7 +175,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               child: GestureDetector(
                 onTap: () => {
                   BlocProvider.of<LocalStatusBloc>(context)
-                      .add(LocalStatusEvent.CompleteOnboardingAction),
+                      .add(CompleteOnboardingAction()),
                   // BlocProvider.of<NavigatorBloc>(context)
                   //     .add(NavigatorAction.NavigateToAuthEvent),
                 },

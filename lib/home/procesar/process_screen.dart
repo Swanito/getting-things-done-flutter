@@ -5,7 +5,6 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/common/loading_screen.dart';
 import 'package:gtd/common/process_list.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';

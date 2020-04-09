@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/authentication_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/main.dart';
 
@@ -94,7 +95,8 @@ class MoreScreen extends StatelessWidget {
                     title: Text('Cerrar Sesión'),
                     onTap: () => {
                       BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut()),
-                      BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigateToAuthEvent)
+                      BlocProvider.of<LocalStatusBloc>(context).add(Logout()),
+                      BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.GoToSplashScreen)
                     },
                   ),
                 ),

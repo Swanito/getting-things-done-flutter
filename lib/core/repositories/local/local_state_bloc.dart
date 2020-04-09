@@ -11,28 +11,40 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
   final GlobalKey<NavigatorState> localStatusKey;
   final LocalRepository localRepository;
 
-  LocalStatusBloc({@required this.localStatusKey, @required this.localRepository})
-  : assert(localRepository != null);
+  LocalStatusBloc(
+      {@required this.localStatusKey, @required this.localRepository})
+      : assert(localRepository != null);
 
   @override
   LocalState get initialState => Unknown();
 
   @override
   Stream<LocalState> mapEventToState(LocalStatusEvent event) async* {
-    switch (event) {
-      case LocalStatusEvent.CompleteOnboardingAction:
-        await localRepository.completeOnboard();
-          yield OnboardingCompleted();
-        break;
-      case LocalStatusEvent.CheckIfOnboardingIsCompleted:
-        bool isCompleted = await localRepository.isOnboardingCompleted();
-        print('Is onboarding completed: $isCompleted');
-        if (isCompleted) {
-          yield OnboardingCompleted();
-        } else {
-          yield OnboardingNotCompleted();
-        }
-        break;
+    if (event is CompleteOnboardingAction) {
+      await localRepository.completeOnboard();
+      yield OnboardingCompleted();
+    } else if (event is CheckIfOnboardingIsCompleted) {
+      bool isCompleted = await localRepository.isOnboardingCompleted();
+      print('Is onboarding completed: $isCompleted');
+      if (isCompleted) {
+        yield OnboardingCompleted();
+      } else {
+        yield OnboardingNotCompleted();
+      }
+    } else if (event is SetGTDLevel) {
+      await localRepository.setGTDLevel(event);
+      yield GTDLevelKnown();
+    } else if (event is CheckIfGTDLevelIsKnwon) {
+      String gtdLevel = await localRepository.getGTDLevel();
+      print('Is gtd level known: $gtdLevel');
+      if (gtdLevel != null) {
+        yield GTDLevelKnown();
+      } else {
+        yield GTDLevelUnknown();
+      }
+    } else if (event is Logout) {
+      await localRepository.logout();
+      yield OnboardingNotCompleted();
     }
   }
 }

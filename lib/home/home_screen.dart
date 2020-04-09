@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/more/more_screen.dart';
 import 'package:gtd/home/next/next_screen.dart';
@@ -42,31 +43,57 @@ class HomeScreenState extends State<HomeScreen> {
       ReviewScreen(userRepository: _userRepository),
       MoreScreen(userRepository: _userRepository),
     ];
-    return Scaffold(
-      body: Center(child: _pages[_selectedTabIndex]),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => {
-          BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.OpenCaptureScreen)
-        },
-        backgroundColor: Colors.orange,
-        child: Icon(Icons.add),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _selectedTabIndex,
-        onTap: _changeIndex,
-        type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.orange,
-        items: [
-          BottomNavigationBarItem(
-              title: Text('Next'), icon: Icon(Icons.next_week)),
-          BottomNavigationBarItem(
-              title: Text('Procesar'), icon: Icon(Icons.store)),
-          BottomNavigationBarItem(
-              title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
-          BottomNavigationBarItem(
-              title: Text('Más'), icon: Icon(Icons.settings))
-        ],
-      ),
-    );
+
+    return BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
+      if (state is GTDLevelUnknown) {
+        return AlertDialog(
+          content:
+              Text('Antes de empezar, cúal dirías que es tu nivel usando GTD?'),
+          actions: [
+            FlatButton(
+              child: Text('Básico'),
+              onPressed: () {
+                BlocProvider.of<LocalStatusBloc>(context)
+                    .add(SetGTDLevel(level: GTDLevel.Low));
+              },
+            ),
+            FlatButton(
+              child: Text('Avanzado'),
+              onPressed: () {
+                BlocProvider.of<LocalStatusBloc>(context)
+                    .add(SetGTDLevel(level: GTDLevel.High));
+              },
+            ),
+          ],
+        );
+      }
+      return Scaffold(
+        body: Center(child: _pages[_selectedTabIndex]),
+        floatingActionButton: FloatingActionButton(
+          onPressed: () => {
+            BlocProvider.of<NavigatorBloc>(context)
+                .add(NavigatorAction.OpenCaptureScreen)
+          },
+          backgroundColor: Colors.orange,
+          child: Icon(Icons.add),
+        ),
+        bottomNavigationBar: BottomNavigationBar(
+          currentIndex: _selectedTabIndex,
+          onTap: _changeIndex,
+          type: BottomNavigationBarType.fixed,
+          selectedItemColor: Colors.orange,
+          items: [
+            BottomNavigationBarItem(
+                title: Text('Next'), icon: Icon(Icons.next_week)),
+            BottomNavigationBarItem(
+                title: Text('Procesar'), icon: Icon(Icons.store)),
+            BottomNavigationBarItem(
+                title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
+            BottomNavigationBarItem(
+                title: Text('Más'), icon: Icon(Icons.settings))
+          ],
+        ),
+      );
+    });
   }
 }

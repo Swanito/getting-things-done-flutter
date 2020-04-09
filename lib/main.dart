@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/auth_screen.dart';
 import 'package:gtd/auth/authentication_bloc.dart';
-import 'package:gtd/common/loading_screen.dart';
+import 'package:gtd/common/splash_screen.dart';
 import 'package:gtd/core/core_blocs/bloc_delegate.dart';
 import 'package:gtd/core/keys.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
@@ -95,7 +95,7 @@ class GTDState extends State<GTD> {
           ),
           BlocProvider<LocalStatusBloc>(
             create: (BuildContext context) => localStatusBloc
-              ..add(LocalStatusEvent.CheckIfOnboardingIsCompleted),
+              ..add(CheckIfOnboardingIsCompleted()),
           ),
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) => authBloc..add(AppStarted()),

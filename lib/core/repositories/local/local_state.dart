@@ -5,10 +5,12 @@ abstract class LocalState extends Equatable {
   List<Object> get props => [];
 }
 
-class Unknown extends LocalState {
-}
+class Unknown extends LocalState {}
 
-class OnboardingCompleted extends LocalState {
-}
-class OnboardingNotCompleted extends LocalState {
-}
+class OnboardingCompleted extends LocalState {}
+
+class OnboardingNotCompleted extends LocalState {}
+
+class GTDLevelUnknown extends LocalState {}
+
+class GTDLevelKnown extends LocalState {}

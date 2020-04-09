@@ -6,6 +6,7 @@ import 'package:gtd/auth/login/custom_widgets/login_button.dart';
 import 'package:gtd/auth/login/custom_widgets/register_button.dart';
 import 'package:gtd/auth/login/login_barrel.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class LoginForm extends StatefulWidget {
@@ -102,6 +103,7 @@ class _LoginFormState extends State<LoginForm> {
         }
         if (state.isSuccess && state.isEmailVerified) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
+          BlocProvider.of<LocalStatusBloc>(context).add(CheckIfGTDLevelIsKnwon());
           BlocProvider.of<NavigatorBloc>(context)
               .add(NavigatorAction.NavigateToHome);
         }

@@ -6,6 +6,7 @@ import 'package:gtd/auth/auth_screen.dart';
 import 'package:gtd/auth/login/login_screen.dart';
 import 'package:gtd/auth/register/register_screen.dart';
 import 'package:gtd/capture/capture_screen.dart';
+import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/home_screen.dart';
@@ -18,15 +19,17 @@ enum NavigatorAction {
   NavigateToRegisterEvent,
   NavigateToHome,
   OpenCaptureScreen,
-  NavigateToProjects
+  NavigateToProjects,
+  GoToSplashScreen
 }
 
 class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
   final GlobalKey<NavigatorState> navigatorKey;
   final UserRepository userRepository;
   final ElementRepository elementRepository;
+  final LocalRepository localRepository;
 
-  NavigatorBloc({this.navigatorKey, this.userRepository, this.elementRepository});
+  NavigatorBloc({this.navigatorKey, this.userRepository, this.elementRepository, this.localRepository});
 
   @override
   dynamic get initialState => 0;
@@ -53,8 +56,8 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
                 RegisterScreen(userRepository: this.userRepository)));
         break;
       case NavigatorAction.NavigateToHome:
-        navigatorKey.currentState.push(MaterialPageRoute(
-            builder: (context) => HomeScreen(userRepository: userRepository)));
+        navigatorKey.currentState.pushAndRemoveUntil(MaterialPageRoute(
+            builder: (context) => HomeScreen(userRepository: userRepository)), (Route<dynamic> route) => false);
         break;
       case NavigatorAction.OpenCaptureScreen:
         navigatorKey.currentState.push(MaterialPageRoute(
@@ -65,6 +68,10 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
        navigatorKey.currentState.push(MaterialPageRoute(
                      builder: (context) => ProjectScreen()));
             // builder: (context) => ProjectScreen(userRepository: userRepository, projectRepository: _projectRepository)));
+        break;
+      case NavigatorAction.GoToSplashScreen:
+         navigatorKey.currentState.push(MaterialPageRoute(
+            builder: (context) => AuthScreen()));
         break;
     }
   }
