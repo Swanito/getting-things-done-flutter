@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtd/core/models/gtd_element.dart';
-import 'package:gtd/core/models/project.dart';
+import 'package:gtd/core/models/gtd_project.dart';
 
 abstract class Repository {}
 
@@ -12,9 +13,9 @@ abstract class ElementRepository {
 }
 
 abstract class ProjectRepository {
-  // Stream<Project> getProject();
-  // Stream<List<Project>> getProjects();
-  // Future<Project> createProject();
-  // Future<Project> updateProject();
-  // Future<Project> deleteProject();
+  Future<QuerySnapshot> getProject(String summary);
+  Stream<List<Project>> getProjects();
+  Future<void> createProject({Project project});
+  Future<void> updateProject({Project project, String id});
+  Future<void> deleteProject(Project project);
 }

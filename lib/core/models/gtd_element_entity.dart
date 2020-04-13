@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
-import 'package:gtd/core/models/project.dart';
+import 'package:gtd/core/models/gtd_project.dart';
+import 'package:gtd/core/models/gtd_project_entity.dart';
 
 enum ElementProcessStatus {
   COMPLETED,
@@ -18,7 +19,7 @@ class GTDElementEntity extends Equatable {
   final String description;
   final Project project;
   final DateTime dueDate;
-  final DateTime createdAt;
+  final Timestamp createdAt;
   final List<String> contexts;
 
   GTDElementEntity(this.id, this.currentStatus, this.summary, this.description,
@@ -42,7 +43,7 @@ class GTDElementEntity extends Equatable {
       "currentStatus": currentStatus.toString(),
       "summary": summary,
       "description": description,
-      "project": project,
+      "project": project != null ? project.toEntity().toDocument() : null,
       "dueDate": dueDate,
       "createdAt": createdAt,
       "contexts": contexts,
@@ -57,18 +58,21 @@ class GTDElementEntity extends Equatable {
       json["description"] as String,
       json["project"] as Project,
       json["dueDate"] as DateTime,
-      json["createdAt"] as DateTime,
+      json["createdAt"] as Timestamp,
       json["contexts"] as List<String>,
     );
   }
 
   static GTDElementEntity fromSnapshot(DocumentSnapshot snap) {
+
+    Project project = snap.data["project"] != null ? Project.fromEntity(ProjectEntity.fromJson(snap.data["project"])) : null;
+
     return GTDElementEntity(
       snap.documentID,
       snap.data["currentStatus"],
       snap.data["summary"],
       snap.data["description"],
-      snap.data["project"],
+      project,
       snap.data["dueDate"],
       snap.data["createdAt"],
       snap.data["contexts"],

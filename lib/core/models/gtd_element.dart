@@ -1,5 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtd/core/models/gtd_element_entity.dart';
-import 'package:gtd/core/models/project.dart';
+import 'package:gtd/core/models/gtd_project.dart';
 import 'package:meta/meta.dart';
 
 @immutable
@@ -10,7 +11,7 @@ class GTDElement {
   final String description;
   final Project project;
   final DateTime dueDate;
-  final DateTime createdAt;
+  final Timestamp createdAt = Timestamp.now();
   final List<String> contexts;
 
   GTDElement(this.summary,
@@ -19,12 +20,11 @@ class GTDElement {
       this.description = '',
       this.project = null,
       this.dueDate = null,
-      this.createdAt = null,
       this.contexts = null});
 
   @override
   String toString() {
-    return 'Element{id: $id, summary: $summary}';
+    return 'Element{id: $id, summary: $summary, project: $project}';
   }
 
   GTDElementEntity toEntity() {
@@ -39,7 +39,6 @@ class GTDElement {
         project: entity.project,
         id: entity.id,
         dueDate: entity.dueDate,
-        currentStatus: entity.currentStatus,
-        createdAt: entity.createdAt);
+        currentStatus: entity.currentStatus);
   }
 }

@@ -8,8 +8,11 @@ import 'package:gtd/core/keys.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
+import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
+import 'package:gtd/home/more/projects/project_bloc.dart';
+import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/onboarding/onboarding_screen.dart';
 
 import 'core/core_blocs/navigator_bloc.dart';
@@ -20,6 +23,7 @@ void main() {
   final UserRepository _userRepository = UserRepository();
   final LocalRepository _localRepository = LocalRepository.instance;
   final ElementRepository _elementRepository = ElementRepositoryImpl();
+  final ProjectRepositoryImpl _projectRepository = ProjectRepositoryImpl();
 
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
@@ -29,7 +33,8 @@ void main() {
     child: GTD(
         userRepository: _userRepository,
         localRepository: _localRepository,
-        elementRepository: _elementRepository),
+        elementRepository: _elementRepository,
+        projectRepository: _projectRepository),
   ));
 }
 
@@ -37,24 +42,28 @@ class GTD extends StatefulWidget {
   final UserRepository _userRepository;
   final LocalRepository _localRepository;
   final ElementRepository _elementRepository;
+  final ProjectRepositoryImpl _projectRepository;
 
   GTD(
       {Key key,
       @required UserRepository userRepository,
       LocalRepository localRepository,
-      ElementRepository elementRepository})
+      ElementRepository elementRepository,
+      ProjectRepositoryImpl projectRepository})
       : assert(userRepository != null),
         assert(localRepository != null),
         assert(elementRepository != null),
+                assert(projectRepository != null),
         _userRepository = userRepository,
         _localRepository = localRepository,
         _elementRepository = elementRepository,
+        _projectRepository = projectRepository,
         super(key: key);
 
   @override
   State<StatefulWidget> createState() {
     return GTDState(
-        userRepository: _userRepository, localRepository: _localRepository, elementRepository: _elementRepository);
+        userRepository: _userRepository, localRepository: _localRepository, elementRepository: _elementRepository, projectRepository: _projectRepository);
   }
 }
 
@@ -62,17 +71,21 @@ class GTDState extends State<GTD> {
   final UserRepository _userRepository;
   final LocalRepository _localRepository;
   final ElementRepository _elementRepository;
+  final ProjectRepositoryImpl _projectRepository;
 
   GTDState(
       {@required UserRepository userRepository,
       LocalRepository localRepository,
-      ElementRepository elementRepository})
+      ElementRepository elementRepository,
+            ProjectRepositoryImpl projectRepository})
       : assert(userRepository != null),
         assert(localRepository != null),
         assert(elementRepository != null),
+                assert(projectRepository != null),
         _userRepository = userRepository,
         _localRepository = localRepository,
-        _elementRepository = elementRepository;
+        _elementRepository = elementRepository,
+        _projectRepository = projectRepository;
 
   @override
   Widget build(BuildContext context) {
@@ -87,6 +100,7 @@ class GTDState extends State<GTD> {
         navigatorKey: _navigatorKey,
         userRepository: _userRepository,
         elementRepository: _elementRepository);
+    ProjectBloc projectBloc = ProjectBloc(projectRepository: _projectRepository);
 
     return MultiBlocProvider(
         providers: [
@@ -99,7 +113,9 @@ class GTDState extends State<GTD> {
           ),
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) => authBloc..add(AppStarted()),
-          )
+          ),
+          BlocProvider<ProjectBloc>(
+            create: (BuildContext context) => projectBloc..add(LoadProjects())),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,

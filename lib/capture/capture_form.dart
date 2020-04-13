@@ -8,14 +8,18 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class CaptureForm extends StatefulWidget {
   final UserRepository _userRepository;
+  final bool _isEditing;
 
-  CaptureForm({@required userRepository})
+  CaptureForm({@required userRepository, @required isEditing})
       : assert(userRepository != null),
+        assert(isEditing != null),
+        _isEditing = isEditing,
         _userRepository = userRepository;
 
   @override
   State<StatefulWidget> createState() {
-    return CaptureFormState(userRepository: _userRepository);
+    return CaptureFormState(
+        userRepository: _userRepository, isEditing: _isEditing);
   }
 }
 
@@ -31,9 +35,13 @@ class CaptureFormState extends State<CaptureForm> {
   CaptureBloc _captureBloc;
 
   bool isRecurrent = false;
+  bool _isEditing;
+  bool get isPopulated => _summaryController.text.isNotEmpty;
 
-  CaptureFormState({@required userRepository})
+  CaptureFormState({@required userRepository, @required isEditing})
       : assert(userRepository != null),
+        assert(isEditing != null),
+        _isEditing = isEditing,
         _userRepository = userRepository;
 
   @override
@@ -52,7 +60,9 @@ class CaptureFormState extends State<CaptureForm> {
     Size size = MediaQuery.of(context).size;
     return BlocListener<CaptureBloc, CaptureState>(
       listener: (context, state) {
-        //if state is blabla
+        // if (!state.isValidTitle) {
+
+        // }
       },
       child: BlocBuilder<CaptureBloc, CaptureState>(builder: (context, state) {
         return Scaffold(
@@ -86,6 +96,9 @@ class CaptureFormState extends State<CaptureForm> {
                   keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidate: true,
+                  validator: (_) {
+                    return !isPopulated ? 'Título no válido.' : null;
+                  },
                 ),
                 SizedBox(
                   height: 20,
@@ -262,10 +275,11 @@ class CaptureFormState extends State<CaptureForm> {
 
   void _onFormSubmitted() {
     _captureBloc.add(Capture(
-      summary: _summaryController.text,
-      description: _descriptionController.text
-    ));
-    BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+        summary: _summaryController.text,
+        description: _descriptionController.text,
+        project: _projectController.text));
+    BlocProvider.of<NavigatorBloc>(context)
+        .add(NavigatorAction.NavigatorActionPop);
   }
 
   void _checkBoxMarked(bool newValue) => setState(() {

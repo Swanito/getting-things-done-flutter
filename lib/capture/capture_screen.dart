@@ -22,7 +22,7 @@ class CaptureScreen extends StatelessWidget {
     Size size = MediaQuery.of(context).size;
     return BlocProvider<CaptureBloc>(
       create: (context) => CaptureBloc(userRepository: _userRepository, elementRepository: _elementRepository),
-      child: CaptureForm(userRepository: _userRepository)
+      child: CaptureForm(userRepository: _userRepository, isEditing: false,)
     );
   }
 }

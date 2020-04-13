@@ -61,9 +61,15 @@ class ProcessCard extends StatelessWidget {
     );
   }
 
-  void _onDeletePressed() {}
+  void _onDeletePressed() {
+    
+  }
 
-  void _onEditPressed() {}
+  void _onEditPressed() {
 
-  void _onProcessPressed() {}
+  }
+
+  void _onProcessPressed() {
+    
+  }
 }

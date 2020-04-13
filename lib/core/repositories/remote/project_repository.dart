@@ -1,36 +1,37 @@
 
-import 'package:gtd/core/models/project.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gtd/core/models/gtd_project.dart';
+import 'package:gtd/core/models/gtd_project_entity.dart';
 import 'package:gtd/core/repositories/repository.dart';
 
 class ProjectRepositoryImpl implements ProjectRepository {
+  final projectCollection = Firestore.instance.collection('projects');
+
   @override
-  Future<Project> createProject() {
-    // TODO: implement createProject
-    throw UnimplementedError();
+  Future<void> createProject({Project project}) {
+    return projectCollection.add(project.toEntity().toDocument());
   }
 
   @override
-  Future<Project> deleteProject() {
-    // TODO: implement deleteProject
-    throw UnimplementedError();
+  Future<void> deleteProject(Project project) {
+    return projectCollection.document(project.id).delete();
+  }
+  @override
+  Future<QuerySnapshot> getProject(String summary) {
+    return projectCollection.where('title', isEqualTo: summary).getDocuments();  
   }
 
   @override
-  Future<Project> getProject() {
-    // TODO: implement getProject
-    throw UnimplementedError();
-  }
+  Stream<List<Project>> getProjects() {
+    return projectCollection.snapshots().map((event) {
+        return event.documents
+          .map((e) => Project.fromEntity(ProjectEntity.fromSnapshot(e)))
+          .toList();
+    });  }
 
   @override
-  Future<List<Project>> getProjects() {
-    // TODO: implement getProjects
-    throw UnimplementedError();
-  }
-
-  @override
-  Future<Project> updateProject() {
-    // TODO: implement updateProject
-    throw UnimplementedError();
+  Future<void> updateProject({Project project, String id}) {
+    return projectCollection.document(id).updateData(project.toEntity().toDocument());
   }
 
 }

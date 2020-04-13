@@ -62,7 +62,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
       case NavigatorAction.OpenCaptureScreen:
         navigatorKey.currentState.push(MaterialPageRoute(
             fullscreenDialog: true,
-            builder: (context) => CaptureScreen(userRepository: userRepository, elementRepository: elementRepository,)));
+            builder: (context) => CaptureScreen(userRepository: userRepository, elementRepository: elementRepository)));
         break;
       case NavigatorAction.NavigateToProjects:
        navigatorKey.currentState.push(MaterialPageRoute(
