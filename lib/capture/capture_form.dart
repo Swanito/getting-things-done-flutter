@@ -134,7 +134,7 @@ class CaptureFormState extends State<CaptureForm> {
                     Spacer(),
                     FlatButton(
                         padding: const EdgeInsets.all(16.0),
-                        onPressed: () {},
+                        onPressed: _onPhotoPressed,
                         child: Icon(
                           Icons.photo_camera,
                           color: Colors.white,
@@ -261,6 +261,10 @@ class CaptureFormState extends State<CaptureForm> {
     _descriptionController.dispose();
     _projectController.dispose();
     super.dispose();
+  }
+
+  void _onPhotoPressed() async {
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.OpenCamera);
   }
 
   void _onSummaryChanged() {}

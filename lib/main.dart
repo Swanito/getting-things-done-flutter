@@ -1,3 +1,4 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/auth_screen.dart';
@@ -18,8 +19,9 @@ import 'package:gtd/onboarding/onboarding_screen.dart';
 import 'core/core_blocs/navigator_bloc.dart';
 import 'home/home_screen.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   final UserRepository _userRepository = UserRepository();
   final LocalRepository _localRepository = LocalRepository.instance;
   final ElementRepository _elementRepository = ElementRepositoryImpl();
@@ -53,7 +55,7 @@ class GTD extends StatefulWidget {
       : assert(userRepository != null),
         assert(localRepository != null),
         assert(elementRepository != null),
-                assert(projectRepository != null),
+        assert(projectRepository != null),
         _userRepository = userRepository,
         _localRepository = localRepository,
         _elementRepository = elementRepository,
@@ -63,7 +65,10 @@ class GTD extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return GTDState(
-        userRepository: _userRepository, localRepository: _localRepository, elementRepository: _elementRepository, projectRepository: _projectRepository);
+        userRepository: _userRepository,
+        localRepository: _localRepository,
+        elementRepository: _elementRepository,
+        projectRepository: _projectRepository);
   }
 }
 
@@ -77,11 +82,11 @@ class GTDState extends State<GTD> {
       {@required UserRepository userRepository,
       LocalRepository localRepository,
       ElementRepository elementRepository,
-            ProjectRepositoryImpl projectRepository})
+      ProjectRepositoryImpl projectRepository})
       : assert(userRepository != null),
         assert(localRepository != null),
         assert(elementRepository != null),
-                assert(projectRepository != null),
+        assert(projectRepository != null),
         _userRepository = userRepository,
         _localRepository = localRepository,
         _elementRepository = elementRepository,
@@ -100,7 +105,8 @@ class GTDState extends State<GTD> {
         navigatorKey: _navigatorKey,
         userRepository: _userRepository,
         elementRepository: _elementRepository);
-    ProjectBloc projectBloc = ProjectBloc(projectRepository: _projectRepository);
+    ProjectBloc projectBloc =
+        ProjectBloc(projectRepository: _projectRepository);
 
     return MultiBlocProvider(
         providers: [
@@ -108,14 +114,15 @@ class GTDState extends State<GTD> {
             create: (BuildContext context) => navigatorBloc,
           ),
           BlocProvider<LocalStatusBloc>(
-            create: (BuildContext context) => localStatusBloc
-              ..add(CheckIfOnboardingIsCompleted()),
+            create: (BuildContext context) =>
+                localStatusBloc..add(CheckIfOnboardingIsCompleted()),
           ),
           BlocProvider<AuthenticationBloc>(
             create: (BuildContext context) => authBloc..add(AppStarted()),
           ),
           BlocProvider<ProjectBloc>(
-            create: (BuildContext context) => projectBloc..add(LoadProjects())),
+              create: (BuildContext context) =>
+                  projectBloc..add(LoadProjects())),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,
