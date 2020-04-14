@@ -1,4 +1,4 @@
-package com.example.gtd
+package com.uoc.gtd
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity

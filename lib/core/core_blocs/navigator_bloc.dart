@@ -91,6 +91,8 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
           final firstCamera = cameras?.first;
           navigatorKey.currentState.push(MaterialPageRoute(
               builder: (context) => TakePictureScreen(camera: firstCamera)));
+        } else {
+          print('Cameras not available');
         }
     }
   }
