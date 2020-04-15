@@ -37,6 +37,8 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapMarkAsCompletedToState(event);
     } else if (event is UnmarkAsCompleted) {
       yield* _mapUnmarkAsCompletedToState(event);
+    } else if(event is MoveToDelete) {
+      yield* _mapMoveToDeleteToState(event);
     }
   }
 
@@ -72,6 +74,12 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
 
     Stream<ElementState> _mapUnmarkAsCompletedToState(UnmarkAsCompleted event) async* {
     event.element.currentStatus = 'PROCESSED';
+    _elementRepository.updateElement(event.element);
+    yield LoadingElements();
+  }
+
+  Stream<ElementState> _mapMoveToDeleteToState(MoveToDelete event) async* {
+    event.element.currentStatus = 'DELETED';
     _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }

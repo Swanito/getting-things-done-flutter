@@ -87,3 +87,15 @@ class ElementsUpdated extends ElementEvent {
   @override
   String toString() => 'ElementsUpdated { elements: $elements }';
 }
+
+class MoveToDelete extends ElementEvent {
+  final GTDElement element;
+
+  MoveToDelete(this.element);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'MoveToDelete { element: $element }';
+}

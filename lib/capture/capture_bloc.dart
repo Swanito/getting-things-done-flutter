@@ -35,6 +35,8 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
       yield* _mapAttachImageToState(event);
     } else if(event is DeleteAttachedImage) {
       yield* _mapDeleteAttachedImageToState();
+    } else if (event is ClearForm) {
+      yield EmptyState();
     }
   }
 

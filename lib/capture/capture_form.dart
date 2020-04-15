@@ -39,9 +39,14 @@ class CaptureFormState extends State<CaptureForm> {
   bool _isEditing;
   int dropdownDayValue;
   String dropdownPeriodValue;
+  Image _attachedImage;
+  List<Chip> contextList = [];
   DateTime selectedDate = DateTime.now();
 
+  Chip newContextChip;
+
   bool get isPopulated => _summaryController.text.isNotEmpty;
+  bool get isContextPopulated => _contextController.text.isNotEmpty;
 
   CaptureFormState({@required userRepository, @required isEditing})
       : assert(userRepository != null),
@@ -63,195 +68,238 @@ class CaptureFormState extends State<CaptureForm> {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CaptureBloc, CaptureState>(builder: (context, state) {
-      return Scaffold(
-        backgroundColor: Colors.orange,
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          elevation: 0.0,
-          bottomOpacity: 0.0,
-          title: Text('Capturar'),
+      return Container(
+        decoration: BoxDecoration(
+          gradient: LinearGradient(
+              begin: Alignment.bottomLeft,
+              end: Alignment.topRight,
+              colors: [
+                Colors.orange[600],
+                Colors.orange[400],
+              ]),
         ),
-        body: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            child: ListView(
-              shrinkWrap: true,
-              controller: ScrollController(),
-              children: [
-                TextFormField(
-                  controller: _summaryController,
-                  style: new TextStyle(
-                      fontWeight: FontWeight.normal, color: Colors.white),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.edit, color: Colors.white),
-                    labelText: 'Título',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
+        child: Scaffold(
+          backgroundColor: Colors.transparent,
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            elevation: 0.0,
+            bottomOpacity: 0.0,
+            title: Text('Capturar'),
+            leading: IconButton(
+                icon: Icon(Icons.close),
+                onPressed: () {
+                  BlocProvider.of<CaptureBloc>(context).add(ClearForm());
+                  BlocProvider.of<NavigatorBloc>(context)
+                      .add(NavigatorAction.NavigatorActionPop);
+                }),
+          ),
+          body: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              child: ListView(
+                shrinkWrap: true,
+                controller: ScrollController(),
+                children: [
+                  TextFormField(
+                    controller: _summaryController,
+                    style: new TextStyle(
+                        fontWeight: FontWeight.normal, color: Colors.white),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.edit, color: Colors.white),
+                      labelText: 'Título',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      errorStyle: TextStyle(color: Colors.white),
+                      errorBorder: new UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                      enabledBorder: new UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
                     ),
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    autovalidate: true,
+                    validator: (_) {
+                      return !isPopulated ? 'Título no válido.' : null;
+                    },
+                    onChanged: (text) {
+                      setState(() {});
+                    },
                   ),
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  autovalidate: true,
-                  validator: (_) {
-                    return !isPopulated ? 'Título no válido.' : null;
-                  },
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _descriptionController,
-                  style: new TextStyle(
-                      fontWeight: FontWeight.normal, color: Colors.white),
-                  maxLines: null,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.description, color: Colors.white),
-                    labelText: 'Descripción',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _descriptionController,
+                    style: new TextStyle(
+                        fontWeight: FontWeight.normal, color: Colors.white),
+                    maxLines: null,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.description, color: Colors.white),
+                      labelText: 'Descripción',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
                     ),
+                    keyboardType: TextInputType.multiline,
+                    autocorrect: false,
+                    autovalidate: true,
                   ),
-                  keyboardType: TextInputType.multiline,
-                  autocorrect: false,
-                  autovalidate: true,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Spacer(),
-                    FlatButton(
-                        padding: const EdgeInsets.all(16.0),
-                        onPressed: _onPhotoPressed,
-                        child: Icon(
-                          Icons.photo_camera,
-                          color: Colors.white,
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Spacer(),
+                      FlatButton(
+                          padding: const EdgeInsets.all(16.0),
+                          onPressed: _onPhotoPressed,
+                          child: Icon(
+                            Icons.photo_camera,
+                            color: Colors.white,
+                          )),
+                      Spacer(),
+                      FlatButton(
+                          padding: const EdgeInsets.all(16.0),
+                          onPressed: () {},
+                          child: Icon(
+                            Icons.mic,
+                            color: Colors.white,
+                          )),
+                      Spacer(),
+                    ],
+                  ),
+                  state is ImageAttached
+                      ? AttachedImageCard(
+                          image: state.attachedImage, fileName: state.fileName)
+                      : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _projectController,
+                    style: new TextStyle(
+                        fontWeight: FontWeight.normal, color: Colors.white),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lightbulb_outline, color: Colors.white),
+                      labelText: 'Proyecto',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                    ),
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    autovalidate: true,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  TextFormField(
+                    controller: _contextController,
+                    style: new TextStyle(
+                        fontWeight: FontWeight.normal, color: Colors.white),
+                    decoration: InputDecoration(
+                        icon: Icon(Icons.dialpad, color: Colors.white),
+                        labelText: 'Contexto',
+                        labelStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.white),
+                        enabledBorder: new UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 1.0,
+                              style: BorderStyle.solid),
+                        ),
+                        suffix: FlatButton(
+                          onPressed: isContextPopulated
+                              ? () {
+                                  _addChip(_contextController.text);
+                                }
+                              : null,
+                          child: Text('AÑADIR',
+                              style: TextStyle(color: Colors.white)),
                         )),
-                    Spacer(),
-                    FlatButton(
-                        padding: const EdgeInsets.all(16.0),
-                        onPressed: () {},
-                        child: Icon(
-                          Icons.mic,
-                          color: Colors.white,
-                        )),
-                    Spacer(),
-                  ],
-                ),
-                state is ImageAttached
-                    ? AttachedImageCard(
-                        image: state.attachedImage, fileName: state.fileName)
-                    : Container(),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _projectController,
-                  style: new TextStyle(
-                      fontWeight: FontWeight.normal, color: Colors.white),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lightbulb_outline, color: Colors.white),
-                    labelText: 'Proyecto',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    autovalidate: true,
+                    onChanged: (text) {
+                      setState(() {});
+                    },
                   ),
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  autovalidate: true,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _contextController,
-                  style: new TextStyle(
-                      fontWeight: FontWeight.normal, color: Colors.white),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.dialpad, color: Colors.white),
-                    labelText: 'Contexto',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Row(children: contextList.toList()),
                   ),
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  autovalidate: true,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: _dateController,
-                  style: new TextStyle(
-                      fontWeight: FontWeight.normal, color: Colors.white),
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.calendar_today, color: Colors.white),
-                    labelText: 'Fecha ocurrencia',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
+                  SizedBox(
+                    height: 20,
                   ),
-                  onTap: () => _selectDate(context),
-                  keyboardType: TextInputType.text,
-                  autocorrect: false,
-                  autovalidate: true,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                Row(
-                  children: [
-                    Checkbox(
-                      value: isRecurrent,
-                      onChanged: _checkBoxMarked,
-                      activeColor: Colors.transparent,
-                      checkColor: Colors.white,
+                  TextFormField(
+                    controller: _dateController,
+                    style: new TextStyle(
+                        fontWeight: FontWeight.normal, color: Colors.white),
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.calendar_today, color: Colors.white),
+                      labelText: 'Fecha ocurrencia',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: new UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
                     ),
-                    Text(
-                      'Es un evento recurrente',
-                      style: TextStyle(color: Colors.white),
-                    )
-                  ],
-                ),
-                isRecurrent ? _showRecurrentField() : Container(),
-                SizedBox(
-                  height: 20,
-                ),
-                RaisedButton(
-                  color: Colors.white,
-                  onPressed: isPopulated ? _onFormSubmitted : null,
-                  child: Text('Crear'),
-                ),
-              ],
+                    onTap: () => _selectDate(context),
+                    keyboardType: TextInputType.text,
+                    autocorrect: false,
+                    autovalidate: true,
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  Row(
+                    children: [
+                      Checkbox(
+                        value: isRecurrent,
+                        onChanged: _checkBoxMarked,
+                        activeColor: Colors.transparent,
+                        checkColor: Colors.white,
+                      ),
+                      Text(
+                        'Es un evento recurrente',
+                        style: TextStyle(color: Colors.white),
+                      )
+                    ],
+                  ),
+                  isRecurrent ? _showRecurrentField() : Container(),
+                  SizedBox(
+                    height: 20,
+                  ),
+                  RaisedButton(
+                    color: Colors.white,
+                    onPressed: isPopulated ? _onFormSubmitted : null,
+                    child: Text('Crear'),
+                  ),
+                ],
+              ),
             ),
           ),
         ),
@@ -289,6 +337,21 @@ class CaptureFormState extends State<CaptureForm> {
     BlocProvider.of<NavigatorBloc>(context)
         .add(NavigatorAction.NavigatorActionPop);
   }
+
+  void _addChip(String chipLabel) => setState(() => {
+        newContextChip = Chip(
+            label: Text(chipLabel),
+            backgroundColor: Colors.white,
+            deleteIconColor: Colors.orange,
+            onDeleted: () {
+              setState(() {
+                contextList.removeWhere((entryChip) {
+                  entryChip.label == chipLabel;
+                });
+              });
+            }),
+        contextList.add(newContextChip)
+      });
 
   void _checkBoxMarked(bool newValue) => setState(() {
         isRecurrent = newValue;
@@ -346,7 +409,7 @@ class CaptureFormState extends State<CaptureForm> {
     final DateTime picked = await showDatePicker(
         context: context,
         initialDate: selectedDate,
-        // locale: Locale.fromSubtags(languageCode: 'SP'),
+        locale: const Locale('es', 'ES'),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
     if (picked != null && picked != selectedDate)

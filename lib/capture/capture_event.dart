@@ -55,3 +55,16 @@ class DeleteAttachedImage extends CaptureEvent {
     return 'DeleteAttachedImage {  }';
   }
 }
+
+class ClearForm extends CaptureEvent {
+  ClearForm();
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [];
+
+    @override
+  String toString() {
+    return 'ClearForm {  }';
+  }
+}

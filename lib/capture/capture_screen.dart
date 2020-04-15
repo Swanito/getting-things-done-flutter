@@ -19,12 +19,6 @@ class CaptureScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-
     return CaptureForm(userRepository: _userRepository, isEditing: false,);
-    // return BlocProvider<CaptureBloc>(
-    //   create: (context) => CaptureBloc(userRepository: _userRepository, elementRepository: _elementRepository),
-    //   child: CaptureForm(userRepository: _userRepository, isEditing: false,)
-    // );
   }
 }

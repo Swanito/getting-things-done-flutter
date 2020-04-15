@@ -1,6 +1,7 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:gtd/auth/auth_screen.dart';
 import 'package:gtd/auth/authentication_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
@@ -108,7 +109,8 @@ class GTDState extends State<GTD> {
         elementRepository: _elementRepository);
     ProjectBloc projectBloc =
         ProjectBloc(projectRepository: _projectRepository);
-    CaptureBloc captureBloc = CaptureBloc(userRepository: _userRepository, elementRepository: _elementRepository);
+    CaptureBloc captureBloc = CaptureBloc(
+        userRepository: _userRepository, elementRepository: _elementRepository);
 
     return MultiBlocProvider(
         providers: [
@@ -126,12 +128,20 @@ class GTDState extends State<GTD> {
               create: (BuildContext context) =>
                   projectBloc..add(LoadProjects())),
           BlocProvider<CaptureBloc>(
-              create: (BuildContext context) =>
-                  captureBloc),
+              create: (BuildContext context) => captureBloc),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,
           title: 'Getting Things Done',
+          localizationsDelegates: [
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('es'), // Spanish
+            const Locale('en'), // English
+          ],
           home: BlocBuilder<AuthenticationBloc, AuthenticationState>(
               builder: (context, state) {
             if (state is Uninitialized) {

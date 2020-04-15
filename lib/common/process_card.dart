@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/styles.dart';
+import 'package:gtd/home/elements/element_bloc.dart';
 
 class ProcessCard extends StatelessWidget {
   final GTDElement _collectedElement;
@@ -37,7 +39,7 @@ class ProcessCard extends StatelessWidget {
               children: [
                 FlatButton(
                     onPressed: () {
-                      _onDeletePressed;
+                      _onDeletePressed(_collectedElement, context);
                     },
                     child: Text('ELIMINAR',
                         style: TextStyle(color: Colors.orange))),
@@ -61,8 +63,8 @@ class ProcessCard extends StatelessWidget {
     );
   }
 
-  void _onDeletePressed() {
-    
+  void _onDeletePressed(GTDElement element, BuildContext context) {
+    BlocProvider.of<ElementBloc>(context).add(MoveToDelete(element));
   }
 
   void _onEditPressed() {
