@@ -38,6 +38,7 @@ dependencies:
   camera:
   path_provider:
   path:
+  app_settings:
     
 dev_dependencies:
   flutter_test:

@@ -1,20 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
-import 'package:gtd/home/procesar/process_list.dart';
+import 'package:gtd/home/more/trash/trash_list.dart';
 
-class ProcessScreen extends StatelessWidget {
+class TrashScreen extends StatelessWidget {
   final UserRepository _userRepository;
-  GTDAppBar _gtdAppBar = GTDAppBar(title: 'Procesar', canSearch: true,factor: BarSizeFactor.Small,);
 
-  ProcessScreen({Key key, UserRepository userRepository})
+  TrashScreen({Key key, UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository;
 
@@ -39,7 +34,7 @@ class ProcessScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          _gtdAppBar,
+          GTDAppBar(title: 'Trash', canSearch: true, factor: BarSizeFactor.Small,),
           MultiBlocProvider(
               providers: [
                 BlocProvider<ElementBloc>(
@@ -62,7 +57,7 @@ class ProcessScreen extends StatelessWidget {
                       ),
                     );
                   } else if (state is SucessLoadingElements) {
-                      return ProcessList(state.elements);
+                      return TrashList(state.elements);
                   } else if (state is FailedLoadingElements) {
                     _showErrorSnackbar(context);
                     return Container();

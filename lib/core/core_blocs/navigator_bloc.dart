@@ -1,3 +1,4 @@
+import 'package:app_settings/app_settings.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,8 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/home_screen.dart';
 import 'package:gtd/home/more/projects/project_screen.dart';
+import 'package:gtd/home/more/settings/settings_screen.dart';
+import 'package:gtd/home/more/trash/trash_screen.dart';
 
 enum NavigatorAction {
   NavigatorActionPop,
@@ -23,7 +26,10 @@ enum NavigatorAction {
   OpenCaptureScreen,
   NavigateToProjects,
   GoToSplashScreen,
-  OpenCamera
+  OpenCamera,
+  NavigateToTrash,
+  OpenSettings,
+  OpenSystemSettings
 }
 
 class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
@@ -94,6 +100,18 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
         } else {
           print('Cameras not available');
         }
+        break;
+      case NavigatorAction.NavigateToTrash:
+        navigatorKey.currentState.push(MaterialPageRoute(
+            builder: (context) => TrashScreen(userRepository: userRepository)));
+        break;
+      case NavigatorAction.OpenSystemSettings:
+        AppSettings.openAppSettings();
+        break;
+      case NavigatorAction.OpenSettings:
+        navigatorKey.currentState.push(MaterialPageRoute(
+            builder: (context) => SettingsScreen(userRepository: userRepository, localRepository: localRepository,)));
+        break;
     }
   }
 }

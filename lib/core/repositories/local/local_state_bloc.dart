@@ -32,7 +32,7 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
         yield OnboardingNotCompleted();
       }
     } else if (event is SetGTDLevel) {
-      await localRepository.setGTDLevel(event);
+      await localRepository.setGTDLevel(event.level);
       yield GTDLevelKnown();
     } else if (event is CheckIfGTDLevelIsKnwon) {
       String gtdLevel = await localRepository.getGTDLevel();

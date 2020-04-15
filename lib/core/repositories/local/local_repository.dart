@@ -12,7 +12,7 @@ class LocalRepository extends Repository {
 
   static LocalRepository get instance => _instance;
 
-  Future<void> setGTDLevel(SetGTDLevel level) async {
+  Future<void> setGTDLevel(GTDLevel level) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setString('gtdLevel', level.toString());
   }

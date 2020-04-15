@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/common/next_list.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
+import 'package:gtd/home/next/next_list.dart';
 
 class NextScreen extends StatelessWidget {
   final UserRepository _userRepository;

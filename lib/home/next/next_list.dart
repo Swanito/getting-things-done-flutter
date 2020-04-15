@@ -1,31 +1,28 @@
 import 'package:flutter/material.dart';
-import 'package:gtd/common/process_card.dart';
 import 'package:gtd/core/models/gtd_element.dart';
+import 'package:gtd/home/next/next_card.dart';
 
-class ProcessList extends StatelessWidget {
+class NextList extends StatelessWidget {
   List<GTDElement> elements = [];
   List<GTDElement> filteredList = [];
 
-  ProcessList(this.elements)
-      : filteredList = elements
-            .where(
-              (e) => e.currentStatus == 'COLLECTED',
-            )
-            .toList();
+  NextList(this.elements)
+      : filteredList = elements.where((e) => 
+              e.currentStatus == 'PROCESSED' || e.currentStatus == 'COMPLETED',
+            ).toList();
 
   @override
   Widget build(BuildContext context) {
-    if (elements.isNotEmpty) {
+
+    if (filteredList.isNotEmpty) {
       return Expanded(
-        child: ListView.builder(
+              child: ListView.builder(
           shrinkWrap: true,
           itemCount: filteredList.length,
           itemBuilder: (BuildContext context, int index) {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: ProcessCard(
-                collectedElement: filteredList[index],
-              ),
+              padding: const EdgeInsets.all(16.0),
+              child: NextCard(processedElement: filteredList[index],)
             );
           },
         ),
@@ -37,7 +34,7 @@ class ProcessList extends StatelessWidget {
           child: Card(
             child: Padding(
               padding: const EdgeInsets.all(20.0),
-              child: Text('No has creado ningún elemento todavía.'),
+              child: Text('No tienes ningún elemento pendiente de completar!'),
             ),
           ),
         ),

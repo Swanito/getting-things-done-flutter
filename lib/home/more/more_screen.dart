@@ -35,7 +35,10 @@ class MoreScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Más', factor: BarSizeFactor.Small,),
+          GTDAppBar(
+            title: 'Más',
+            factor: BarSizeFactor.Small,
+          ),
           Flexible(
             child: ListView(
               children: [
@@ -60,7 +63,10 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.delete),
                     title: Text('Papelera'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigatorAction.NavigateToTrash)
+                    },
                   ),
                 ),
                 Card(
@@ -69,7 +75,8 @@ class MoreScreen extends StatelessWidget {
                     title: Text('Proyectos'),
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () => {
-                      BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigateToProjects)
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigatorAction.NavigateToProjects)
                     },
                   ),
                 ),
@@ -78,7 +85,10 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.settings),
                     title: Text('Ajustes'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigatorAction.OpenSettings)
+                    },
                   ),
                 ),
                 Card(
@@ -86,7 +96,10 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.security),
                     title: Text('Permisos'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigatorAction.OpenSystemSettings)
+                    },
                   ),
                 ),
                 Card(
@@ -94,9 +107,11 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.exit_to_app),
                     title: Text('Cerrar Sesión'),
                     onTap: () => {
-                      BlocProvider.of<AuthenticationBloc>(context).add(LoggedOut()),
+                      BlocProvider.of<AuthenticationBloc>(context)
+                          .add(LoggedOut()),
                       BlocProvider.of<LocalStatusBloc>(context).add(Logout()),
-                      BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.GoToSplashScreen)
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigatorAction.GoToSplashScreen)
                     },
                   ),
                 ),

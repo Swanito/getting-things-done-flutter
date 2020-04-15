@@ -106,7 +106,8 @@ class GTDState extends State<GTD> {
     NavigatorBloc navigatorBloc = NavigatorBloc(
         navigatorKey: _navigatorKey,
         userRepository: _userRepository,
-        elementRepository: _elementRepository);
+        elementRepository: _elementRepository,
+        localRepository: _localRepository);
     ProjectBloc projectBloc =
         ProjectBloc(projectRepository: _projectRepository);
     CaptureBloc captureBloc = CaptureBloc(
