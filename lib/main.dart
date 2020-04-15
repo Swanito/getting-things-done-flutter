@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/auth_screen.dart';
 import 'package:gtd/auth/authentication_bloc.dart';
+import 'package:gtd/capture/capture_bloc.dart';
 import 'package:gtd/common/splash_screen.dart';
 import 'package:gtd/core/core_blocs/bloc_delegate.dart';
 import 'package:gtd/core/keys.dart';
@@ -107,6 +108,7 @@ class GTDState extends State<GTD> {
         elementRepository: _elementRepository);
     ProjectBloc projectBloc =
         ProjectBloc(projectRepository: _projectRepository);
+    CaptureBloc captureBloc = CaptureBloc(userRepository: _userRepository, elementRepository: _elementRepository);
 
     return MultiBlocProvider(
         providers: [
@@ -123,6 +125,9 @@ class GTDState extends State<GTD> {
           BlocProvider<ProjectBloc>(
               create: (BuildContext context) =>
                   projectBloc..add(LoadProjects())),
+          BlocProvider<CaptureBloc>(
+              create: (BuildContext context) =>
+                  captureBloc),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,

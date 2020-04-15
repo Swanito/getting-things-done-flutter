@@ -31,6 +31,10 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
   Stream<CaptureState> mapEventToState(CaptureEvent event) async* {
     if (event is Capture) {
       yield* _mapCaptureToState(event);
+    } else if(event is AttachImage) {
+      yield* _mapAttachImageToState(event);
+    } else if(event is DeleteAttachedImage) {
+      yield* _mapDeleteAttachedImageToState();
     }
   }
 
@@ -68,5 +72,16 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
       print(error);
       yield ErrorCapturing();
     }
+  }
+
+  Stream<CaptureState> _mapAttachImageToState(AttachImage event) async* {
+    print('aqui viene lo dificil');
+    print(state);
+    yield ImageAttached(attachedImage: event.takenImage, fileName: event.fileName);
+    print(state);
+  }
+
+  Stream<CaptureState> _mapDeleteAttachedImageToState() async* {
+    yield EmptyState();
   }
 }

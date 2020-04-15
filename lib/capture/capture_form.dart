@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
 import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/capture/capture_state.dart';
+import 'package:gtd/common/attached_image_card.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
@@ -36,6 +37,10 @@ class CaptureFormState extends State<CaptureForm> {
 
   bool isRecurrent = false;
   bool _isEditing;
+  int dropdownDayValue;
+  String dropdownPeriodValue;
+  DateTime selectedDate = DateTime.now();
+
   bool get isPopulated => _summaryController.text.isNotEmpty;
 
   CaptureFormState({@required userRepository, @required isEditing})
@@ -57,25 +62,21 @@ class CaptureFormState extends State<CaptureForm> {
 
   @override
   Widget build(BuildContext context) {
-    Size size = MediaQuery.of(context).size;
-    return BlocListener<CaptureBloc, CaptureState>(
-      listener: (context, state) {
-        // if (!state.isValidTitle) {
-
-        // }
-      },
-      child: BlocBuilder<CaptureBloc, CaptureState>(builder: (context, state) {
-        return Scaffold(
-          backgroundColor: Colors.orange,
-          appBar: AppBar(
-            backgroundColor: Colors.transparent,
-            elevation: 0.0,
-            bottomOpacity: 0.0,
-            title: Text('Capturar'),
-          ),
-          body: Padding(
-            padding: const EdgeInsets.all(16.0),
+    return BlocBuilder<CaptureBloc, CaptureState>(builder: (context, state) {
+      return Scaffold(
+        backgroundColor: Colors.orange,
+        appBar: AppBar(
+          backgroundColor: Colors.transparent,
+          elevation: 0.0,
+          bottomOpacity: 0.0,
+          title: Text('Capturar'),
+        ),
+        body: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
             child: ListView(
+              shrinkWrap: true,
+              controller: ScrollController(),
               children: [
                 TextFormField(
                   controller: _summaryController,
@@ -150,6 +151,10 @@ class CaptureFormState extends State<CaptureForm> {
                     Spacer(),
                   ],
                 ),
+                state is ImageAttached
+                    ? AttachedImageCard(
+                        image: state.attachedImage, fileName: state.fileName)
+                    : Container(),
                 SizedBox(
                   height: 20,
                 ),
@@ -157,7 +162,6 @@ class CaptureFormState extends State<CaptureForm> {
                   controller: _projectController,
                   style: new TextStyle(
                       fontWeight: FontWeight.normal, color: Colors.white),
-                  maxLines: null,
                   decoration: InputDecoration(
                     icon: Icon(Icons.lightbulb_outline, color: Colors.white),
                     labelText: 'Proyecto',
@@ -170,7 +174,7 @@ class CaptureFormState extends State<CaptureForm> {
                           style: BorderStyle.solid),
                     ),
                   ),
-                  keyboardType: TextInputType.multiline,
+                  keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidate: true,
                 ),
@@ -181,7 +185,6 @@ class CaptureFormState extends State<CaptureForm> {
                   controller: _contextController,
                   style: new TextStyle(
                       fontWeight: FontWeight.normal, color: Colors.white),
-                  maxLines: null,
                   decoration: InputDecoration(
                     icon: Icon(Icons.dialpad, color: Colors.white),
                     labelText: 'Contexto',
@@ -194,7 +197,7 @@ class CaptureFormState extends State<CaptureForm> {
                           style: BorderStyle.solid),
                     ),
                   ),
-                  keyboardType: TextInputType.multiline,
+                  keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidate: true,
                 ),
@@ -205,13 +208,11 @@ class CaptureFormState extends State<CaptureForm> {
                   controller: _dateController,
                   style: new TextStyle(
                       fontWeight: FontWeight.normal, color: Colors.white),
-                  maxLines: null,
                   decoration: InputDecoration(
                     icon: Icon(Icons.calendar_today, color: Colors.white),
-                    labelText: 'Fecha fin',
+                    labelText: 'Fecha ocurrencia',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    hintText: 'dd/mm/AAAA',
                     enabledBorder: new UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
@@ -219,7 +220,8 @@ class CaptureFormState extends State<CaptureForm> {
                           style: BorderStyle.solid),
                     ),
                   ),
-                  keyboardType: TextInputType.multiline,
+                  onTap: () => _selectDate(context),
+                  keyboardType: TextInputType.text,
                   autocorrect: false,
                   autovalidate: true,
                 ),
@@ -240,19 +242,21 @@ class CaptureFormState extends State<CaptureForm> {
                     )
                   ],
                 ),
+                isRecurrent ? _showRecurrentField() : Container(),
                 SizedBox(
                   height: 20,
                 ),
                 RaisedButton(
-                  onPressed: _onFormSubmitted,
+                  color: Colors.white,
+                  onPressed: isPopulated ? _onFormSubmitted : null,
                   child: Text('Crear'),
                 ),
               ],
             ),
           ),
-        );
-      }),
-    );
+        ),
+      );
+    });
   }
 
   @override
@@ -288,11 +292,67 @@ class CaptureFormState extends State<CaptureForm> {
 
   void _checkBoxMarked(bool newValue) => setState(() {
         isRecurrent = newValue;
-
-        if (isRecurrent) {
-          // TODO: Here goes your functionality that remembers the user.
-        } else {
-          // TODO: Forget the user
-        }
       });
+
+  Widget _showRecurrentField() {
+    var list = new List<int>.generate(31, (i) => i + 1);
+
+    return Row(
+      children: <Widget>[
+        Text('Ocurre cada ', style: TextStyle(color: Colors.white)),
+        DropdownButton<int>(
+          value: dropdownDayValue,
+          underline: Container(
+            height: 2,
+            color: Colors.white,
+          ),
+          onChanged: (int newValue) {
+            setState(() {
+              dropdownDayValue = newValue;
+            });
+          },
+          items: list.map<DropdownMenuItem<int>>((int value) {
+            return DropdownMenuItem<int>(
+              value: value,
+              child: Text(value.toString()),
+            );
+          }).toList(),
+        ),
+        Text(' '),
+        DropdownButton<String>(
+          value: dropdownPeriodValue,
+          underline: Container(
+            height: 2,
+            color: Colors.white,
+          ),
+          onChanged: (String newValue) {
+            setState(() {
+              dropdownPeriodValue = newValue;
+            });
+          },
+          items: <String>['Dias', 'Semanas']
+              .map<DropdownMenuItem<String>>((String value) {
+            return DropdownMenuItem<String>(
+              value: value,
+              child: Text(value),
+            );
+          }).toList(),
+        )
+      ],
+    );
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        // locale: Locale.fromSubtags(languageCode: 'SP'),
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+      });
+  }
 }
