@@ -49,7 +49,7 @@ class AuthScreen extends StatelessWidget {
       color: Colors.white,
       onPressed: () => {
         BlocProvider.of<NavigatorBloc>(context)
-            .add(NavigatorAction.NavigateToLoginEvent),
+            .add(NavigateToLoginEvent()),
       },
       child: Text('Iniciar Sesión', style: kButtonLabel),
     );
@@ -58,7 +58,7 @@ class AuthScreen extends StatelessWidget {
       color: Colors.white,
       onPressed: () => {
                 BlocProvider.of<NavigatorBloc>(context)
-            .add(NavigatorAction.NavigateToRegisterEvent),
+            .add(NavigateToRegisterEvent()),
       },
       child: Text('Registrarse', style: kButtonLabel),
     );

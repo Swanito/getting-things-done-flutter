@@ -23,3 +23,27 @@ class SucessLoadingElements extends ElementState {
 }
 
 class FailedLoadingElements extends ElementState {}
+
+class StartingAdvancedProcessing extends ElementState {
+  final GTDElement element;
+
+  const StartingAdvancedProcessing([this.element]);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'StartingAdvancedProcessing { element to be processed: $element }';
+}
+
+class StartingBasicProcessing extends ElementState {
+    final GTDElement element;
+
+  const StartingBasicProcessing([this.element]);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'StartingBasicProcessing { element to be processed: $element }';
+}

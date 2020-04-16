@@ -70,14 +70,14 @@ class TrashCard extends StatelessWidget {
             FlatButton(
               child: Text('Cancelar'),
               onPressed: () {
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
               },
             ),
             FlatButton(
               child: Text('Borrar'),
               onPressed: () {
                     _elementBloc.add(DeleteElement(element));
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
               },
             ),
           ],

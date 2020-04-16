@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/capture/capture_screen.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
@@ -7,6 +8,7 @@ import 'package:gtd/home/more/more_screen.dart';
 import 'package:gtd/home/next/next_screen.dart';
 import 'package:gtd/home/procesar/process_screen.dart';
 import 'package:gtd/home/revisar/review_screen.dart';
+import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;
@@ -72,7 +74,7 @@ class HomeScreenState extends State<HomeScreen> {
         floatingActionButton: FloatingActionButton(
           onPressed: () => {
             BlocProvider.of<NavigatorBloc>(context)
-                .add(NavigatorAction.OpenCaptureScreen)
+                .add(OpenCaptureScreen())
           },
           backgroundColor: Colors.orange,
           child: Icon(Icons.add),

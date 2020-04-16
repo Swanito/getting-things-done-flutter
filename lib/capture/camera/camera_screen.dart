@@ -133,8 +133,8 @@ class DisplayPictureScreen extends StatelessWidget {
           padding: EdgeInsets.only(top: 20, bottom: 20, left: 100, right: 100),
           color: Colors.orange,
           onPressed: () {
-            BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
-            BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+            BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+            BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
             BlocProvider.of<CaptureBloc>(context).add(AttachImage(takenImage: thumbnail, fileName: fileName));
           },
           child: Text('Adjuntar imagen', style: TextStyle(color: Colors.white),),

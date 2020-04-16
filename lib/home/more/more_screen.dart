@@ -65,7 +65,7 @@ class MoreScreen extends StatelessWidget {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () => {
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorAction.NavigateToTrash)
+                          .add(NavigateToTrash())
                     },
                   ),
                 ),
@@ -76,7 +76,7 @@ class MoreScreen extends StatelessWidget {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () => {
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorAction.NavigateToProjects)
+                          .add(NavigateToProjects())
                     },
                   ),
                 ),
@@ -87,7 +87,7 @@ class MoreScreen extends StatelessWidget {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () => {
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorAction.OpenSettings)
+                          .add(OpenSettings())
                     },
                   ),
                 ),
@@ -98,7 +98,7 @@ class MoreScreen extends StatelessWidget {
                     trailing: Icon(Icons.keyboard_arrow_right),
                     onTap: () => {
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorAction.OpenSystemSettings)
+                          .add(OpenSystemSettings())
                     },
                   ),
                 ),
@@ -111,7 +111,7 @@ class MoreScreen extends StatelessWidget {
                           .add(LoggedOut()),
                       BlocProvider.of<LocalStatusBloc>(context).add(Logout()),
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorAction.GoToSplashScreen)
+                          .add(GoToSplashScreen())
                     },
                   ),
                 ),

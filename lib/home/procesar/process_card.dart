@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/styles.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
@@ -51,7 +52,7 @@ class ProcessCard extends StatelessWidget {
                         Text('EDITAR', style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      _onProcessPressed;
+                      _onProcessPressed(_collectedElement, context);
                     },
                     child: Text('PROCESAR',
                         style: TextStyle(color: Colors.orange))),
@@ -71,7 +72,7 @@ class ProcessCard extends StatelessWidget {
 
   }
 
-  void _onProcessPressed() {
-    
+  void _onProcessPressed(GTDElement element, BuildContext context) {
+    BlocProvider.of<NavigatorBloc>(context).add(OpenProcessScreen(elementToBeProcessed: element));
   }
 }

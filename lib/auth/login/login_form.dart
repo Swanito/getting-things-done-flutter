@@ -105,7 +105,7 @@ class _LoginFormState extends State<LoginForm> {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
           BlocProvider.of<LocalStatusBloc>(context).add(CheckIfGTDLevelIsKnwon());
           BlocProvider.of<NavigatorBloc>(context)
-              .add(NavigatorAction.NavigateToHome);
+              .add(NavigateToHome());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -228,7 +228,7 @@ class _LoginFormState extends State<LoginForm> {
               child: Text('Ok'),
               onPressed: () {
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorAction.NavigatorActionPop);
+                    .add(NavigatorActionPop());
               },
             ),
           ],

@@ -14,6 +14,18 @@ abstract class LocalStatusEvent extends Equatable {
 
 class CheckIfGTDLevelIsKnwon extends LocalStatusEvent {}
 
+class UpdateGTDLevel extends LocalStatusEvent {
+  final GTDLevel level;
+
+  UpdateGTDLevel({@required this.level});
+
+    @override
+  List<Object> get props => [level];
+
+  @override
+  String toString() => 'Event SetGTDLevel: { GTDLevel: $level }';
+}
+
 class SetGTDLevel extends LocalStatusEvent {
   final GTDLevel level;
 

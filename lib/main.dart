@@ -16,6 +16,7 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_event.dart';
+import 'package:gtd/home/procesar/bloc/process_bloc.dart';
 import 'package:gtd/onboarding/onboarding_screen.dart';
 
 import 'core/core_blocs/navigator_bloc.dart';
@@ -112,6 +113,7 @@ class GTDState extends State<GTD> {
         ProjectBloc(projectRepository: _projectRepository);
     CaptureBloc captureBloc = CaptureBloc(
         userRepository: _userRepository, elementRepository: _elementRepository);
+    ProcessBloc processBloc = ProcessBloc(elementRepository: _elementRepository);
 
     return MultiBlocProvider(
         providers: [
@@ -130,6 +132,8 @@ class GTDState extends State<GTD> {
                   projectBloc..add(LoadProjects())),
           BlocProvider<CaptureBloc>(
               create: (BuildContext context) => captureBloc),
+          BlocProvider<ProcessBloc>(
+              create: (BuildContext context) => processBloc),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,

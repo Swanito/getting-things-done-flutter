@@ -2,7 +2,10 @@ import 'dart:async';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
+import 'package:gtd/core/repositories/local/local_repository.dart';
+import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:meta/meta.dart';
 
@@ -11,6 +14,8 @@ part 'element_event.dart';
 
 class ElementBloc extends Bloc<ElementEvent, ElementState> {
   final ElementRepository _elementRepository;
+  final LocalRepository _localRepository = LocalRepository.instance;
+
   StreamSubscription _elementSubscription;
 
   ElementBloc({@required ElementRepository elementRepository})

@@ -31,3 +31,5 @@ class SettingsLoaded extends LocalState {
   }
 
 }
+
+class SettingsSaved extends LocalState {}

@@ -118,7 +118,7 @@ class ProjectCardState extends State<ProjectCard> {
               FlatButton(
                   onPressed: () {
                     BlocProvider.of<NavigatorBloc>(context)
-                        .add(NavigatorAction.NavigatorActionPop);
+                        .add(NavigatorActionPop());
                   },
                   child: Text('Cancelar')),
               FlatButton(onPressed: _onProjectEdited, child: Text('Guardar')),
@@ -133,7 +133,7 @@ class ProjectCardState extends State<ProjectCard> {
       title: _projectEditController.text,
       id: project.id
     ));
-    BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigatorActionPop);
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
   @override

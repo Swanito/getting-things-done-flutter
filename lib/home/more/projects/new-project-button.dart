@@ -57,7 +57,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
             FlatButton(
                 onPressed: () {
                   BlocProvider.of<NavigatorBloc>(context)
-                      .add(NavigatorAction.NavigatorActionPop);
+                      .add(NavigatorActionPop());
                 },
                 child: Text('Cancelar')),
             FlatButton(onPressed: _onProjectCreated, child: Text('Crear')),
@@ -85,7 +85,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
   void _onProjectCreated() {
     _projectBloc.add(CreateProject(title: _projectInputController.text));
     BlocProvider.of<NavigatorBloc>(context)
-        .add(NavigatorAction.NavigatorActionPop);
+        .add(NavigatorActionPop());
   }
 
   @override

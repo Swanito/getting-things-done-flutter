@@ -20,7 +20,7 @@ class RegisterScreen extends StatelessWidget {
         leading: GestureDetector(
           onTap: () => {
             BlocProvider.of<NavigatorBloc>(context)
-                .add(NavigatorAction.NavigatorActionPop)
+                .add(NavigatorActionPop())
           },
           child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),

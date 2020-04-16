@@ -4,16 +4,11 @@ class ElementEvent extends Equatable {
   @override
   // TODO: implement props
   List<Object> get props => [];
-  
 }
 
-class LoadElements extends ElementEvent {
+class LoadElements extends ElementEvent {}
 
-}
-
-class LoadElement extends ElementEvent {
-  
-}
+class LoadElement extends ElementEvent {}
 
 class CreateElement extends ElementEvent {
   final GTDElement element;
@@ -28,7 +23,7 @@ class CreateElement extends ElementEvent {
 }
 
 class DeleteElement extends ElementEvent {
-    final GTDElement element;
+  final GTDElement element;
 
   DeleteElement(this.element);
 
@@ -40,7 +35,7 @@ class DeleteElement extends ElementEvent {
 }
 
 class UpdateElement extends ElementEvent {
-      final GTDElement element;
+  final GTDElement element;
 
   UpdateElement(this.element);
 
@@ -52,7 +47,7 @@ class UpdateElement extends ElementEvent {
 }
 
 class MarkAsCompleted extends ElementEvent {
-        final GTDElement element;
+  final GTDElement element;
 
   MarkAsCompleted(this.element);
 
@@ -64,7 +59,7 @@ class MarkAsCompleted extends ElementEvent {
 }
 
 class UnmarkAsCompleted extends ElementEvent {
-        final GTDElement element;
+  final GTDElement element;
 
   UnmarkAsCompleted(this.element);
 
@@ -75,9 +70,8 @@ class UnmarkAsCompleted extends ElementEvent {
   String toString() => 'MarkAsCompleted { element: $element }';
 }
 
-
 class ElementsUpdated extends ElementEvent {
-        final List<GTDElement> elements;
+  final List<GTDElement> elements;
 
   ElementsUpdated(this.elements);
 
@@ -98,4 +92,17 @@ class MoveToDelete extends ElementEvent {
 
   @override
   String toString() => 'MoveToDelete { element: $element }';
+}
+
+class Process extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  
+  Process(this.elementToBeProcessed);
+
+  @override
+  List<Object> get props => [elementToBeProcessed];
+
+  @override
+  String toString() =>
+      'Process { elementToBeProcessed: $elementToBeProcessed }';
 }

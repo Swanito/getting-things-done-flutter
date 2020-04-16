@@ -90,7 +90,7 @@ class CaptureFormState extends State<CaptureForm> {
                 onPressed: () {
                   BlocProvider.of<CaptureBloc>(context).add(ClearForm());
                   BlocProvider.of<NavigatorBloc>(context)
-                      .add(NavigatorAction.NavigatorActionPop);
+                      .add(NavigatorActionPop());
                 }),
           ),
           body: Padding(
@@ -136,26 +136,30 @@ class CaptureFormState extends State<CaptureForm> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    controller: _descriptionController,
-                    style: new TextStyle(
-                        fontWeight: FontWeight.normal, color: Colors.white),
-                    maxLines: null,
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.description, color: Colors.white),
-                      labelText: 'Descripción',
-                      labelStyle: TextStyle(color: Colors.white),
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 1.0,
-                            style: BorderStyle.solid),
+                  Container(
+                    height: MediaQuery.of(context).size.height / 6,
+                    child: TextFormField(
+                      controller: _descriptionController,
+                      style: new TextStyle(
+                          fontWeight: FontWeight.normal, color: Colors.white),
+                      maxLines: null,
+                      expands: true,
+                      decoration: InputDecoration(
+                        icon: Icon(Icons.description, color: Colors.white),
+                        labelText: 'Descripción',
+                        labelStyle: TextStyle(color: Colors.white),
+                        hintStyle: TextStyle(color: Colors.white),
+                        enabledBorder: new UnderlineInputBorder(
+                          borderSide: BorderSide(
+                              color: Colors.white,
+                              width: 1.0,
+                              style: BorderStyle.solid),
+                        ),
                       ),
+                      keyboardType: TextInputType.multiline,
+                      autocorrect: false,
+                      autovalidate: true,
                     ),
-                    keyboardType: TextInputType.multiline,
-                    autocorrect: false,
-                    autovalidate: true,
                   ),
                   SizedBox(
                     height: 20,
@@ -190,109 +194,6 @@ class CaptureFormState extends State<CaptureForm> {
                   SizedBox(
                     height: 20,
                   ),
-                  TextFormField(
-                    controller: _projectController,
-                    style: new TextStyle(
-                        fontWeight: FontWeight.normal, color: Colors.white),
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.lightbulb_outline, color: Colors.white),
-                      labelText: 'Proyecto',
-                      labelStyle: TextStyle(color: Colors.white),
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 1.0,
-                            style: BorderStyle.solid),
-                      ),
-                    ),
-                    keyboardType: TextInputType.text,
-                    autocorrect: false,
-                    autovalidate: true,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _contextController,
-                    style: new TextStyle(
-                        fontWeight: FontWeight.normal, color: Colors.white),
-                    decoration: InputDecoration(
-                        icon: Icon(Icons.dialpad, color: Colors.white),
-                        labelText: 'Contexto',
-                        labelStyle: TextStyle(color: Colors.white),
-                        hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: new UnderlineInputBorder(
-                          borderSide: BorderSide(
-                              color: Colors.white,
-                              width: 1.0,
-                              style: BorderStyle.solid),
-                        ),
-                        suffix: FlatButton(
-                          onPressed: isContextPopulated
-                              ? () {
-                                  _addChip(_contextController.text);
-                                }
-                              : null,
-                          child: Text('AÑADIR',
-                              style: TextStyle(color: Colors.white)),
-                        )),
-                    keyboardType: TextInputType.text,
-                    autocorrect: false,
-                    autovalidate: true,
-                    onChanged: (text) {
-                      setState(() {});
-                    },
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Row(children: contextList.toList()),
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  TextFormField(
-                    controller: _dateController,
-                    style: new TextStyle(
-                        fontWeight: FontWeight.normal, color: Colors.white),
-                    decoration: InputDecoration(
-                      icon: Icon(Icons.calendar_today, color: Colors.white),
-                      labelText: 'Fecha ocurrencia',
-                      labelStyle: TextStyle(color: Colors.white),
-                      hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
-                        borderSide: BorderSide(
-                            color: Colors.white,
-                            width: 1.0,
-                            style: BorderStyle.solid),
-                      ),
-                    ),
-                    onTap: () => _selectDate(context),
-                    keyboardType: TextInputType.text,
-                    autocorrect: false,
-                    autovalidate: true,
-                  ),
-                  SizedBox(
-                    height: 20,
-                  ),
-                  Row(
-                    children: [
-                      Checkbox(
-                        value: isRecurrent,
-                        onChanged: _checkBoxMarked,
-                        activeColor: Colors.transparent,
-                        checkColor: Colors.white,
-                      ),
-                      Text(
-                        'Es un evento recurrente',
-                        style: TextStyle(color: Colors.white),
-                      )
-                    ],
-                  ),
-                  isRecurrent ? _showRecurrentField() : Container(),
-                  SizedBox(
-                    height: 20,
-                  ),
                   RaisedButton(
                     color: Colors.white,
                     onPressed: isPopulated ? _onFormSubmitted : null,
@@ -316,7 +217,7 @@ class CaptureFormState extends State<CaptureForm> {
   }
 
   void _onPhotoPressed() async {
-    BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.OpenCamera);
+    BlocProvider.of<NavigatorBloc>(context).add(OpenCamera());
   }
 
   void _onSummaryChanged() {}
@@ -335,87 +236,7 @@ class CaptureFormState extends State<CaptureForm> {
         description: _descriptionController.text,
         project: _projectController.text));
     BlocProvider.of<NavigatorBloc>(context)
-        .add(NavigatorAction.NavigatorActionPop);
+        .add(NavigatorActionPop());
   }
 
-  void _addChip(String chipLabel) => setState(() => {
-        newContextChip = Chip(
-            label: Text(chipLabel),
-            backgroundColor: Colors.white,
-            deleteIconColor: Colors.orange,
-            onDeleted: () {
-              setState(() {
-                contextList.removeWhere((entryChip) {
-                  entryChip.label == chipLabel;
-                });
-              });
-            }),
-        contextList.add(newContextChip)
-      });
-
-  void _checkBoxMarked(bool newValue) => setState(() {
-        isRecurrent = newValue;
-      });
-
-  Widget _showRecurrentField() {
-    var list = new List<int>.generate(31, (i) => i + 1);
-
-    return Row(
-      children: <Widget>[
-        Text('Ocurre cada ', style: TextStyle(color: Colors.white)),
-        DropdownButton<int>(
-          value: dropdownDayValue,
-          underline: Container(
-            height: 2,
-            color: Colors.white,
-          ),
-          onChanged: (int newValue) {
-            setState(() {
-              dropdownDayValue = newValue;
-            });
-          },
-          items: list.map<DropdownMenuItem<int>>((int value) {
-            return DropdownMenuItem<int>(
-              value: value,
-              child: Text(value.toString()),
-            );
-          }).toList(),
-        ),
-        Text(' '),
-        DropdownButton<String>(
-          value: dropdownPeriodValue,
-          underline: Container(
-            height: 2,
-            color: Colors.white,
-          ),
-          onChanged: (String newValue) {
-            setState(() {
-              dropdownPeriodValue = newValue;
-            });
-          },
-          items: <String>['Dias', 'Semanas']
-              .map<DropdownMenuItem<String>>((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
-        )
-      ],
-    );
-  }
-
-  Future<Null> _selectDate(BuildContext context) async {
-    final DateTime picked = await showDatePicker(
-        context: context,
-        initialDate: selectedDate,
-        locale: const Locale('es', 'ES'),
-        firstDate: DateTime(2015, 8),
-        lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
-      setState(() {
-        selectedDate = picked;
-        _dateController.text = selectedDate.toLocal().toString().split(' ')[0];
-      });
-  }
 }

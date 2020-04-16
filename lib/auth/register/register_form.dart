@@ -228,7 +228,7 @@ class _RegisterFormState extends State<RegisterForm> {
           FlatButton(
             child: Text('Ok'),
             onPressed: () {
-              BlocProvider.of<NavigatorBloc>(context).add(NavigatorAction.NavigateToAuthEvent);
+              BlocProvider.of<NavigatorBloc>(context).add(NavigateToAuthEvent());
             },
           ),
         ],

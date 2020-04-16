@@ -45,7 +45,7 @@ class AttachedImageCard extends StatelessWidget {
               child: Text('Ok'),
               onPressed: () {
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorAction.NavigatorActionPop);
+                    .add(NavigatorActionPop());
               },
             ),
             FlatButton(
@@ -54,7 +54,7 @@ class AttachedImageCard extends StatelessWidget {
                 BlocProvider.of<CaptureBloc>(context)
                     .add(DeleteAttachedImage());
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorAction.NavigatorActionPop);
+                    .add(NavigatorActionPop());
               },
             ),
           ],

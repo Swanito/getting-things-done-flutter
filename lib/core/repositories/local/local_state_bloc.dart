@@ -47,6 +47,9 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
       yield OnboardingNotCompleted();
     } else if(event is LoadLocalSettings) {
       yield* _mapLoadLocalSettingsToState();
+    } else if (event is UpdateGTDLevel) {
+      await localRepository.setGTDLevel(event.level);
+      yield SettingsSaved();
     }
   }
 

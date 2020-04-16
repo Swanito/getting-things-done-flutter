@@ -7,6 +7,7 @@ import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/trash/trash_list.dart';
+import 'package:path/path.dart';
 
 class SettingsScreen extends StatefulWidget {
   final UserRepository _userRepository;
@@ -78,49 +79,56 @@ class SettingsScreenState extends State<SettingsScreen> {
                 currentGtdLevel = state.gtdLevel;
                 print('Current GTD level is $currentGtdLevel');
               }
-                return Column(
-                  children: <Widget>[
-                    ListTile(
-                      title: Text('Nivel de GTD'),
-                      subtitle:
-                          Text('Esto cambiará la manera de procesar elementos'),
-                      contentPadding:
-                          EdgeInsets.only(left: 40, right: 40, top: 20),
-                      trailing: new DropdownButton<String>(
-                        value: selectedGTDLevel,
-                        items:
-                            <String>['Básico', 'Avanzado'].map((String value) {
-                          return new DropdownMenuItem<String>(
-                            value: value,
-                            child: new Text(
-                              value,
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          );
-                        }).toList(),
-                        onChanged: (value) {
-                          setState(() {
-                            selectedGTDLevel = value;
-                          });
-                        },
-                      ),
-                    ),
-                    Divider(),
-                    RaisedButton(
-                      onPressed: () {
-                        if (selectedGTDLevel.contains('Avanzado')) {
-                          BlocProvider.of<LocalStatusBloc>(context)
-                              .add(SetGTDLevel(level: GTDLevel.High));
-                        } else {
-                          BlocProvider.of<LocalStatusBloc>(context)
-                              .add(SetGTDLevel(level: GTDLevel.Low));
-                        }
+              if (state is SettingsSaved) {
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  Scaffold.of(context).showSnackBar(SnackBar(
+                    content: Text('Preferencias guardadas con éxito'),
+                  ));
+                  BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
+                });
+              }
+              return Column(
+                children: <Widget>[
+                  ListTile(
+                    title: Text('Nivel de GTD'),
+                    subtitle:
+                        Text('Esto cambiará la manera de procesar elementos'),
+                    contentPadding:
+                        EdgeInsets.only(left: 40, right: 40, top: 20),
+                    trailing: new DropdownButton<String>(
+                      value: selectedGTDLevel,
+                      items: <String>['Básico', 'Avanzado'].map((String value) {
+                        return new DropdownMenuItem<String>(
+                          value: value,
+                          child: new Text(
+                            value,
+                            style: TextStyle(color: Colors.black),
+                          ),
+                        );
+                      }).toList(),
+                      onChanged: (value) {
+                        setState(() {
+                          selectedGTDLevel = value;
+                        });
                       },
-                      child: Text('Guardar cambios'),
-                      color: Colors.white,
-                    )
-                  ],
-                );
+                    ),
+                  ),
+                  Divider(),
+                  RaisedButton(
+                    onPressed: () {
+                      if (selectedGTDLevel.contains('Avanzado')) {
+                        BlocProvider.of<LocalStatusBloc>(context)
+                            .add(UpdateGTDLevel(level: GTDLevel.High));
+                      } else {
+                        BlocProvider.of<LocalStatusBloc>(context)
+                            .add(UpdateGTDLevel(level: GTDLevel.Low));
+                      }
+                    },
+                    child: Text('Guardar cambios'),
+                    color: Colors.white,
+                  )
+                ],
+              );
             },
           )
         ],

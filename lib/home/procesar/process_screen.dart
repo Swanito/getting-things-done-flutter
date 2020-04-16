@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 import 'package:flutter/material.dart';
@@ -8,6 +9,8 @@ import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
+import 'package:gtd/home/procesar/bloc/process_bloc.dart';
+import 'package:gtd/home/procesar/bloc/process_state.dart';
 import 'package:gtd/home/procesar/process_list.dart';
 
 class ProcessScreen extends StatelessWidget {
