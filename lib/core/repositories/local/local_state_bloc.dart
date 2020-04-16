@@ -45,6 +45,12 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
     } else if (event is Logout) {
       await localRepository.logout();
       yield OnboardingNotCompleted();
+    } else if(event is LoadLocalSettings) {
+      yield* _mapLoadLocalSettingsToState();
     }
+  }
+
+  Stream<LocalState> _mapLoadLocalSettingsToState() async* {
+    yield SettingsLoaded(gtdLevel: await localRepository.getGTDLevel());
   }
 }

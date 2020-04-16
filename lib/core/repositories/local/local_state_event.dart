@@ -26,6 +26,10 @@ class SetGTDLevel extends LocalStatusEvent {
   String toString() => 'Event SetGTDLevel: { GTDLevel: $level }';
 }
 
+class LoadLocalSettings extends LocalStatusEvent {
+  
+}
+
 class CheckIfOnboardingIsCompleted extends LocalStatusEvent {
 
 }

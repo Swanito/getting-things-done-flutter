@@ -21,16 +21,18 @@ class SettingsScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SettingsScreenState(userRepository: _userRepository, localRepository: _localRepository);
+    return SettingsScreenState(
+        userRepository: _userRepository, localRepository: _localRepository);
   }
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  // GTDLevel gtdLevel;
-  String gtdLevel;
+  String selectedGTDLevel;
+  String currentGtdLevel;
 
   final UserRepository _userRepository;
   final LocalRepository _localRepository;
+  LocalStatusBloc _localStatusBloc;
 
   SettingsScreenState(
       {Key key, UserRepository userRepository, LocalRepository localRepository})
@@ -42,10 +44,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    _localRepository.getGTDLevel().then((level) {
-      gtdLevel = level;
-      print(level);
-    });
+    BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
   }
 
   @override
@@ -63,7 +62,6 @@ class SettingsScreenState extends State<SettingsScreen> {
                 Colors.orange[600],
                 Colors.orange[400],
                 Colors.orange[200],
-                // Colors.orange[100],
               ]),
         )),
       ),
@@ -76,27 +74,53 @@ class SettingsScreenState extends State<SettingsScreen> {
           ),
           BlocBuilder<LocalStatusBloc, LocalState>(
             builder: (context, state) {
-              return Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text('Nivel de GTD'),
-                    subtitle:
-                        Text('Esto cambiará la manera de procesar elementos'),
-                    contentPadding:
-                        EdgeInsets.only(left: 40, right: 40, top: 20),
-                    trailing: new DropdownButton<String>(
-                      value: gtdLevel == 'GTDLevel.Low' ? 'Basico' : 'Avanzado',
-                      items: <String>['Basico', 'Avanzado'].map((String value) {
-                        return new DropdownMenuItem<String>(
-                          value: value,
-                          child: new Text(value, style: TextStyle(color: Colors.black),),
-                        );
-                      }).toList(),
-                      onChanged: (_) {},
+              if (state is SettingsLoaded) {
+                currentGtdLevel = state.gtdLevel;
+                print('Current GTD level is $currentGtdLevel');
+              }
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text('Nivel de GTD'),
+                      subtitle:
+                          Text('Esto cambiará la manera de procesar elementos'),
+                      contentPadding:
+                          EdgeInsets.only(left: 40, right: 40, top: 20),
+                      trailing: new DropdownButton<String>(
+                        value: selectedGTDLevel,
+                        items:
+                            <String>['Básico', 'Avanzado'].map((String value) {
+                          return new DropdownMenuItem<String>(
+                            value: value,
+                            child: new Text(
+                              value,
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (value) {
+                          setState(() {
+                            selectedGTDLevel = value;
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                ],
-              );
+                    Divider(),
+                    RaisedButton(
+                      onPressed: () {
+                        if (selectedGTDLevel.contains('Avanzado')) {
+                          BlocProvider.of<LocalStatusBloc>(context)
+                              .add(SetGTDLevel(level: GTDLevel.High));
+                        } else {
+                          BlocProvider.of<LocalStatusBloc>(context)
+                              .add(SetGTDLevel(level: GTDLevel.Low));
+                        }
+                      },
+                      child: Text('Guardar cambios'),
+                      color: Colors.white,
+                    )
+                  ],
+                );
             },
           )
         ],
