@@ -14,14 +14,16 @@ class ProjectEntity extends Equatable {
   final String id;
   final String title;
   final Timestamp createdAt;
+  String createdBy;
 
-  ProjectEntity(this.id, this.title, this.createdAt);
+  ProjectEntity(this.id, this.title, this.createdAt, this.createdBy);
 
   Map<String, Object> toJson() {
     return {
       "id": id,
       "title": title,
-      "createdAt": createdAt
+      "createdAt": createdAt,
+      "createdBy": createdBy
     };
   }
 
@@ -29,7 +31,8 @@ class ProjectEntity extends Equatable {
     return {
       "id": id,
       "title": title,
-      "createdAt": createdAt
+      "createdAt": createdAt,
+      "createdBy": createdBy
     };
   }
 
@@ -37,7 +40,8 @@ class ProjectEntity extends Equatable {
     return ProjectEntity(
       json["id"] as String,
       json["title"] as String,
-      json["createdAt"] as Timestamp
+      json["createdAt"] as Timestamp,
+      json["createdBy"] as String
     );
   }
 
@@ -45,7 +49,8 @@ class ProjectEntity extends Equatable {
     return ProjectEntity(
       snap.documentID,
       snap.data["title"],
-      snap.data["createdAt"]
+      snap.data["createdAt"],
+      snap.data["createdBy"]
     );
   }
 

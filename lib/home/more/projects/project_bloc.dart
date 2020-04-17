@@ -34,9 +34,10 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
   Stream<ProjectState> _mapLoadToState() async* {
     _projectSubscription?.cancel();
-    _projectSubscription = projectRepository
-        .getProjects()
-        .listen((projects) => add(ProjectsLoaded(projects)));
+    _projectSubscription = await projectRepository
+        .getProjects().then((value) => 
+          value.listen((projects) => add(ProjectsLoaded(projects)))
+        );
   }
 
   Stream<ProjectState> _mapCreateProjectsToState(CreateProject event) async* {

@@ -14,7 +14,7 @@ abstract class ElementRepository {
 
 abstract class ProjectRepository {
   Future<QuerySnapshot> getProject(String summary);
-  Stream<List<Project>> getProjects();
+  Future<Stream<List<Project>>> getProjects();
   Future<void> createProject({Project project});
   Future<void> updateProject({Project project, String id});
   Future<void> deleteProject(Project project);

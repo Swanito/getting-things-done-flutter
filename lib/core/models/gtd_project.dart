@@ -8,8 +8,9 @@ class Project {
   final String id;
   final String title;
   final Timestamp createdAt;
+  String createdBy;
 
-  Project(this.title, {this.id, this.createdAt});
+  Project(this.title, {this.id, this.createdAt, this.createdBy});
 
   @override
   String toString() {
@@ -17,7 +18,7 @@ class Project {
   }
 
   ProjectEntity toEntity() {
-    return ProjectEntity(id, title, createdAt);
+    return ProjectEntity(id, title, createdAt, createdBy);
   }
 
   static Project fromEntity(ProjectEntity entity) {
