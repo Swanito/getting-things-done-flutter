@@ -6,7 +6,7 @@ abstract class Repository {}
 
 abstract class ElementRepository {
   Stream<GTDElement> getElement();
-  Stream<List<GTDElement>> getElements();
+  Future<Stream<List<GTDElement>>> getElements();
   Future<void> createElement(GTDElement element);
   Future<void> updateElement(GTDElement element);
   Future<void> deleteElement(GTDElement element);

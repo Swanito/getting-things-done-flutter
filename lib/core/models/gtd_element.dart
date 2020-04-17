@@ -10,6 +10,7 @@ class GTDElement {
   final String summary;
   final String description;
   String asignee;
+  String createdBy;
   final Project project;
   final DateTime dueDate;
   final Timestamp createdAt = Timestamp.now();
@@ -20,6 +21,7 @@ class GTDElement {
       this.asignee = null,
       this.currentStatus = 'COLLECTED',
       this.description = '',
+      this.createdBy,
       this.project = null,
       this.dueDate = null,
       this.contexts = null});
@@ -30,8 +32,18 @@ class GTDElement {
   }
 
   GTDElementEntity toEntity() {
-    return GTDElementEntity(id, currentStatus, summary, description, project,
-        dueDate, createdAt, contexts, asignee);
+    return GTDElementEntity(
+      id: id,
+      summary: summary,
+      description: description,
+      asignee: asignee,
+      contexts: contexts,
+      createdAt: createdAt,
+      createdBy: createdBy,
+      currentStatus: currentStatus,
+      dueDate: dueDate,
+      project: project
+    );
   }
 
   static GTDElement fromEntity(GTDElementEntity entity) {
@@ -42,6 +54,7 @@ class GTDElement {
         id: entity.id,
         dueDate: entity.dueDate,
         asignee: entity.asignee,
-        currentStatus: entity.currentStatus);
+        currentStatus: entity.currentStatus,
+        createdBy: entity.createdBy);
   }
 }

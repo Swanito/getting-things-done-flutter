@@ -15,7 +15,11 @@ import 'package:gtd/home/procesar/process_list.dart';
 
 class ProcessScreen extends StatelessWidget {
   final UserRepository _userRepository;
-  GTDAppBar _gtdAppBar = GTDAppBar(title: 'Procesar', canSearch: true,factor: BarSizeFactor.Small,);
+  GTDAppBar _gtdAppBar = GTDAppBar(
+    title: 'Procesar',
+    canSearch: true,
+    factor: BarSizeFactor.Small,
+  );
 
   ProcessScreen({Key key, UserRepository userRepository})
       : assert(userRepository != null),
@@ -43,29 +47,40 @@ class ProcessScreen extends StatelessWidget {
       body: Column(
         children: [
           _gtdAppBar,
-          BlocBuilder<ElementBloc, ElementState>(
-            builder: (context, state) {
-              if (state is LoadingElements) {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.orange,
-                    ),
-                  ),
-                );
-              } else if (state is SucessLoadingElements) {
-                  return ProcessList(state.elements);
-              } else if (state is FailedLoadingElements) {
-                _showErrorSnackbar(context);
-                return Container();
-              } else if (state is ElementProcessed) {
-                _showSuccessSnackbar(context);
-                BlocProvider.of<ElementBloc>(context).add(LoadElements());
-                return Container();
-              }
-            },
-          )
+          MultiBlocProvider(
+              providers: [
+                BlocProvider<ElementBloc>(
+                  create: (context) {
+                    return ElementBloc(
+                      elementRepository: ElementRepositoryImpl(),
+                    )..add(LoadElements());
+                  },
+                )
+              ],
+              child: BlocBuilder<ElementBloc, ElementState>(
+                  builder: (context, state) {
+                    if (state is LoadingElements) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.orange,
+                          ),
+                        ),
+                      );
+                    } else if (state is SucessLoadingElements) {
+                      return ProcessList(state.elements);
+                    } else if (state is FailedLoadingElements) {
+                      _showErrorSnackbar(context);
+                      return Container();
+                    } else if (state is ElementProcessed) {
+                      _showSuccessSnackbar(context);
+                      BlocProvider.of<ElementBloc>(context).add(LoadElements());
+                      return Container();
+                    }
+                  },
+                )
+              )
         ],
       ),
     );
@@ -97,8 +112,7 @@ class ProcessScreen extends StatelessWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  'Elemento procesado correctamente.'),
+              Text('Elemento procesado correctamente.'),
               Icon(Icons.error)
             ],
           ),

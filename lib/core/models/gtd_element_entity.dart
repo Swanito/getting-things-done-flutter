@@ -21,10 +21,11 @@ class GTDElementEntity extends Equatable {
   final Project project;
   final DateTime dueDate;
   final Timestamp createdAt;
+  final String createdBy;
   final List<String> contexts;
 
-  GTDElementEntity(this.id, this.currentStatus, this.summary, this.description,
-      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee);
+  GTDElementEntity({this.id, this.currentStatus, this.summary, this.description,
+      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy});
 
   Map<String, Object> toJson() {
     return {
@@ -37,6 +38,7 @@ class GTDElementEntity extends Equatable {
       "createdAt": createdAt,
       "contexts": contexts,
       "asignee": asignee,
+      "createdBy": createdBy
     };
   }
 
@@ -50,20 +52,22 @@ class GTDElementEntity extends Equatable {
       "createdAt": createdAt,
       "contexts": contexts,
       "asignee": asignee,
+      "createdBy": createdBy
     };
   }
 
     static GTDElementEntity fromJson(Map<String, Object> json) {
     return GTDElementEntity(
-      json["id"] as String,
-      json["currentStatus"] as String,
-      json["summary"] as String,
-      json["description"] as String,
-      json["project"] as Project,
-      json["dueDate"] as DateTime,
-      json["createdAt"] as Timestamp,
-      json["contexts"] as List<String>,
-      json["asignee"] as String,
+      id: json["id"] as String,
+      currentStatus: json["currentStatus"] as String,
+      summary: json["summary"] as String,
+      description: json["description"] as String,
+      project: json["project"] as Project,
+      dueDate: json["dueDate"] as DateTime,
+      createdAt: json["createdAt"] as Timestamp,
+      contexts: json["contexts"] as List<String>,
+      asignee: json["asignee"] as String,
+      createdBy: json["createdBy"] as String,
     );
   }
 
@@ -72,15 +76,16 @@ class GTDElementEntity extends Equatable {
     Project project = snap.data["project"] != null ? Project.fromEntity(ProjectEntity.fromJson(snap.data["project"])) : null;
 
     return GTDElementEntity(
-      snap.documentID,
-      snap.data["currentStatus"],
-      snap.data["summary"],
-      snap.data["description"],
-      project,
-      snap.data["dueDate"],
-      snap.data["createdAt"],
-      snap.data["contexts"],
-      snap.data["asignee"]
+      id: snap.documentID,
+      currentStatus: snap.data["currentStatus"],
+      summary: snap.data["summary"],
+      description: snap.data["description"],
+      project: project,
+      dueDate: snap.data["dueDate"],
+      createdAt: snap.data["createdAt"],
+      contexts: snap.data["contexts"],
+      asignee: snap.data["asignee"],
+      createdBy: snap.data["createdBy"]
     );
   }
 

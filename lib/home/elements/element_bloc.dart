@@ -52,9 +52,10 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
 
   Stream<ElementState> _mapLoadEventsToState() async* {
     _elementSubscription?.cancel();
-    _elementSubscription = _elementRepository
-        .getElements()
-        .listen((elements) => add(ElementsUpdated(elements)));
+    _elementSubscription = await _elementRepository
+        .getElements().then((value) => 
+          value.listen((elements) => add(ElementsUpdated(elements))),
+        );
   }
 
   Stream<ElementState> _mapCreateElementToState(CreateElement event) async* {
