@@ -14,6 +14,7 @@ import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
+import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/home/procesar/bloc/process_bloc.dart';
@@ -114,7 +115,8 @@ class GTDState extends State<GTD> {
     CaptureBloc captureBloc = CaptureBloc(
         userRepository: _userRepository, elementRepository: _elementRepository);
     ProcessBloc processBloc = ProcessBloc(elementRepository: _elementRepository);
-
+    ElementBloc elementBloc = ElementBloc(elementRepository: _elementRepository);
+    
     return MultiBlocProvider(
         providers: [
           BlocProvider<NavigatorBloc>(
@@ -134,6 +136,8 @@ class GTDState extends State<GTD> {
               create: (BuildContext context) => captureBloc),
           BlocProvider<ProcessBloc>(
               create: (BuildContext context) => processBloc),
+          BlocProvider<ElementBloc>(
+              create: (BuildContext context) => elementBloc..add(LoadElements())),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,

@@ -43,35 +43,29 @@ class ProcessScreen extends StatelessWidget {
       body: Column(
         children: [
           _gtdAppBar,
-          MultiBlocProvider(
-              providers: [
-                BlocProvider<ElementBloc>(
-                  create: (context) {
-                    return ElementBloc(
-                      elementRepository: ElementRepositoryImpl(),
-                    )..add(LoadElements());
-                  },
-                )
-              ],
-              child: BlocBuilder<ElementBloc, ElementState>(
-                builder: (context, state) {
-                  if (state is LoadingElements) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.orange,
-                        ),
-                      ),
-                    );
-                  } else if (state is SucessLoadingElements) {
-                      return ProcessList(state.elements);
-                  } else if (state is FailedLoadingElements) {
-                    _showErrorSnackbar(context);
-                    return Container();
-                  }
-                },
-              ))
+          BlocBuilder<ElementBloc, ElementState>(
+            builder: (context, state) {
+              if (state is LoadingElements) {
+                return Container(
+                  height: MediaQuery.of(context).size.height / 2,
+                  child: Center(
+                    child: CircularProgressIndicator(
+                      backgroundColor: Colors.orange,
+                    ),
+                  ),
+                );
+              } else if (state is SucessLoadingElements) {
+                  return ProcessList(state.elements);
+              } else if (state is FailedLoadingElements) {
+                _showErrorSnackbar(context);
+                return Container();
+              } else if (state is ElementProcessed) {
+                _showSuccessSnackbar(context);
+                BlocProvider.of<ElementBloc>(context).add(LoadElements());
+                return Container();
+              }
+            },
+          )
         ],
       ),
     );
@@ -87,6 +81,24 @@ class ProcessScreen extends StatelessWidget {
             children: [
               Text(
                   'Error recuperarndo los elementos. Intentalo de nuevo más tarde.'),
+              Icon(Icons.error)
+            ],
+          ),
+          backgroundColor: Colors.red,
+        ),
+      );
+  }
+
+  _showSuccessSnackbar(BuildContext context) {
+    Scaffold.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                  'Elemento procesado correctamente.'),
               Icon(Icons.error)
             ],
           ),

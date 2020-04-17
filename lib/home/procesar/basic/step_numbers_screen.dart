@@ -4,52 +4,45 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
+import 'package:gtd/home/more/projects/project_bloc.dart';
+import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/process_screen_template.dart';
 
-class ActionableScreen extends StatefulWidget {
+class StepNumbersScreen extends StatefulWidget {
   final GTDElement element;
   final UserRepository userRepository;
 
-  ActionableScreen({this.element, this.userRepository});
+  StepNumbersScreen({this.element, this.userRepository});
 
   @override
-  _ActionableScreenState createState() => _ActionableScreenState();
+  _StepNumbersScreenState createState() => _StepNumbersScreenState();
 }
 
-class _ActionableScreenState extends State<ActionableScreen> {
+class _StepNumbersScreenState extends State<StepNumbersScreen> {
+
   void continueFunction({GTDElement element, UserRepository userRepository}) {
     print('el elemento ${element.summary} es accionable');
-    BlocProvider.of<NavigatorBloc>(context).add(GoToProcessStepScreen(
+    BlocProvider.of<NavigatorBloc>(context).add(GoToTimeStepScreen(
         elementBeingProcessed: element, userRepository: userRepository));
   }
 
-  Future<void> alternativeFunction(
-      {GTDElement element, UserRepository userRepository}) {
+  Future<void> alternativeFunction({GTDElement element, UserRepository userRepository}) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Veamos...'),
           content: Text(
-              'Si el item no es accionable te recomendamos moverlo a una de éstas categorías...'),
+              'Si no puedes realizarlo en un solo paso, quizá deberías crear un proyecto para llevarlo a cabo.'),
           actions: <Widget>[
             FlatButton(
-              child: Text('Mover a Referencias'),
+              child: Text('Crear Proyecto Nuevo'),
               onPressed: () {
-                BlocProvider.of<ElementBloc>(context)
-                    .add(MoveToReference(element));
+                BlocProvider.of<ProjectBloc>(context).add(CreateProject(title: element.summary));
+                BlocProvider.of<ElementBloc>(context).add(DeleteElement(element));
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-              },
-            ),
-            FlatButton(
-              child: Text('Mover a Papelera'),
-              onPressed: () {
-                BlocProvider.of<ElementBloc>(context)
-                    .add(MoveToDelete(element));
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
                 BlocProvider.of<NavigatorBloc>(context)
@@ -72,12 +65,13 @@ class _ActionableScreenState extends State<ActionableScreen> {
   @override
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
-        title: 'Es accionable?',
-        lottie: null,
-        description: 'Descripcion de accionable',
-        alternativeFunction: alternativeFunction,
-        continueFunction: continueFunction,
-        userRepository: widget.userRepository,
-        elementBeingProcessed: widget.element);
+      title: 'Se puede realizar en un solo paso?',
+      lottie: null,
+      description: 'Descripcion de accionable',
+      alternativeFunction: alternativeFunction,
+      continueFunction: continueFunction,
+      userRepository: widget.userRepository,
+      elementBeingProcessed: widget.element
+    );
   }
 }

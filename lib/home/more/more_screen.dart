@@ -47,7 +47,10 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.link),
                     title: Text('Referenciados'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigateToReferenced())
+                    },
                   ),
                 ),
                 Card(
@@ -55,7 +58,8 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.watch_later),
                     title: Text('En Espera'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {},
+                    onTap: () => {BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigateToWaitingFor())},
                   ),
                 ),
                 Card(

@@ -94,6 +94,30 @@ class MoveToDelete extends ElementEvent {
   String toString() => 'MoveToDelete { element: $element }';
 }
 
+class MoveToReference extends ElementEvent {
+  final GTDElement element;
+
+  MoveToReference(this.element);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'MoveToReference { element: $element }';
+}
+
+class MoveToWaintingFor extends ElementEvent {
+  final GTDElement element;
+  final String asignee;
+
+  MoveToWaintingFor(this.element, this.asignee);
+
+  @override
+  List<Object> get props => [element, asignee];
+
+  @override
+  String toString() => 'MoveToWaintingFor { element: $element, waiting for: $asignee }';
+}
 class Process extends ElementEvent {
   GTDElement elementToBeProcessed;
   

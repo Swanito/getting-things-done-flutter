@@ -16,6 +16,7 @@ class GTDElementEntity extends Equatable {
   final String id;
   final String currentStatus;
   final String summary;
+  final String asignee;
   final String description;
   final Project project;
   final DateTime dueDate;
@@ -23,7 +24,7 @@ class GTDElementEntity extends Equatable {
   final List<String> contexts;
 
   GTDElementEntity(this.id, this.currentStatus, this.summary, this.description,
-      this.project, this.dueDate, this.createdAt, this.contexts);
+      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee);
 
   Map<String, Object> toJson() {
     return {
@@ -35,6 +36,7 @@ class GTDElementEntity extends Equatable {
       "dueDate": dueDate,
       "createdAt": createdAt,
       "contexts": contexts,
+      "asignee": asignee,
     };
   }
 
@@ -47,6 +49,7 @@ class GTDElementEntity extends Equatable {
       "dueDate": dueDate,
       "createdAt": createdAt,
       "contexts": contexts,
+      "asignee": asignee,
     };
   }
 
@@ -60,6 +63,7 @@ class GTDElementEntity extends Equatable {
       json["dueDate"] as DateTime,
       json["createdAt"] as Timestamp,
       json["contexts"] as List<String>,
+      json["asignee"] as String,
     );
   }
 
@@ -76,6 +80,7 @@ class GTDElementEntity extends Equatable {
       snap.data["dueDate"],
       snap.data["createdAt"],
       snap.data["contexts"],
+      snap.data["asignee"]
     );
   }
 

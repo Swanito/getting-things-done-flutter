@@ -64,9 +64,6 @@ class ProjectScreenState extends State<ProjectScreen> {
                   ),
                 );
               } else if (state is ProjectsSuccessfullyLoaded) {
-                for (var project in state.projects) {
-                  print('projects in project screen' + project.title);
-                }
                 return ProjectList(state.projects);
               } else if (state is ProjectUpdated) {
                 Scaffold.of(context).showSnackBar(

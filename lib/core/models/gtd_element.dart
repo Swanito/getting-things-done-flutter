@@ -9,13 +9,15 @@ class GTDElement {
   String currentStatus;
   final String summary;
   final String description;
+  String asignee;
   final Project project;
   final DateTime dueDate;
   final Timestamp createdAt = Timestamp.now();
   final List<String> contexts;
 
-  GTDElement(this.summary,
+  GTDElement(this.summary, 
       {this.id,
+      this.asignee = null,
       this.currentStatus = 'COLLECTED',
       this.description = '',
       this.project = null,
@@ -29,7 +31,7 @@ class GTDElement {
 
   GTDElementEntity toEntity() {
     return GTDElementEntity(id, currentStatus, summary, description, project,
-        dueDate, createdAt, contexts);
+        dueDate, createdAt, contexts, asignee);
   }
 
   static GTDElement fromEntity(GTDElementEntity entity) {
@@ -39,6 +41,7 @@ class GTDElement {
         project: entity.project,
         id: entity.id,
         dueDate: entity.dueDate,
+        asignee: entity.asignee,
         currentStatus: entity.currentStatus);
   }
 }

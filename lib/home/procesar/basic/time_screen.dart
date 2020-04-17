@@ -4,23 +4,21 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
-import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/process_screen_template.dart';
 
-class ActionableScreen extends StatefulWidget {
+class TimeStepScreen extends StatefulWidget {
   final GTDElement element;
   final UserRepository userRepository;
 
-  ActionableScreen({this.element, this.userRepository});
+  TimeStepScreen({this.element, this.userRepository});
 
   @override
-  _ActionableScreenState createState() => _ActionableScreenState();
+  _TimeStepScreenState createState() => _TimeStepScreenState();
 }
 
-class _ActionableScreenState extends State<ActionableScreen> {
+class _TimeStepScreenState extends State<TimeStepScreen> {
   void continueFunction({GTDElement element, UserRepository userRepository}) {
-    print('el elemento ${element.summary} es accionable');
-    BlocProvider.of<NavigatorBloc>(context).add(GoToProcessStepScreen(
+    BlocProvider.of<NavigatorBloc>(context).add(GoToAsigneeStepScreen(
         elementBeingProcessed: element, userRepository: userRepository));
   }
 
@@ -32,13 +30,17 @@ class _ActionableScreenState extends State<ActionableScreen> {
         return AlertDialog(
           title: Text('Veamos...'),
           content: Text(
-              'Si el item no es accionable te recomendamos moverlo a una de éstas categorías...'),
+              'Si no te llevaría ni dos minutos hacerlo te recomendamos que lo hagas ya mismo :)'),
           actions: <Widget>[
             FlatButton(
-              child: Text('Mover a Referencias'),
+              child: Text('Vale, lo haré'),
               onPressed: () {
                 BlocProvider.of<ElementBloc>(context)
-                    .add(MoveToReference(element));
+                    .add(MarkAsCompleted(element));
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
                 BlocProvider.of<NavigatorBloc>(context)
@@ -46,21 +48,14 @@ class _ActionableScreenState extends State<ActionableScreen> {
               },
             ),
             FlatButton(
-              child: Text('Mover a Papelera'),
-              onPressed: () {
-                BlocProvider.of<ElementBloc>(context)
-                    .add(MoveToDelete(element));
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-              },
-            ),
-            FlatButton(
-              child: Text('Cancelar'),
+              child: Text('No tengo tiempo ahora'),
               onPressed: () {
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context).add(
+                    GoToAsigneeStepScreen(
+                        elementBeingProcessed: element,
+                        userRepository: userRepository));
               },
             ),
           ],
@@ -72,9 +67,9 @@ class _ActionableScreenState extends State<ActionableScreen> {
   @override
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
-        title: 'Es accionable?',
+        title: 'Tardarías más de dos minutos en hacerlo?',
         lottie: null,
-        description: 'Descripcion de accionable',
+        description: 'Descripcion de tiempo',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,

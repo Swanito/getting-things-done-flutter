@@ -101,6 +101,7 @@ class CaptureFormState extends State<CaptureForm> {
                 controller: ScrollController(),
                 children: [
                   TextFormField(
+                    autofocus: true,
                     controller: _summaryController,
                     style: new TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),

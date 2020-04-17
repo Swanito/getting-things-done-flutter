@@ -5,7 +5,6 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
-import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:meta/meta.dart';
 
@@ -42,8 +41,12 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapMarkAsCompletedToState(event);
     } else if (event is UnmarkAsCompleted) {
       yield* _mapUnmarkAsCompletedToState(event);
-    } else if(event is MoveToDelete) {
+    } else if (event is MoveToDelete) {
       yield* _mapMoveToDeleteToState(event);
+    } else if (event is MoveToReference) {
+      yield* _mapMoveToReferenceToState(event);
+    } else if (event is MoveToWaintingFor) {
+      yield* _mapMoveToWaitingForToState(event);
     }
   }
 
@@ -71,13 +74,15 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     yield SucessLoadingElements(event.elements);
   }
 
-  Stream<ElementState> _mapMarkAsCompletedToState(MarkAsCompleted event) async* {
+  Stream<ElementState> _mapMarkAsCompletedToState(
+      MarkAsCompleted event) async* {
     event.element.currentStatus = 'COMPLETED';
     _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }
 
-    Stream<ElementState> _mapUnmarkAsCompletedToState(UnmarkAsCompleted event) async* {
+  Stream<ElementState> _mapUnmarkAsCompletedToState(
+      UnmarkAsCompleted event) async* {
     event.element.currentStatus = 'PROCESSED';
     _elementRepository.updateElement(event.element);
     yield LoadingElements();
@@ -86,7 +91,20 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   Stream<ElementState> _mapMoveToDeleteToState(MoveToDelete event) async* {
     event.element.currentStatus = 'DELETED';
     _elementRepository.updateElement(event.element);
-    yield LoadingElements();
+    yield ElementProcessed();
+  }
+
+  Stream<ElementState> _mapMoveToReferenceToState(MoveToReference event) async* {
+    event.element.currentStatus = 'REFERENCED';
+    _elementRepository.updateElement(event.element);
+    yield ElementProcessed();
+  }
+
+Stream<ElementState> _mapMoveToWaitingForToState(MoveToWaintingFor event) async* {
+    event.element.currentStatus = 'WAITINGFOR';
+    event.element.asignee = event.asignee;
+    _elementRepository.updateElement(event.element);
+    yield ElementProcessed();
   }
 
   @override

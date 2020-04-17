@@ -45,11 +45,13 @@ class SettingsScreenState extends State<SettingsScreen> {
   @override
   void initState() {
     super.initState();
-    BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
   }
 
   @override
   Widget build(BuildContext context) {
+
+    BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
