@@ -40,9 +40,7 @@ class _ActionableScreenState extends State<ActionableScreen> {
                 BlocProvider.of<ElementBloc>(context)
                     .add(MoveToReference(element));
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
+                    .add(NavigatorActionPopAll());
               },
             ),
             FlatButton(
@@ -51,9 +49,7 @@ class _ActionableScreenState extends State<ActionableScreen> {
                 BlocProvider.of<ElementBloc>(context)
                     .add(MoveToDelete(element));
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
+                    .add(NavigatorActionPopAll());
               },
             ),
             FlatButton(

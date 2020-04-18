@@ -10,7 +10,6 @@ class CalendarStepScreen extends StatefulWidget {
   final GTDElement element;
   final UserRepository userRepository;
 
-
   CalendarStepScreen({this.element, this.userRepository});
 
   @override
@@ -18,17 +17,34 @@ class CalendarStepScreen extends StatefulWidget {
 }
 
 class _CalendarStepScreenState extends State<CalendarStepScreen> {
-
   TextEditingController _contextController = TextEditingController();
   String _elementContext;
+  String _elementDate;
 
-  void continueFunction({GTDElement element, UserRepository userRepository}) {
-    BlocProvider.of<NavigatorBloc>(context).add(GoToAsigneeStepScreen(
-        elementBeingProcessed: element, userRepository: userRepository));
+  Future<void> continueFunction(
+      {GTDElement element, UserRepository userRepository}) {
+    showCalendarDialog(element, userRepository);
   }
 
   Future<void> alternativeFunction(
       {GTDElement element, UserRepository userRepository}) {
+    showAlternativeDialog(element, userRepository);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProcessScreenTemplate(
+        title: 'Tiene fecha límite?',
+        lottie: null,
+        description: 'Descripcion de tiempo',
+        alternativeFunction: alternativeFunction,
+        continueFunction: continueFunction,
+        userRepository: widget.userRepository,
+        elementBeingProcessed: widget.element);
+  }
+
+  Future<void> showAlternativeDialog(
+      GTDElement element, UserRepository userRepository) {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -61,8 +77,10 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
                 autovalidate: true,
                 autocorrect: false,
                 onChanged: (text) => {
-                  setState(() =>
-                      {_elementContext = _contextController.text, print(_elementContext)})
+                  setState(() => {
+                        _elementContext = _contextController.text,
+                        print(_elementContext)
+                      })
                 },
               ),
             ],
@@ -73,39 +91,15 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
               onPressed: () {
                 BlocProvider.of<ElementBloc>(context)
                     .add(AddContextToElement(element, _elementContext));
-                BlocProvider.of<ElementBloc>(context)
-                    .add(Process(element));
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
+                BlocProvider.of<ElementBloc>(context).add(Process(element));
+                closeScreens();
               },
             ),
             FlatButton(
               child: Text('No, gracias'),
               onPressed: () {
-                BlocProvider.of<ElementBloc>(context)
-                    .add(Process(element));
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
+                BlocProvider.of<ElementBloc>(context).add(Process(element));
+                closeScreens();
               },
             ),
           ],
@@ -114,15 +108,69 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
     );
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return ProcessScreenTemplate(
-        title: 'Tiene fecha límite?',
-        lottie: null,
-        description: 'Descripcion de tiempo',
-        alternativeFunction: alternativeFunction,
-        continueFunction: continueFunction,
-        userRepository: widget.userRepository,
-        elementBeingProcessed: widget.element);
+  Future<void> showCalendarDialog(
+      GTDElement element, UserRepository userRepository) {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Veamos...'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text('Cual es la fecha de su realización?'),
+              TextFormField(
+                controller: _contextController,
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.lightbulb_outline,
+                    color: Colors.orange,
+                    size: 13,
+                  ),
+                  labelText: 'Fecha',
+                  labelStyle: TextStyle(color: Colors.orange),
+                  hintStyle: TextStyle(color: Colors.orange),
+                  enabledBorder: new UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.orange,
+                        width: 1.0,
+                        style: BorderStyle.solid),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+                autovalidate: true,
+                autocorrect: false,
+                onChanged: (text) => {
+                  setState(() => {
+                        _elementDate = _contextController.text,
+                        print(_elementDate)
+                      })
+                },
+              ),
+            ],
+          ),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Procesar'),
+              onPressed: () {
+                BlocProvider.of<ElementBloc>(context)
+                    .add(AddDateToElement(element, _elementDate));
+                showAlternativeDialog(element, userRepository);
+              },
+            ),
+            FlatButton(
+              child: Text('No fijar la fecha.'),
+              onPressed: () {
+                showAlternativeDialog(element, userRepository);
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void closeScreens() {
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPopAll());
   }
 }

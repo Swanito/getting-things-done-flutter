@@ -4,7 +4,10 @@ import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
+import 'package:gtd/core/models/gtd_project.dart';
+import 'package:gtd/core/models/gtd_project_entity.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
+import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:meta/meta.dart';
 
@@ -51,6 +54,10 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapAddContextToElementToState(event);
     } else if (event is Process) {
       yield* _mapProcessToState(event);
+    } else if (event is AddDateToElement) {
+      yield* _mapAddDateToElement(event);
+    } else if (event is AddProjectToElement) {
+      yield* _mapAddProjectToElementToState(event);
     }
   }
 
@@ -85,7 +92,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     yield LoadingElements();
   }
 
-    Stream<ElementState> _mapProcessToState(Process event) async* {
+  Stream<ElementState> _mapProcessToState(Process event) async* {
     event.elementToBeProcessed.currentStatus = 'PROCESSED';
     _elementRepository.updateElement(event.elementToBeProcessed);
     yield ElementProcessed();
@@ -127,6 +134,33 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       arrayWithoutSpaces.add(context.trim());
     }
     event.elementToBeProcessed.contexts = arrayWithoutSpaces;
+    _elementRepository.updateElement(event.elementToBeProcessed);
+  }
+
+  Stream<ElementState> _mapAddDateToElement(AddDateToElement event) async* {
+    event.elementToBeProcessed.dueDate = event.date;
+    _elementRepository.updateElement(event.elementToBeProcessed);
+  }
+
+  Stream<ElementState> _mapAddProjectToElementToState(
+      AddProjectToElement event) async* {
+    ProjectRepository _projectRepository = ProjectRepositoryImpl();
+    Project projectToBeAdded;
+
+    await _projectRepository.getProject(event.projectTitle).then((value) => {
+          for (var project in value.documents)
+            {
+              projectToBeAdded =
+                  Project.fromEntity(ProjectEntity.fromSnapshot(project)),
+            },
+          if (projectToBeAdded == null)
+            {
+              projectToBeAdded = Project(event.projectTitle),
+              _projectRepository.createProject(project: projectToBeAdded)
+            }
+        });
+
+    event.elementToBeProcessed.project = projectToBeAdded;
     _elementRepository.updateElement(event.elementToBeProcessed);
   }
 

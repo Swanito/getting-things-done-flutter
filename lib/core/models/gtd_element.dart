@@ -11,8 +11,8 @@ class GTDElement {
   final String description;
   String asignee;
   String createdBy;
-  final Project project;
-  final DateTime dueDate;
+  Project project;
+  String dueDate;
   final Timestamp createdAt = Timestamp.now();
   List<dynamic> contexts;
 

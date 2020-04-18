@@ -74,15 +74,7 @@ String _asignee = "";
                       BlocProvider.of<ElementBloc>(context)
                           .add(MoveToWaintingFor(element, _asignee));
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorActionPop());
-                      BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorActionPop());
-                      BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorActionPop());
-                      BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorActionPop());
-                      BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigatorActionPop());
+                          .add(NavigatorActionPopAll());
                     }
             ),
             FlatButton(

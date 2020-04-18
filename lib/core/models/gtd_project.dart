@@ -7,10 +7,10 @@ import 'package:meta/meta.dart';
 class Project {
   final String id;
   final String title;
-  final Timestamp createdAt;
+  final Timestamp createdAt = Timestamp.now();
   String createdBy;
 
-  Project(this.title, {this.id, this.createdAt, this.createdBy});
+  Project(this.title, {this.id, this.createdBy});
 
   @override
   String toString() {
@@ -22,6 +22,6 @@ class Project {
   }
 
   static Project fromEntity(ProjectEntity entity) {
-    return Project(entity.title, id: entity.id);
+    return Project(entity.title, id: entity.id, createdBy: entity.createdBy);
   }
 }

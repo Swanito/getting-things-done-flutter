@@ -37,6 +37,8 @@ class NavigatorAction extends Equatable {
 
 class NavigatorActionPop extends NavigatorAction {}
 
+class NavigatorActionPopAll extends NavigatorAction {}
+
 class NavigateToAuthEvent extends NavigatorAction {}
 
 class NavigateToLoginEvent extends NavigatorAction {}
@@ -112,7 +114,9 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
   Stream<dynamic> mapEventToState(NavigatorAction event) async* {
     if (event is NavigatorActionPop) {
       navigatorKey.currentState.pop();
-    } else if (event is NavigateToAuthEvent) {
+    } else if (event is NavigatorActionPopAll) {
+      navigatorKey.currentState.popUntil((route) => route.isFirst);
+      }else if (event is NavigateToAuthEvent) {
       navigatorKey.currentState.pushAndRemoveUntil(
           MaterialPageRoute(builder: (context) => AuthScreen()),
           (Route<dynamic> route) => false);
@@ -127,7 +131,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
     } else if (event is NavigateToHome) {
       navigatorKey.currentState.pushAndRemoveUntil(
           MaterialPageRoute(
-              builder: (context) => HomeScreen(userRepository: userRepository)),
+            builder: (context) => HomeScreen(userRepository: userRepository)),
           (Route<dynamic> route) => false);
     } else if (event is OpenCaptureScreen) {
       navigatorKey.currentState.push(MaterialPageRoute(

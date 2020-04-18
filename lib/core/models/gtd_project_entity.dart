@@ -13,7 +13,7 @@ enum ElementProcessStatus {
 class ProjectEntity extends Equatable {
   final String id;
   final String title;
-  final Timestamp createdAt;
+  Timestamp createdAt;
   String createdBy;
 
   ProjectEntity(this.id, this.title, this.createdAt, this.createdBy);

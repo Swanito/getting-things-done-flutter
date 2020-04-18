@@ -116,19 +116,20 @@ class MoveToWaintingFor extends ElementEvent {
   List<Object> get props => [element, asignee];
 
   @override
-  String toString() => 'MoveToWaintingFor { element: $element, waiting for: $asignee }';
+  String toString() =>
+      'MoveToWaintingFor { element: $element, waiting for: $asignee }';
 }
+
 class Process extends ElementEvent {
   GTDElement elementToBeProcessed;
-  
+
   Process(this.elementToBeProcessed);
 
   @override
   List<Object> get props => [elementToBeProcessed];
 
   @override
-  String toString() =>
-      'Process { Process: $elementToBeProcessed }';
+  String toString() => 'Process { Process: $elementToBeProcessed }';
 }
 
 class AddContextToElement extends ElementEvent {
@@ -142,4 +143,32 @@ class AddContextToElement extends ElementEvent {
 
   @override
   String toString() =>
-      'Process { AddContextToElement: $elementToBeProcessed, context: $context }';}
+      'Process { AddContextToElement: $elementToBeProcessed, context: $context }';
+}
+class AddDateToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  String date;
+
+  AddDateToElement(this.elementToBeProcessed, this.date);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, date];
+
+  @override
+  String toString() =>
+      'Process { AddDateToElement: $elementToBeProcessed, date: $date }';
+}
+
+class AddProjectToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  String projectTitle;
+
+  AddProjectToElement(this.elementToBeProcessed, this.projectTitle);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, projectTitle];
+
+  @override
+  String toString() =>
+      'Process { AddProjectToElement: $elementToBeProcessed, projectTitle: $projectTitle }';
+}

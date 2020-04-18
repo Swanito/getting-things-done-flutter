@@ -38,13 +38,7 @@ class _TimeStepScreenState extends State<TimeStepScreen> {
                 BlocProvider.of<ElementBloc>(context)
                     .add(MarkAsCompleted(element));
                 BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context)
-                    .add(NavigatorActionPop());
+                    .add(NavigatorActionPopAll());
               },
             ),
             FlatButton(

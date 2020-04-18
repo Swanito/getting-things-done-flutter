@@ -19,7 +19,7 @@ class GTDElementEntity extends Equatable {
   final String asignee;
   final String description;
   final Project project;
-  final DateTime dueDate;
+  final String dueDate;
   final Timestamp createdAt;
   final String createdBy;
   final List<dynamic> contexts;
@@ -63,7 +63,7 @@ class GTDElementEntity extends Equatable {
       summary: json["summary"] as String,
       description: json["description"] as String,
       project: json["project"] as Project,
-      dueDate: json["dueDate"] as DateTime,
+      dueDate: json["dueDate"] as String,
       createdAt: json["createdAt"] as Timestamp,
       contexts: json["contexts"] as List<String>,
       asignee: json["asignee"] as String,
