@@ -9,9 +9,12 @@ import 'package:gtd/main.dart';
 
 class MoreScreen extends StatelessWidget {
   final UserRepository _userRepository;
+  final String _currentUser;
 
-  MoreScreen({Key key, UserRepository userRepository})
+  MoreScreen({Key key, UserRepository userRepository, String currentUser})
       : assert(userRepository != null),
+        assert(currentUser != null),
+        _currentUser = currentUser,
         _userRepository = userRepository;
 
   @override
@@ -38,6 +41,7 @@ class MoreScreen extends StatelessWidget {
           GTDAppBar(
             title: 'Más',
             factor: BarSizeFactor.Small,
+            currentUser: _currentUser,
           ),
           Flexible(
             child: ListView(
@@ -58,8 +62,10 @@ class MoreScreen extends StatelessWidget {
                     leading: Icon(Icons.watch_later),
                     title: Text('En Espera'),
                     trailing: Icon(Icons.keyboard_arrow_right),
-                    onTap: () => {BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigateToWaitingFor())},
+                    onTap: () => {
+                      BlocProvider.of<NavigatorBloc>(context)
+                          .add(NavigateToWaitingFor())
+                    },
                   ),
                 ),
                 Card(

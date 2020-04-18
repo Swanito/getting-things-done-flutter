@@ -12,10 +12,13 @@ import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;
+  final String _currentUser;
 
-  HomeScreen({Key key, UserRepository userRepository})
+  HomeScreen({Key key, UserRepository userRepository, String currentUser})
       : assert(userRepository != null),
-        _userRepository = userRepository;
+      assert(currentUser != null),
+        _userRepository = userRepository,
+        _currentUser = currentUser;
 
   @override
   State<StatefulWidget> createState() {
@@ -43,7 +46,7 @@ class HomeScreenState extends State<HomeScreen> {
       NextScreen(userRepository: _userRepository),
       ProcessScreen(userRepository: _userRepository),
       ReviewScreen(userRepository: _userRepository),
-      MoreScreen(userRepository: _userRepository),
+      MoreScreen(userRepository: _userRepository, currentUser: widget._currentUser,),
     ];
 
     return BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {

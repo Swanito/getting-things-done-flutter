@@ -1,18 +1,22 @@
 import 'package:flutter/material.dart';
+import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 enum BarSizeFactor { Big, Small }
 
 class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
   final String _title;
   bool _canSearch;
+  bool _showCurrentUser;
   BarSizeFactor _factor;
+  String _currentUser;
 
   TextEditingController _searchController = TextEditingController();
 
-  GTDAppBar({@required String title, bool canSearch = false, BarSizeFactor factor = BarSizeFactor.Small})
+  GTDAppBar({@required String title, bool canSearch = false, BarSizeFactor factor = BarSizeFactor.Small, String currentUser,})
       : assert(title != null),
         assert(canSearch != null),
         _canSearch = canSearch,
+        _currentUser = currentUser,
         _factor = factor,
         _title = title;
 
@@ -51,6 +55,8 @@ class GTDAppBar extends StatelessWidget implements PreferredSizeWidget {
                   _title,
                   style: TextStyle(color: Colors.white, fontSize: 52),
                 ),
+                SizedBox(height: 20,),
+                _currentUser != null ? Text('Sesión iniciada como $_currentUser', style: TextStyle(color: Colors.white),) : Container(),
                 SizedBox(height: 20,),
                 _canSearch ? TextFormField(
                         controller: _searchController,
