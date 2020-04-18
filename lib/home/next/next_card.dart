@@ -35,7 +35,7 @@ class NextCard extends StatelessWidget {
                       children: [
                         Text(
                             _processedElement.project != null
-                                ? _processedElement.project
+                                ? _processedElement.project.title
                                 : 'Sin proyecto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600]))
@@ -75,7 +75,7 @@ class NextCard extends StatelessWidget {
                             size: 13, color: Colors.grey[600]),
                         Text(
                             _processedElement.contexts != null
-                                ? _processedElement.contexts.toString()
+                                ? '${_processedElement.contexts[0]} y ${_processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600])),
@@ -130,7 +130,7 @@ class NextCard extends StatelessWidget {
                       _onEditPressed;
                     },
                     child:
-                        Text('EDITAR', style: TextStyle(color: Colors.orange))),
+                        Text('DETALLES', style: TextStyle(color: Colors.orange))),
               ],
             ),
           )

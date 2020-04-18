@@ -22,7 +22,7 @@ class GTDElementEntity extends Equatable {
   final DateTime dueDate;
   final Timestamp createdAt;
   final String createdBy;
-  final List<String> contexts;
+  final List<dynamic> contexts;
 
   GTDElementEntity({this.id, this.currentStatus, this.summary, this.description,
       this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy});

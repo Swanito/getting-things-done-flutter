@@ -10,6 +10,7 @@ class CalendarStepScreen extends StatefulWidget {
   final GTDElement element;
   final UserRepository userRepository;
 
+
   CalendarStepScreen({this.element, this.userRepository});
 
   @override
@@ -17,6 +18,10 @@ class CalendarStepScreen extends StatefulWidget {
 }
 
 class _CalendarStepScreenState extends State<CalendarStepScreen> {
+
+  TextEditingController _contextController = TextEditingController();
+  String _elementContext;
+
   void continueFunction({GTDElement element, UserRepository userRepository}) {
     BlocProvider.of<NavigatorBloc>(context).add(GoToAsigneeStepScreen(
         elementBeingProcessed: element, userRepository: userRepository));
@@ -29,14 +34,49 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
       builder: (BuildContext context) {
         return AlertDialog(
           title: Text('Veamos...'),
-          content: Text(
-              'Si no es tu responsabilidad, lo moveremos a la lista En Espera'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Text(
+                  'Quieres añadir algún contexto? Esto te ayudará a identificar el ámbito de la tarea. Añade uno o más contextos separados por una coma.'),
+              TextFormField(
+                controller: _contextController,
+                decoration: InputDecoration(
+                  icon: Icon(
+                    Icons.lightbulb_outline,
+                    color: Colors.orange,
+                    size: 13,
+                  ),
+                  labelText: 'Contextos',
+                  labelStyle: TextStyle(color: Colors.orange),
+                  hintStyle: TextStyle(color: Colors.orange),
+                  enabledBorder: new UnderlineInputBorder(
+                    borderSide: BorderSide(
+                        color: Colors.orange,
+                        width: 1.0,
+                        style: BorderStyle.solid),
+                  ),
+                ),
+                keyboardType: TextInputType.text,
+                autovalidate: true,
+                autocorrect: false,
+                onChanged: (text) => {
+                  setState(() =>
+                      {_elementContext = _contextController.text, print(_elementContext)})
+                },
+              ),
+            ],
+          ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Vale, lo haré'),
+              child: Text('Crear contexto'),
               onPressed: () {
                 BlocProvider.of<ElementBloc>(context)
-                    .add(MarkAsCompleted(element));
+                    .add(AddContextToElement(element, _elementContext));
+                BlocProvider.of<ElementBloc>(context)
+                    .add(Process(element));
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
                 BlocProvider.of<NavigatorBloc>(context)
@@ -50,14 +90,22 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
               },
             ),
             FlatButton(
-              child: Text('Lo haré yo mismo'),
+              child: Text('No, gracias'),
               onPressed: () {
+                BlocProvider.of<ElementBloc>(context)
+                    .add(Process(element));
                 BlocProvider.of<NavigatorBloc>(context)
                     .add(NavigatorActionPop());
-                BlocProvider.of<NavigatorBloc>(context).add(
-                    GoToAsigneeStepScreen(
-                        elementBeingProcessed: element,
-                        userRepository: userRepository));
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
               },
             ),
           ],

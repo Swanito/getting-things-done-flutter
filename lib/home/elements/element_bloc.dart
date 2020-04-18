@@ -47,14 +47,17 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapMoveToReferenceToState(event);
     } else if (event is MoveToWaintingFor) {
       yield* _mapMoveToWaitingForToState(event);
+    } else if (event is AddContextToElement) {
+      yield* _mapAddContextToElementToState(event);
+    } else if (event is Process) {
+      yield* _mapProcessToState(event);
     }
   }
 
   Stream<ElementState> _mapLoadEventsToState() async* {
     _elementSubscription?.cancel();
-    _elementSubscription = await _elementRepository
-        .getElements().then((value) => 
-          value.listen((elements) => add(ElementsUpdated(elements))),
+    _elementSubscription = await _elementRepository.getElements().then(
+          (value) => value.listen((elements) => add(ElementsUpdated(elements))),
         );
   }
 
@@ -82,6 +85,12 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     yield LoadingElements();
   }
 
+    Stream<ElementState> _mapProcessToState(Process event) async* {
+    event.elementToBeProcessed.currentStatus = 'PROCESSED';
+    _elementRepository.updateElement(event.elementToBeProcessed);
+    yield ElementProcessed();
+  }
+
   Stream<ElementState> _mapUnmarkAsCompletedToState(
       UnmarkAsCompleted event) async* {
     event.element.currentStatus = 'PROCESSED';
@@ -95,17 +104,30 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     yield ElementProcessed();
   }
 
-  Stream<ElementState> _mapMoveToReferenceToState(MoveToReference event) async* {
+  Stream<ElementState> _mapMoveToReferenceToState(
+      MoveToReference event) async* {
     event.element.currentStatus = 'REFERENCED';
     _elementRepository.updateElement(event.element);
     yield ElementProcessed();
   }
 
-Stream<ElementState> _mapMoveToWaitingForToState(MoveToWaintingFor event) async* {
+  Stream<ElementState> _mapMoveToWaitingForToState(
+      MoveToWaintingFor event) async* {
     event.element.currentStatus = 'WAITINGFOR';
     event.element.asignee = event.asignee;
     _elementRepository.updateElement(event.element);
     yield ElementProcessed();
+  }
+
+  Stream<ElementState> _mapAddContextToElementToState(
+      AddContextToElement event) async* {
+    List<String> arrayContexts = event.context.split(',');
+    List<String> arrayWithoutSpaces = [];
+    for (var context in arrayContexts) {
+      arrayWithoutSpaces.add(context.trim());
+    }
+    event.elementToBeProcessed.contexts = arrayWithoutSpaces;
+    _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   @override

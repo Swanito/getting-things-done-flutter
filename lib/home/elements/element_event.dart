@@ -128,5 +128,18 @@ class Process extends ElementEvent {
 
   @override
   String toString() =>
-      'Process { elementToBeProcessed: $elementToBeProcessed }';
+      'Process { Process: $elementToBeProcessed }';
 }
+
+class AddContextToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  String context;
+
+  AddContextToElement(this.elementToBeProcessed, this.context);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, context];
+
+  @override
+  String toString() =>
+      'Process { AddContextToElement: $elementToBeProcessed, context: $context }';}

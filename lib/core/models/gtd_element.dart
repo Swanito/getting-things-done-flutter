@@ -14,7 +14,7 @@ class GTDElement {
   final Project project;
   final DateTime dueDate;
   final Timestamp createdAt = Timestamp.now();
-  final List<String> contexts;
+  List<dynamic> contexts;
 
   GTDElement(this.summary, 
       {this.id,
