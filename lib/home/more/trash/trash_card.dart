@@ -48,7 +48,12 @@ class TrashCard extends StatelessWidget {
                         style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      _onRecoverPressed;
+                      try{
+                        _onRecoverPressed(_deletedElement);
+                        _showSucessSnackbar(context);
+                      } catch (error) {
+                        _showErrorSnackbar(context);
+                      }
                     },
                     child: Text('RECUPERAR',
                         style: TextStyle(color: Colors.orange))),
@@ -86,5 +91,15 @@ class TrashCard extends StatelessWidget {
     );
   }
 
-  void _onRecoverPressed() {}
+  void _onRecoverPressed(GTDElement element) {
+    _elementBloc.add(RecoverFromTrash(element));
+  }
+
+  void _showSucessSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text('Elemento recuperado con éxito.'),));
+  }
+
+    void _showErrorSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(content: Text('No se pudo recuperar el elemento.'),));
+  }
 }

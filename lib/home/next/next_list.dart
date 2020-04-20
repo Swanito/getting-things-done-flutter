@@ -35,7 +35,7 @@ class _NextListState extends State<NextList> {
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text('Mostrar los elementos completados'),
+                  Text('Ocultar los elementos completados'),
                   Spacer(),
                   Checkbox(
                       value: _showAllElements,

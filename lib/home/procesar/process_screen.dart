@@ -72,11 +72,9 @@ class ProcessScreen extends StatelessWidget {
                       return ProcessList(state.elements);
                     } else if (state is FailedLoadingElements) {
                       _showErrorSnackbar(context);
-                      return Container();
                     } else if (state is ElementProcessed) {
                       _showSuccessSnackbar(context);
                       BlocProvider.of<ElementBloc>(context).add(LoadElements());
-                      return Container();
                     }
                   },
                 )

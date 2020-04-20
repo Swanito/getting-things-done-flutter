@@ -58,6 +58,8 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapAddDateToElement(event);
     } else if (event is AddProjectToElement) {
       yield* _mapAddProjectToElementToState(event);
+    } else if(event is RecoverFromTrash) {
+      yield* _mapRecoverFromTrashToState(event);
     }
   }
 
@@ -100,6 +102,13 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
 
   Stream<ElementState> _mapUnmarkAsCompletedToState(
       UnmarkAsCompleted event) async* {
+    event.element.currentStatus = 'PROCESSED';
+    _elementRepository.updateElement(event.element);
+    yield LoadingElements();
+  }
+
+  Stream<ElementState> _mapRecoverFromTrashToState(
+      RecoverFromTrash event) async* {
     event.element.currentStatus = 'PROCESSED';
     _elementRepository.updateElement(event.element);
     yield LoadingElements();

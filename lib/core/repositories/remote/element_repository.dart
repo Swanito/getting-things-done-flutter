@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_element_entity.dart';
 import 'package:gtd/core/repositories/repository.dart';
@@ -44,7 +47,18 @@ class ElementRepositoryImpl implements ElementRepository {
         .document(element.id)
         .updateData(element.toEntity().toDocument());
   }
+
+  @override
+  Future uploadFile(File file) async {    
+    uid = await getCurrentUserId();
+
+    StorageReference storageReference = FirebaseStorage.instance    
+        .ref()    
+        .child('elements/${uid+file.path}}');    
+    storageReference.putFile(file);       
+  }  
   
+  @override
   Future<String> getCurrentUserId() async {
     await FirebaseAuth.instance.currentUser().then((value) => {
       uid = value.uid

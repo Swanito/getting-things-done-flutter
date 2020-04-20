@@ -30,6 +30,8 @@ dependencies:
   bloc:
   firebase_auth:
   firebase_core:
+  firebase_storage:
+  image_picker:
   cloud_firestore:
   google_sign_in:
   equatable:

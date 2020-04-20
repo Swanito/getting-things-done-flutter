@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
@@ -10,6 +12,8 @@ abstract class ElementRepository {
   Future<void> createElement(GTDElement element);
   Future<void> updateElement(GTDElement element);
   Future<void> deleteElement(GTDElement element);
+  Future uploadFile(File file);
+  Future<String> getCurrentUserId();
 }
 
 abstract class ProjectRepository {

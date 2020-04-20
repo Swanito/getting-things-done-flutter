@@ -1,15 +1,23 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 
-class NextCard extends StatelessWidget {
+class NextCard extends StatefulWidget {
   final GTDElement _processedElement;
-  ElementBloc _elementBloc;
 
   NextCard({GTDElement processedElement})
       : assert(processedElement != null),
         _processedElement = processedElement;
+
+  @override
+  _NextCardState createState() => _NextCardState();
+}
+
+class _NextCardState extends State<NextCard> {
+  ElementBloc _elementBloc;
 
   @override
   Widget build(BuildContext context) {
@@ -34,8 +42,8 @@ class NextCard extends StatelessWidget {
                     Row(
                       children: [
                         Text(
-                            _processedElement.project != null
-                                ? _processedElement.project.title
+                            widget._processedElement.project != null
+                                ? widget._processedElement.project.title
                                 : 'Sin proyecto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600]))
@@ -45,13 +53,14 @@ class NextCard extends StatelessWidget {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Row(
                         children: [
-                          Text(_processedElement.summary,
+                          Text(widget._processedElement.summary,
                               style: TextStyle(
                                   fontSize: 18,
-                                  decoration: _processedElement.currentStatus ==
-                                          'COMPLETED'
-                                      ? TextDecoration.lineThrough
-                                      : null))
+                                  decoration:
+                                      widget._processedElement.currentStatus ==
+                                              'COMPLETED'
+                                          ? TextDecoration.lineThrough
+                                          : null))
                         ],
                       ),
                     ),
@@ -63,8 +72,8 @@ class NextCard extends StatelessWidget {
                           color: Colors.grey[600],
                         ),
                         Text(
-                            _processedElement.dueDate != null
-                                ? _processedElement.dueDate.toString()
+                            widget._processedElement.dueDate != null
+                                ? widget._processedElement.dueDate.toString()
                                 : 'Sin fecha',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600])),
@@ -74,8 +83,8 @@ class NextCard extends StatelessWidget {
                         Icon(Icons.assignment_ind,
                             size: 13, color: Colors.grey[600]),
                         Text(
-                            _processedElement.contexts != null
-                                ? '${_processedElement.contexts[0]} y ${_processedElement.contexts.length - 1} más'
+                            widget._processedElement.contexts != null
+                                ? '${widget._processedElement.contexts[0]} y ${widget._processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600])),
@@ -94,19 +103,20 @@ class NextCard extends StatelessWidget {
                     Checkbox(
                         checkColor: Colors.orange,
                         activeColor: Colors.white,
-                        value: _processedElement.currentStatus == 'COMPLETED'
+                        value: widget._processedElement.currentStatus ==
+                                'COMPLETED'
                             ? true
                             : false,
                         onChanged: (check) => {
                               if (check)
                                 {
-                                  _elementBloc
-                                      .add(MarkAsCompleted(_processedElement)),
+                                  _elementBloc.add(MarkAsCompleted(
+                                      widget._processedElement)),
                                 }
                               else
                                 {
-                                  _elementBloc
-                                      .add(UnmarkAsCompleted(_processedElement))
+                                  _elementBloc.add(UnmarkAsCompleted(
+                                      widget._processedElement))
                                 }
                             }),
                   ],
@@ -121,16 +131,16 @@ class NextCard extends StatelessWidget {
               children: [
                 FlatButton(
                     onPressed: () {
-                      _onDeletePressed(_processedElement);
+                      _onDeletePressed(widget._processedElement);
                     },
                     child: Text('ELIMINAR',
                         style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      _onEditPressed;
+                      _onDetailsPressed(context);
                     },
-                    child:
-                        Text('DETALLES', style: TextStyle(color: Colors.orange))),
+                    child: Text('DETALLES',
+                        style: TextStyle(color: Colors.orange))),
               ],
             ),
           )
@@ -140,10 +150,95 @@ class NextCard extends StatelessWidget {
   }
 
   void _onDeletePressed(GTDElement element) {
-    _elementBloc.add(DeleteElement(element));
+    _elementBloc.add(MoveToDelete(element));
   }
 
-  void _onEditPressed() {}
+  void _onDetailsPressed(BuildContext context) {
+    String elementTitle = widget._processedElement.summary ?? 'Sin título';
+    String elementDescription =
+        widget._processedElement.description.isNotEmpty ? widget._processedElement.description : 'Sin descripción';
+    String projectTitle = widget._processedElement.project != null
+        ? widget._processedElement.project.title
+        : 'Sin proyecto';
+    List<dynamic> contexts = widget._processedElement.contexts ?? [];
+    String dueDate = widget._processedElement.dueDate ?? 'Sin fecha prevista';
+    Timestamp createdAt =
+        widget._processedElement.createdAt ?? 'Sin fecha de creación';
 
-  void _onProcessPressed() {}
+    List<Widget> list = [];
+    for (var context in contexts) {
+      list.add(Chip(label: Text(context)));
+    }
+
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Detalles de $elementTitle'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Descripción',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(elementDescription),
+              ),
+              Text(
+                'Proyecto',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(projectTitle),
+              ),
+              Text(
+                'Contexto(s)',
+                textAlign: TextAlign.left,
+              ),
+              Row(
+                children: list,
+              ),
+              Text(
+                'Fecha prevista',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(dueDate),
+              ),
+              Text(
+                'Creado el',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(createdAt.toDate().toString()),
+              ),
+              Text(
+                'Archivos adjuntos',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text('Sin archivos adjuntos'),
+              )
+            ],
+          ),
+          actions: [
+            FlatButton(
+                onPressed: () {
+                  BlocProvider.of<NavigatorBloc>(context)
+                      .add(NavigatorActionPop());
+                },
+                child: Text('Cerrar')),
+          ],
+        );
+      },
+    );
+  }
 }

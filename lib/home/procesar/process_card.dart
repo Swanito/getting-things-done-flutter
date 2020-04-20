@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
-import 'package:gtd/core/styles.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 
 class ProcessCard extends StatelessWidget {
@@ -46,12 +45,6 @@ class ProcessCard extends StatelessWidget {
                         style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      _onEditPressed;
-                    },
-                    child:
-                        Text('EDITAR', style: TextStyle(color: Colors.orange))),
-                FlatButton(
-                    onPressed: () {
                       _onProcessPressed(_collectedElement, context);
                     },
                     child: Text('PROCESAR',
@@ -66,10 +59,6 @@ class ProcessCard extends StatelessWidget {
 
   void _onDeletePressed(GTDElement element, BuildContext context) {
     BlocProvider.of<ElementBloc>(context).add(MoveToDelete(element));
-  }
-
-  void _onEditPressed() {
-
   }
 
   void _onProcessPressed(GTDElement element, BuildContext context) {

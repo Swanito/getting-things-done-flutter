@@ -1,11 +1,11 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/capture/capture_state.dart';
-import 'package:gtd/capture/capture_validators.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
@@ -63,6 +63,11 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
         newProject = Project(event.project);
         await _projectRepository.createProject(project: newProject);
       }
+    }
+
+    if (event.attachedImage != null) {
+
+      // _elementRepository.uploadFile();
     }
 
     try {

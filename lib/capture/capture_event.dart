@@ -15,15 +15,16 @@ class Capture extends CaptureEvent {
   final String summary;
   final String description;
   final String project;
+  final Image attachedImage;
 
-  const Capture({@required this.summary, @required this.description, @required this.project});
+  const Capture({@required this.summary, @required this.description, @required this.project, @required this.attachedImage});
 
     @override
-  List<Object> get props => [summary, description, project];
+  List<Object> get props => [summary, description, project, attachedImage];
 
   @override
   String toString() {
-    return 'Element Captured { summary: $summary, description: $description, project: $project }';
+    return 'Element Captured { summary: $summary, description: $description, project: $project, image: $attachedImage}';
   }
 }
 

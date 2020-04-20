@@ -120,6 +120,19 @@ class MoveToWaintingFor extends ElementEvent {
       'MoveToWaintingFor { element: $element, waiting for: $asignee }';
 }
 
+class RecoverFromTrash extends ElementEvent {
+  final GTDElement element;
+
+  RecoverFromTrash(this.element);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() =>
+      'MoveToWaintingFor { element: $element}';
+}
+
 class Process extends ElementEvent {
   GTDElement elementToBeProcessed;
 

@@ -20,6 +20,7 @@ import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/home/procesar/bloc/process_bloc.dart';
 import 'package:gtd/onboarding/onboarding_screen.dart';
 
+import 'capture/capture_state.dart';
 import 'core/core_blocs/navigator_bloc.dart';
 import 'home/home_screen.dart';
 
@@ -172,7 +173,9 @@ class GTDState extends State<GTD> {
               );
             }
             if (state is Authenticated) {
-              return HomeScreen(userRepository: _userRepository, currentUser: state.displayName);
+              return BlocBuilder<CaptureBloc, CaptureState>(builder: (context, captureState) {
+                return HomeScreen(userRepository: _userRepository, currentUser: state.displayName);
+              },);
             }
             return OnboardingScreen(userRepository: _userRepository);
           }),

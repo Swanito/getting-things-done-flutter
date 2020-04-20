@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gtd/capture/capture_bloc.dart';
 import 'package:gtd/capture/capture_form.dart';
-import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 

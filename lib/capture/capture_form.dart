@@ -189,8 +189,7 @@ class CaptureFormState extends State<CaptureForm> {
                     ],
                   ),
                   state is ImageAttached
-                      ? AttachedImageCard(
-                          image: state.attachedImage, fileName: state.fileName)
+                      ? () => showTakenPicture(state)
                       : Container(),
                   SizedBox(
                     height: 20,
@@ -235,9 +234,15 @@ class CaptureFormState extends State<CaptureForm> {
     _captureBloc.add(Capture(
         summary: _summaryController.text,
         description: _descriptionController.text,
-        project: _projectController.text));
+        project: _projectController.text,
+        attachedImage: _attachedImage));
     BlocProvider.of<NavigatorBloc>(context)
         .add(NavigatorActionPop());
+  }
+
+  void showTakenPicture(ImageAttached state) {
+    _attachedImage = state.attachedImage;
+    AttachedImageCard(image: state.attachedImage, fileName: state.fileName);
   }
 
 }
