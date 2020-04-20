@@ -94,7 +94,7 @@ String _asignee = "";
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
         title: 'Es tu responsabilidad hacerlo?',
-        lottie: null,
+        lottie: 'assets/pro_asignee.json',
         description: 'Descripcion de tiempo',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,

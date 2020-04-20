@@ -101,7 +101,7 @@ class NextCard extends StatelessWidget {
                               if (check)
                                 {
                                   _elementBloc
-                                      .add(MarkAsCompleted(_processedElement))
+                                      .add(MarkAsCompleted(_processedElement)),
                                 }
                               else
                                 {

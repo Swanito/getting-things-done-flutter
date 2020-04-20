@@ -6,7 +6,6 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_event.dart';
-import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/process_screen_template.dart';
 
 class StepNumbersScreen extends StatefulWidget {
@@ -37,7 +36,7 @@ class _StepNumbersScreenState extends State<StepNumbersScreen> {
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
         title: 'Se puede realizar en un solo paso?',
-        lottie: null,
+        lottie: 'assets/pro_steps.json',
         description: 'Descripcion de accionable',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,

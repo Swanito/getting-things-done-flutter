@@ -35,7 +35,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
         title: 'Tiene fecha límite?',
-        lottie: null,
+        lottie: 'assets/pro_calendar.json',
         description: 'Descripcion de tiempo',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,

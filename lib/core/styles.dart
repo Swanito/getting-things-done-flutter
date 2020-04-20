@@ -14,7 +14,7 @@ final kSubtitleStyle = TextStyle(
 );
 
 final kTitleStyleOrange = TextStyle(
-  color: Colors.orange,
+  color: Colors.deepOrangeAccent,
   fontFamily: 'CM Sans Serif',
   fontSize: 26.0,
   height: 1.5,
@@ -22,6 +22,5 @@ final kTitleStyleOrange = TextStyle(
 
 final kButtonLabel = TextStyle(
   color: Colors.orange,
-  // fontFamily: 'CM Sans Serif',
   fontSize: 16.0,
 );

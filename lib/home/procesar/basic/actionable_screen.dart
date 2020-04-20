@@ -6,6 +6,7 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/process_screen_template.dart';
+import 'package:lottie/lottie.dart';
 
 class ActionableScreen extends StatefulWidget {
   final GTDElement element;
@@ -69,8 +70,8 @@ class _ActionableScreenState extends State<ActionableScreen> {
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
         title: 'Es accionable?',
-        lottie: null,
-        description: 'Descripcion de accionable',
+        lottie: 'assets/pro_actionable.json',
+        description: 'Los elementos accionables son cosas que se pueden llevar a cabo y tienen un contexto, un tiempo, y requiren tiempo y energía.',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,

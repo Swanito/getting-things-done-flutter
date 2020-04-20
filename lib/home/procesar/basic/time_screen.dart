@@ -62,7 +62,7 @@ class _TimeStepScreenState extends State<TimeStepScreen> {
   Widget build(BuildContext context) {
     return ProcessScreenTemplate(
         title: 'Tardarías más de dos minutos en hacerlo?',
-        lottie: null,
+        lottie: 'assets/pro_chrono.json',
         description: 'Descripcion de tiempo',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
