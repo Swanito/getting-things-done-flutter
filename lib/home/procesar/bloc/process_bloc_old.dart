@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/repositories/repository.dart';
-import 'package:gtd/home/procesar/bloc/process_event.dart';
-import 'package:gtd/home/procesar/bloc/process_state.dart';
+import 'package:gtd/home/procesar/bloc/process_event_old.dart';
+import 'package:gtd/home/procesar/bloc/process_state_old.dart';
 
 class ProcessBloc extends Bloc<ProcessEvent, ProcessState> {
   ElementRepository _elementRepository;

@@ -7,8 +7,9 @@ import 'package:meta/meta.dart';
 class GTDElement {
   final String id;
   String currentStatus;
-  final String summary;
-  final String description;
+  String lastStatus;
+  String summary;
+  String description;
   String asignee;
   String createdBy;
   Project project;
@@ -20,6 +21,7 @@ class GTDElement {
       {this.id,
       this.asignee = null,
       this.currentStatus = 'COLLECTED',
+      this.lastStatus = null,
       this.description = '',
       this.createdBy,
       this.project = null,
@@ -41,6 +43,7 @@ class GTDElement {
       createdAt: createdAt,
       createdBy: createdBy,
       currentStatus: currentStatus,
+      lastStatus: lastStatus,
       dueDate: dueDate,
       project: project
     );
@@ -55,6 +58,7 @@ class GTDElement {
         dueDate: entity.dueDate,
         asignee: entity.asignee,
         currentStatus: entity.currentStatus,
+        lastStatus: entity.lastStatus,
         createdBy: entity.createdBy);
   }
 }

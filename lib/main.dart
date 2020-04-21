@@ -17,7 +17,9 @@ import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_event.dart';
-import 'package:gtd/home/procesar/bloc/process_bloc.dart';
+import 'package:gtd/home/next/next_bloc.dart';
+import 'package:gtd/home/next/next_event.dart';
+import 'package:gtd/home/next/next_state.dart';
 import 'package:gtd/onboarding/onboarding_screen.dart';
 
 import 'capture/capture_state.dart';
@@ -115,9 +117,9 @@ class GTDState extends State<GTD> {
         ProjectBloc(projectRepository: _projectRepository);
     CaptureBloc captureBloc = CaptureBloc(
         userRepository: _userRepository, elementRepository: _elementRepository);
-    ProcessBloc processBloc = ProcessBloc(elementRepository: _elementRepository);
     ElementBloc elementBloc = ElementBloc(elementRepository: _elementRepository);
-    
+    NextBloc nextBloc = NextBloc();
+
     return MultiBlocProvider(
         providers: [
           BlocProvider<NavigatorBloc>(
@@ -135,10 +137,10 @@ class GTDState extends State<GTD> {
                   projectBloc..add(LoadProjects())),
           BlocProvider<CaptureBloc>(
               create: (BuildContext context) => captureBloc),
-          BlocProvider<ProcessBloc>(
-              create: (BuildContext context) => processBloc),
           BlocProvider<ElementBloc>(
               create: (BuildContext context) => elementBloc..add(LoadElements())),
+          BlocProvider<NextBloc>(
+              create: (BuildContext context) => nextBloc..add(HideCompletedElements(shouldBeHidden: false))),
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,
@@ -173,9 +175,7 @@ class GTDState extends State<GTD> {
               );
             }
             if (state is Authenticated) {
-              return BlocBuilder<CaptureBloc, CaptureState>(builder: (context, captureState) {
                 return HomeScreen(userRepository: _userRepository, currentUser: state.displayName);
-              },);
             }
             return OnboardingScreen(userRepository: _userRepository);
           }),

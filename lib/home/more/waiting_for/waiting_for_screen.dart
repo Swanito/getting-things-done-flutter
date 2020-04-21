@@ -34,7 +34,7 @@ class WaitingForScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'En Espera', canSearch: true, factor: BarSizeFactor.Small,),
+          GTDAppBar(title: 'En Espera', canSearch: false, factor: BarSizeFactor.Small,),
           MultiBlocProvider(
               providers: [
                 BlocProvider<ElementBloc>(

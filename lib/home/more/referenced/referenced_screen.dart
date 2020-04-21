@@ -34,7 +34,7 @@ class ReferencedScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Referencias', canSearch: true, factor: BarSizeFactor.Small,),
+          GTDAppBar(title: 'Referencias', canSearch: false, factor: BarSizeFactor.Small,),
           MultiBlocProvider(
               providers: [
                 BlocProvider<ElementBloc>(

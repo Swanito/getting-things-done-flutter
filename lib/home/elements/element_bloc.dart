@@ -60,6 +60,10 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapAddProjectToElementToState(event);
     } else if(event is RecoverFromTrash) {
       yield* _mapRecoverFromTrashToState(event);
+    } else if(event is AddDescriptionToElement) {
+      yield* _mapAddDescriptionToElementToState(event);
+    } else if(event is AddTitleToElement) {
+      yield* _mapAddTitleToElementToState(event);
     }
   }
 
@@ -109,15 +113,16 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
 
   Stream<ElementState> _mapRecoverFromTrashToState(
       RecoverFromTrash event) async* {
-    event.element.currentStatus = 'PROCESSED';
+    event.element.currentStatus = event.element.lastStatus;
     _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }
 
   Stream<ElementState> _mapMoveToDeleteToState(MoveToDelete event) async* {
+    event.element.lastStatus = event.element.currentStatus;
     event.element.currentStatus = 'DELETED';
     _elementRepository.updateElement(event.element);
-    yield ElementProcessed();
+    yield ElementDeleted();
   }
 
   Stream<ElementState> _mapMoveToReferenceToState(
@@ -138,6 +143,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   Stream<ElementState> _mapAddContextToElementToState(
       AddContextToElement event) async* {
     List<String> arrayContexts = event.context.split(',');
+    arrayContexts.removeWhere((item) => item == "");
     List<String> arrayWithoutSpaces = [];
     for (var context in arrayContexts) {
       arrayWithoutSpaces.add(context.trim());
@@ -147,7 +153,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   }
 
   Stream<ElementState> _mapAddDateToElement(AddDateToElement event) async* {
-    event.elementToBeProcessed.dueDate = event.date;
+    event.elementToBeProcessed.dueDate = event.date != "" ? event.date : null;
     _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
@@ -156,6 +162,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     ProjectRepository _projectRepository = ProjectRepositoryImpl();
     Project projectToBeAdded;
 
+    if (event.projectTitle != null && event.projectTitle != "") {
     await _projectRepository.getProject(event.projectTitle).then((value) => {
           for (var project in value.documents)
             {
@@ -169,7 +176,19 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
             }
         });
 
+    }
+
     event.elementToBeProcessed.project = projectToBeAdded;
+    _elementRepository.updateElement(event.elementToBeProcessed);
+  }
+
+  Stream<ElementState> _mapAddDescriptionToElementToState(AddDescriptionToElement event) async* {
+    event.elementToBeProcessed.description = event.description != "" ? event.description : null;
+    _elementRepository.updateElement(event.elementToBeProcessed);
+  }
+
+  Stream<ElementState> _mapAddTitleToElementToState(AddTitleToElement event) async* {
+    event.elementToBeProcessed.summary = event.title != "" ? event.title : null;
     _elementRepository.updateElement(event.elementToBeProcessed);
   }
 

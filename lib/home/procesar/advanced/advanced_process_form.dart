@@ -7,8 +7,7 @@ import 'package:gtd/common/attached_image_card.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
-import 'package:gtd/home/procesar/bloc/process_bloc.dart';
-import 'package:gtd/home/procesar/bloc/process_event.dart';
+import 'package:gtd/home/elements/element_bloc.dart';
 
 class AdvancedProcessForm extends StatefulWidget {
   final UserRepository _userRepository;
@@ -40,7 +39,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   final TextEditingController _contextController = TextEditingController();
   final TextEditingController _dateController = TextEditingController();
 
-  ProcessBloc _processBloc;
+  ElementBloc _elementBloc;
 
   bool isRecurrent = false;
   bool _isEditing;
@@ -66,7 +65,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   @override
   void initState() {
     super.initState();
-    _processBloc = BlocProvider.of<ProcessBloc>(context);
+    _elementBloc = BlocProvider.of<ElementBloc>(context);
     _summaryController.addListener(_onSummaryChanged);
     _descriptionController.addListener(_onDescriptionChanged);
     _projectController.addListener(_onProjectChanged);
@@ -310,11 +309,11 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                     child: Text('Procesar'),
                   ),
                   FlatButton(
-                    onPressed: isPopulated ? _onFormSubmitted : null,
+                    onPressed: isPopulated ? _onMoveToReference : null,
                     child: Text('Mover a Referencias', style: TextStyle(color: Colors.white)),
                   ),
                   FlatButton(
-                    onPressed: isPopulated ? _onFormSubmitted : null,
+                    onPressed: isPopulated ? _onMoveToWaitingFor : null,
                     child: Text('Esperando por...', style: TextStyle(color: Colors.white)),
                   ),
                 ],
@@ -342,16 +341,38 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
 
   void _onDescriptionChanged() {}
 
-  void _onProjectChanged() {}
+  void _onProjectChanged() {
+
+  }
 
   void _onContextChanged() {}
 
   void _onDateChanged() {}
 
+  void _onMoveToReference() {
+    BlocProvider.of<ElementBloc>(context).add(MoveToReference(_elementInFocus));
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+  }
+
+  void _onMoveToWaitingFor() {
+
+  }
+
   void _onFormSubmitted() {
-    _processBloc.add(ProcessElement(element: _elementInFocus));
-    BlocProvider.of<NavigatorBloc>(context)
-        .add(NavigatorActionPop());
+    _elementBloc.add(AddTitleToElement(_elementInFocus, _summaryController.text ?? null));
+    _elementBloc.add(AddDescriptionToElement(_elementInFocus, _descriptionController.text ?? null));
+    _elementBloc.add(AddProjectToElement(_elementInFocus, _projectController.text ?? null));
+    String contexts = "";
+    Text label;
+    contextList.forEach((chip) => {
+      label = chip.label as Text,
+      contexts += label.data + ","
+    });
+    _elementBloc.add(AddContextToElement(_elementInFocus, contexts));
+    _elementBloc.add(AddDateToElement(_elementInFocus, _dateController.text));
+    // _elementBloc.add(AddImageToElement());
+    _elementBloc.add(Process(_elementInFocus));
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
   void _addChip(String chipLabel) => setState(() => {
@@ -366,7 +387,8 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                 });
               });
             }),
-        contextList.add(newContextChip)
+        contextList.add(newContextChip),
+        _contextController.clear()
       });
 
   void _checkBoxMarked(bool newValue) => setState(() {

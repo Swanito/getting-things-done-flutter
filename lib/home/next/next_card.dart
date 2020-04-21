@@ -83,7 +83,7 @@ class _NextCardState extends State<NextCard> {
                         Icon(Icons.assignment_ind,
                             size: 13, color: Colors.grey[600]),
                         Text(
-                            widget._processedElement.contexts != null
+                            widget._processedElement.contexts.isNotEmpty
                                 ? '${widget._processedElement.contexts[0]} y ${widget._processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(

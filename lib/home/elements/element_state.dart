@@ -10,6 +10,7 @@ class ElementState extends Equatable {
 
 class LoadingElements extends ElementState {}
 class ElementProcessed extends ElementState {}
+class ElementDeleted extends ElementState {}
 
 class SucessLoadingElements extends ElementState {
   final List<GTDElement> elements;
@@ -18,9 +19,6 @@ class SucessLoadingElements extends ElementState {
 
   @override
   List<Object> get props => [elements];
-
-  // @override
-  // String toString() => 'SucessLoadingElements { elements: $elements }';
 }
 
 class FailedLoadingElements extends ElementState {}

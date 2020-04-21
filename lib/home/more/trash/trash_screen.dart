@@ -34,7 +34,7 @@ class TrashScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Trash', canSearch: true, factor: BarSizeFactor.Small,),
+          GTDAppBar(title: 'Trash', canSearch: false, factor: BarSizeFactor.Small,),
           MultiBlocProvider(
               providers: [
                 BlocProvider<ElementBloc>(

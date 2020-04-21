@@ -33,7 +33,6 @@ class ProjectScreenState extends State<ProjectScreen> {
                 Colors.orange[600],
                 Colors.orange[400],
                 Colors.orange[200],
-                // Colors.orange[100],
               ]),
         )),
       ),
@@ -41,7 +40,7 @@ class ProjectScreenState extends State<ProjectScreen> {
         children: [
           GTDAppBar(
             title: 'Proyectos',
-            canSearch: true,
+            canSearch: false,
             factor: BarSizeFactor.Small,
           ),
           MultiBlocProvider(

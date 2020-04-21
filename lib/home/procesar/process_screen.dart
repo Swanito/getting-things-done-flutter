@@ -1,23 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
-import 'package:gtd/home/procesar/bloc/process_bloc.dart';
-import 'package:gtd/home/procesar/bloc/process_state.dart';
 import 'package:gtd/home/procesar/process_list.dart';
 
 class ProcessScreen extends StatelessWidget {
   final UserRepository _userRepository;
   GTDAppBar _gtdAppBar = GTDAppBar(
     title: 'Procesar',
-    canSearch: true,
+    canSearch: false,
     factor: BarSizeFactor.Small,
   );
 
@@ -73,9 +67,13 @@ class ProcessScreen extends StatelessWidget {
                     } else if (state is FailedLoadingElements) {
                       _showErrorSnackbar(context);
                     } else if (state is ElementProcessed) {
-                      _showSuccessSnackbar(context);
+                      _showSuccessSnackbar(context, 'Elemento procesado correctamente');
+                      BlocProvider.of<ElementBloc>(context).add(LoadElements());
+                    } else if(state is ElementDeleted) {
+                      _showSuccessSnackbar(context, 'Elemento eliminado correctamente');
                       BlocProvider.of<ElementBloc>(context).add(LoadElements());
                     }
+                    return Container();
                   },
                 )
               )
@@ -102,7 +100,7 @@ class ProcessScreen extends StatelessWidget {
       );
   }
 
-  _showSuccessSnackbar(BuildContext context) {
+  _showSuccessSnackbar(BuildContext context, String text) {
     Scaffold.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -110,11 +108,11 @@ class ProcessScreen extends StatelessWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text('Elemento procesado correctamente.'),
-              Icon(Icons.error)
+              Text(text),
+              Icon(Icons.check)
             ],
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: Colors.green,
         ),
       );
   }

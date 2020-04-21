@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
+import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
+import 'package:gtd/home/next/next_bloc.dart';
 import 'package:gtd/home/next/next_list.dart';
+import 'package:gtd/home/next/next_state.dart';
 
 class NextScreen extends StatelessWidget {
   final UserRepository _userRepository;
@@ -35,7 +38,11 @@ class NextScreen extends StatelessWidget {
       ),
       body: Column(
         children: [
-          GTDAppBar(title: 'Next', canSearch: true, factor: BarSizeFactor.Small,),
+          GTDAppBar(
+            title: 'Next',
+            canSearch: false,
+            factor: BarSizeFactor.Small,
+          ),
           MultiBlocProvider(
               providers: [
                 BlocProvider<ElementBloc>(
@@ -48,21 +55,34 @@ class NextScreen extends StatelessWidget {
               ],
               child: BlocBuilder<ElementBloc, ElementState>(
                 builder: (context, state) {
-                  if (state is LoadingElements) {
-                    return Container(
-                      height: MediaQuery.of(context).size.height / 2,
-                      child: Center(
-                        child: CircularProgressIndicator(
-                          backgroundColor: Colors.orange,
+                  return BlocBuilder<NextBloc, NextState>(
+                      builder: (context, nextState) {
+                    if (state is LoadingElements) {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: CircularProgressIndicator(
+                            backgroundColor: Colors.orange,
+                          ),
                         ),
-                      ),
-                    );
-                  } else if (state is SucessLoadingElements) {
-                      return NextList(state.elements);
-                  } else if (state is FailedLoadingElements) {
-                    _showErrorSnackbar(context);
-                    return Container();
-                  }
+                      );
+                    } else if (state is SucessLoadingElements) {
+                      if (nextState is CompletedElementsHidden) {
+                        List<GTDElement> filteredElements = state.elements.where((element) => 
+                          element.currentStatus == 'PROCESSED',
+                        ).toList();
+                        return NextList(filteredElements, completedElementsHidden: true);
+                      } else {
+                        List<GTDElement> filteredElements = state.elements.where((element) => 
+                          element.currentStatus == 'PROCESSED' || element.currentStatus == 'COMPLETED',
+                        ).toList();
+                        return NextList(filteredElements, completedElementsHidden: false);
+                      }
+                    } else if (state is FailedLoadingElements) {
+                      _showErrorSnackbar(context);
+                      return Container();
+                    }
+                  });
                 },
               ))
         ],

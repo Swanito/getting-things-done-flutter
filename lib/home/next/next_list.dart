@@ -1,33 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
+import 'package:gtd/home/next/next_bloc.dart';
 import 'package:gtd/home/next/next_card.dart';
+import 'package:gtd/home/next/next_event.dart';
 
 class NextList extends StatefulWidget {
   List<GTDElement> elements = [];
-  List<GTDElement> filteredList = [];
-  List<GTDElement> uncompletedList = [];
+  bool completedElementsHidden;
 
-  NextList(this.elements)
-      : filteredList = elements
-            .where(
-              (e) =>
-                  e.currentStatus == 'PROCESSED' ||
-                  e.currentStatus == 'COMPLETED',
-            )
-            .toList(),
-        uncompletedList =
-            elements.where((e) => e.currentStatus == 'PROCESSED').toList();
+  NextList(this.elements, {@required this.completedElementsHidden});
 
   @override
   _NextListState createState() => _NextListState();
 }
 
 class _NextListState extends State<NextList> {
-  bool _showAllElements = false;
+  bool _initialValue;
+  bool _currentValue;
 
   @override
   Widget build(BuildContext context) {
-    if (widget.filteredList.isNotEmpty || widget.uncompletedList.isNotEmpty) {
+
+    _initialValue = widget.completedElementsHidden;
+
+    if (widget.elements.isNotEmpty) {
       return Expanded(
         child: Column(
           children: <Widget>[
@@ -35,13 +32,15 @@ class _NextListState extends State<NextList> {
               padding: const EdgeInsets.only(left: 16.0, right: 16.0),
               child: Row(
                 children: <Widget>[
-                  Text('Ocultar los elementos completados'),
+                  Text('Mostrar los elementos completados'),
                   Spacer(),
                   Checkbox(
-                      value: _showAllElements,
+                      value: _currentValue ?? _initialValue,
                       onChanged: (value) => {
                             setState(() {
-                              _showAllElements = value;
+                              print('compelted elements should be hidden: $value');
+                              _currentValue = value;
+                              BlocProvider.of<NextBloc>(context).add(HideCompletedElements(shouldBeHidden: _currentValue));
                             })
                           })
                 ],
@@ -50,18 +49,11 @@ class _NextListState extends State<NextList> {
             Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
-                itemCount: widget.filteredList.length,
+                itemCount: widget.elements.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                     padding: const EdgeInsets.only(left: 16.0, right: 16.0),
-                    child: _showAllElements
-                        ? NextCard(
-                            processedElement: widget.uncompletedList[index],
-                          )
-                        : NextCard(
-                            processedElement: widget.filteredList[index],
-                          ),
-                  );
+                    child: NextCard(processedElement: widget.elements[index],));
                 },
               ),
             ),
@@ -81,16 +73,5 @@ class _NextListState extends State<NextList> {
         ),
       );
     }
-  }
-
-  void _filterLists() {
-    widget.filteredList = widget.elements
-        .where(
-          (e) =>
-              e.currentStatus == 'PROCESSED' || e.currentStatus == 'COMPLETED',
-        )
-        .toList();
-    widget.uncompletedList =
-        widget.elements.where((e) => e.currentStatus == 'PROCESSED').toList();
   }
 }

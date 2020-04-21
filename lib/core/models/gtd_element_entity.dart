@@ -15,6 +15,7 @@ enum ElementProcessStatus {
 class GTDElementEntity extends Equatable {
   final String id;
   final String currentStatus;
+  final String lastStatus;
   final String summary;
   final String asignee;
   final String description;
@@ -24,13 +25,14 @@ class GTDElementEntity extends Equatable {
   final String createdBy;
   final List<dynamic> contexts;
 
-  GTDElementEntity({this.id, this.currentStatus, this.summary, this.description,
+  GTDElementEntity({this.id, this.currentStatus, this.lastStatus, this.summary, this.description,
       this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy});
 
   Map<String, Object> toJson() {
     return {
       "id": id,
       "currentStatus": currentStatus,
+      "lastStatus": lastStatus,
       "summary": summary,
       "description": description,
       "project": project,
@@ -45,6 +47,7 @@ class GTDElementEntity extends Equatable {
   Map<String, Object> toDocument() {
     return {
       "currentStatus": currentStatus.toString(),
+      "lastStatus": lastStatus.toString(),
       "summary": summary,
       "description": description,
       "project": project != null ? project.toEntity().toDocument() : null,
@@ -60,6 +63,7 @@ class GTDElementEntity extends Equatable {
     return GTDElementEntity(
       id: json["id"] as String,
       currentStatus: json["currentStatus"] as String,
+      lastStatus: json["lastStatus"] as String,
       summary: json["summary"] as String,
       description: json["description"] as String,
       project: json["project"] as Project,
@@ -78,6 +82,7 @@ class GTDElementEntity extends Equatable {
     return GTDElementEntity(
       id: snap.documentID,
       currentStatus: snap.data["currentStatus"],
+      lastStatus: snap.data["lastStatus"],
       summary: snap.data["summary"],
       description: snap.data["description"],
       project: project,

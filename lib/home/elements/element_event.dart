@@ -185,3 +185,31 @@ class AddProjectToElement extends ElementEvent {
   String toString() =>
       'Process { AddProjectToElement: $elementToBeProcessed, projectTitle: $projectTitle }';
 }
+
+class AddDescriptionToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  String description;
+
+  AddDescriptionToElement(this.elementToBeProcessed, this.description);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, description];
+
+  @override
+  String toString() =>
+      'Process { AddDescriptionToElement: $elementToBeProcessed, description: $description }';
+}
+
+class AddTitleToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  String title;
+
+  AddTitleToElement(this.elementToBeProcessed, this.title);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, title];
+
+  @override
+  String toString() =>
+      'Process { AddTitleToElement: $elementToBeProcessed, title: $title }';
+}

@@ -189,7 +189,7 @@ class CaptureFormState extends State<CaptureForm> {
                     ],
                   ),
                   state is ImageAttached
-                      ? () => showTakenPicture(state)
+                      ? showTakenPicture(state)
                       : Container(),
                   SizedBox(
                     height: 20,
@@ -240,9 +240,9 @@ class CaptureFormState extends State<CaptureForm> {
         .add(NavigatorActionPop());
   }
 
-  void showTakenPicture(ImageAttached state) {
+  Widget showTakenPicture(ImageAttached state) {
     _attachedImage = state.attachedImage;
-    AttachedImageCard(image: state.attachedImage, fileName: state.fileName);
+    return AttachedImageCard(image: state.attachedImage, fileName: state.fileName);
   }
 
 }
