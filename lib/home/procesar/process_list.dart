@@ -15,7 +15,7 @@ class ProcessList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (elements.isNotEmpty) {
+    if (filteredList.isNotEmpty) {
       return Expanded(
         child: ListView.builder(
           shrinkWrap: true,

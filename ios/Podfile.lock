@@ -158,6 +158,8 @@ PODS:
     - abseil/base/base_internal
     - abseil/base/config
     - abseil/meta/type_traits
+  - add_2_calendar (0.0.1):
+    - Flutter
   - "app_settings (3.0.0+1)":
     - Flutter
   - AppAuth (1.3.0):
@@ -341,6 +343,7 @@ PODS:
     - Flutter
 
 DEPENDENCIES:
+  - add_2_calendar (from `.symlinks/plugins/add_2_calendar/ios`)
   - app_settings (from `.symlinks/plugins/app_settings/ios`)
   - camera (from `.symlinks/plugins/camera/ios`)
   - cloud_firestore (from `.symlinks/plugins/cloud_firestore/ios`)
@@ -390,6 +393,8 @@ SPEC REPOS:
     - PromisesObjC
 
 EXTERNAL SOURCES:
+  add_2_calendar:
+    :path: ".symlinks/plugins/add_2_calendar/ios"
   app_settings:
     :path: ".symlinks/plugins/app_settings/ios"
   camera:
@@ -431,6 +436,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   abseil: 18063d773f5366ff8736a050fe035a28f635fd27
+  add_2_calendar: c201b1c7dc0299280f1b1a8158aa80e15a8f8912
   app_settings: d103828c9f5d515c4df9ee754dabd443f7cedcf3
   AppAuth: 73574f3013a1e65b9601a3ddc8b3158cce68c09d
   BoringSSL-GRPC: db8764df3204ccea016e1c8dd15d9a9ad63ff318

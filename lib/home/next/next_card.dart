@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
+import 'package:add_2_calendar/add_2_calendar.dart';
 
 class NextCard extends StatefulWidget {
   final GTDElement _processedElement;
@@ -83,8 +84,8 @@ class _NextCardState extends State<NextCard> {
                         Icon(Icons.assignment_ind,
                             size: 13, color: Colors.grey[600]),
                         Text(
-                            widget._processedElement.contexts.isNotEmpty
-                                ? '${widget._processedElement.contexts[0]} y ${widget._processedElement.contexts.length - 1} más'
+                            widget._processedElement.contexts != null && widget._processedElement.contexts.length > 0
+                                ? '${widget._processedElement.contexts.first} y ${widget._processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600])),
@@ -141,12 +142,36 @@ class _NextCardState extends State<NextCard> {
                     },
                     child: Text('DETALLES',
                         style: TextStyle(color: Colors.orange))),
+                widget._processedElement.dueDate != null ?
+                FlatButton(
+                    onPressed: () {
+                      _addToCalendar();
+                    },
+                    child: Text('AL CALENDARIO',
+                        style: TextStyle(color: Colors.orange))) : Container(),
               ],
             ),
           )
         ],
       ),
     );
+  }
+
+  void _addToCalendar() {
+    final Event event = Event(
+      title: widget._processedElement.summary,
+      description: _buildEventDescription(),
+      startDate: DateTime.parse(widget._processedElement.dueDate),
+      endDate: DateTime.parse(widget._processedElement.dueDate),
+    );
+
+    Add2Calendar.addEvent2Cal(event);
+  }
+
+  String _buildEventDescription() {
+    return ''' Hola! 👋 
+    
+    Este evento ha sido creado por Do Things App para recordarte completar el elemento ${widget._processedElement.summary}. ''';
   }
 
   void _onDeletePressed(GTDElement element) {

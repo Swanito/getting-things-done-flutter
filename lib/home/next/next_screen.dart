@@ -82,6 +82,7 @@ class NextScreen extends StatelessWidget {
                       _showErrorSnackbar(context);
                       return Container();
                     }
+                    return Container();
                   });
                 },
               ))

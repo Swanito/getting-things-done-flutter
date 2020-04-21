@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
@@ -18,6 +19,7 @@ class CalendarStepScreen extends StatefulWidget {
 
 class _CalendarStepScreenState extends State<CalendarStepScreen> {
   TextEditingController _contextController = TextEditingController();
+  TextEditingController _dateController = TextEditingController();
   String _elementContext;
   String _elementDate;
 
@@ -120,7 +122,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
             children: <Widget>[
               Text('Cual es la fecha de su realización?'),
               TextFormField(
-                controller: _contextController,
+                controller: _dateController,
                 decoration: InputDecoration(
                   icon: Icon(
                     Icons.lightbulb_outline,
@@ -137,12 +139,13 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
                         style: BorderStyle.solid),
                   ),
                 ),
+                onTap: () => _selectDate(context),
                 keyboardType: TextInputType.text,
                 autovalidate: true,
+                readOnly: true,
                 autocorrect: false,
                 onChanged: (text) => {
                   setState(() => {
-                        _elementDate = _contextController.text,
                         print(_elementDate)
                       })
                 },
@@ -154,7 +157,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
               child: Text('Procesar'),
               onPressed: () {
                 BlocProvider.of<ElementBloc>(context)
-                    .add(AddDateToElement(element, _elementDate));
+                    .add(AddDateToElement(element, _dateController.text));
                 showAlternativeDialog(element, userRepository);
               },
             ),
@@ -172,5 +175,21 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
 
   void closeScreens() {
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPopAll());
+  }
+
+  Future<Null> _selectDate(BuildContext context) async {
+      DateTime selectedDate = DateTime.now();
+
+    final DateTime picked = await showDatePicker(
+        context: context,
+        initialDate: selectedDate,
+        locale: const Locale('es', 'ES'),
+        firstDate: DateTime(2015, 8),
+        lastDate: DateTime(2101));
+    if (picked != null && picked != selectedDate)
+      setState(() {
+        selectedDate = picked;
+        _dateController.text = selectedDate.toLocal().toString().split(' ')[0];
+      });
   }
 }
