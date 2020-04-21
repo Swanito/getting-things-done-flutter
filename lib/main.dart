@@ -161,14 +161,14 @@ class GTDState extends State<GTD> {
             }
             if (state is Unauthenticated) {
               return BlocBuilder<LocalStatusBloc, LocalState>(
-                builder: (context, state) {
-                  if (state is Unknown) {
+                builder: (context, localState) {
+                  if (localState is Unknown) {
                     return SplashScreen();
                   }
-                  if (state is OnboardingNotCompleted) {
+                  if (localState is OnboardingNotCompleted) {
                     return OnboardingScreen(userRepository: _userRepository);
                   }
-                  if (state is OnboardingCompleted) {
+                  if (localState is OnboardingCompleted) {
                     return AuthScreen();
                   }
                 },

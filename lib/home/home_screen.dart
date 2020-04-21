@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gtd/capture/capture_screen.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
@@ -8,13 +7,12 @@ import 'package:gtd/home/more/more_screen.dart';
 import 'package:gtd/home/next/next_screen.dart';
 import 'package:gtd/home/procesar/process_screen.dart';
 import 'package:gtd/home/revisar/review_screen.dart';
-import 'package:path/path.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;
   final String _currentUser;
 
-  HomeScreen({Key key, UserRepository userRepository, String currentUser})
+  HomeScreen({Key key, UserRepository userRepository, String currentUser = "Unknown"})
       : assert(userRepository != null),
       assert(currentUser != null),
         _userRepository = userRepository,
@@ -22,17 +20,13 @@ class HomeScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return HomeScreenState(userRepository: _userRepository);
+    print('Current user is $_currentUser');
+    return HomeScreenState();
   }
 }
 
 class HomeScreenState extends State<HomeScreen> {
-  final UserRepository _userRepository;
   int _selectedTabIndex = 0;
-
-  HomeScreenState({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
 
   _changeIndex(int index) {
     setState(() {
@@ -43,10 +37,10 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     List _pages = [
-      NextScreen(userRepository: _userRepository),
-      ProcessScreen(userRepository: _userRepository),
-      ReviewScreen(userRepository: _userRepository),
-      MoreScreen(userRepository: _userRepository, currentUser: widget._currentUser,),
+      NextScreen(userRepository: widget._userRepository),
+      ProcessScreen(userRepository: widget._userRepository),
+      ReviewScreen(userRepository: widget._userRepository),
+      MoreScreen(userRepository: widget._userRepository, currentUser: widget._currentUser,),
     ];
 
     return BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {

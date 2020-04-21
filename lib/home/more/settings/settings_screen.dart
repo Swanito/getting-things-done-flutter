@@ -22,8 +22,7 @@ class SettingsScreen extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return SettingsScreenState(
-        userRepository: _userRepository, localRepository: _localRepository);
+    return SettingsScreenState();
   }
 }
 
@@ -31,16 +30,6 @@ class SettingsScreenState extends State<SettingsScreen> {
   String selectedGTDLevel;
   String currentGtdLevel;
 
-  final UserRepository _userRepository;
-  final LocalRepository _localRepository;
-  LocalStatusBloc _localStatusBloc;
-
-  SettingsScreenState(
-      {Key key, UserRepository userRepository, LocalRepository localRepository})
-      : assert(userRepository != null),
-        assert(localRepository != null),
-        _localRepository = localRepository,
-        _userRepository = userRepository;
 
   @override
   void initState() {
@@ -85,6 +74,7 @@ class SettingsScreenState extends State<SettingsScreen> {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   Scaffold.of(context).showSnackBar(SnackBar(
                     content: Text('Preferencias guardadas con éxito'),
+                    backgroundColor: Colors.green,
                   ));
                   BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
                 });
