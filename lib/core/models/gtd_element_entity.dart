@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
+import 'package:gtd/home/procesar/advanced/advanced_process_form.dart';
 
 enum ElementProcessStatus {
   COMPLETED,
@@ -24,9 +25,11 @@ class GTDElementEntity extends Equatable {
   final Timestamp createdAt;
   final String createdBy;
   final List<dynamic> contexts;
+  final int repeatInterval;
+  final String period;
 
   GTDElementEntity({this.id, this.currentStatus, this.lastStatus, this.summary, this.description,
-      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy});
+      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy, this.repeatInterval, this.period});
 
   Map<String, Object> toJson() {
     return {
@@ -40,7 +43,9 @@ class GTDElementEntity extends Equatable {
       "createdAt": createdAt,
       "contexts": contexts,
       "asignee": asignee,
-      "createdBy": createdBy
+      "createdBy": createdBy,
+      "repeatInterval": repeatInterval,
+      "period": period
     };
   }
 
@@ -55,7 +60,9 @@ class GTDElementEntity extends Equatable {
       "createdAt": createdAt,
       "contexts": contexts,
       "asignee": asignee,
-      "createdBy": createdBy
+      "createdBy": createdBy,
+      "repeatInterval": repeatInterval,
+      "period": period
     };
   }
 
@@ -72,6 +79,8 @@ class GTDElementEntity extends Equatable {
       contexts: json["contexts"] as List<String>,
       asignee: json["asignee"] as String,
       createdBy: json["createdBy"] as String,
+      repeatInterval: json["repeatInterval"] as int,
+      period: json["period"] as String
     );
   }
 
@@ -90,7 +99,9 @@ class GTDElementEntity extends Equatable {
       createdAt: snap.data["createdAt"],
       contexts: snap.data["contexts"],
       asignee: snap.data["asignee"],
-      createdBy: snap.data["createdBy"]
+      createdBy: snap.data["createdBy"],
+      repeatInterval: snap.data["repeatInterval"],
+      period: snap.data["period"],
     );
   }
 

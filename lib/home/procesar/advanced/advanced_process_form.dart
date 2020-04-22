@@ -9,12 +9,15 @@ import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 
+enum DatePeriod { WEEK, DAY }
+
 class AdvancedProcessForm extends StatefulWidget {
   final UserRepository _userRepository;
   final bool _isEditing;
   final GTDElement _element;
 
-  AdvancedProcessForm({@required userRepository, @required isEditing, @required element})
+  AdvancedProcessForm(
+      {@required userRepository, @required isEditing, @required element})
       : assert(userRepository != null),
         assert(isEditing != null),
         assert(element != null),
@@ -25,7 +28,9 @@ class AdvancedProcessForm extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return AdvancedProcessFormState(
-        userRepository: _userRepository, isEditing: _isEditing, elementInFocus: _element);
+        userRepository: _userRepository,
+        isEditing: _isEditing,
+        elementInFocus: _element);
   }
 }
 
@@ -42,23 +47,23 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   ElementBloc _elementBloc;
 
   bool isRecurrent = false;
-  bool _isEditing;
   int dropdownDayValue;
   String dropdownPeriodValue;
   Image _attachedImage;
   List<Chip> contextList = [];
   DateTime selectedDate = DateTime.now();
+  DatePeriod dropdownPeriod;
 
   Chip newContextChip;
 
   bool get isPopulated => _summaryController.text.isNotEmpty;
   bool get isContextPopulated => _contextController.text.isNotEmpty;
 
-  AdvancedProcessFormState({@required userRepository, @required isEditing, @required elementInFocus})
+  AdvancedProcessFormState(
+      {@required userRepository, @required isEditing, @required elementInFocus})
       : assert(userRepository != null),
         assert(isEditing != null),
         assert(elementInFocus != null),
-        _isEditing = isEditing,
         _userRepository = userRepository,
         _elementInFocus = elementInFocus;
 
@@ -310,11 +315,13 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                   ),
                   FlatButton(
                     onPressed: isPopulated ? _onMoveToReference : null,
-                    child: Text('Mover a Referencias', style: TextStyle(color: Colors.white)),
+                    child: Text('Mover a Referencias',
+                        style: TextStyle(color: Colors.white)),
                   ),
                   FlatButton(
                     onPressed: isPopulated ? _onMoveToWaitingFor : null,
-                    child: Text('Esperando por...', style: TextStyle(color: Colors.white)),
+                    child: Text('Esperando por...',
+                        style: TextStyle(color: Colors.white)),
                   ),
                 ],
               ),
@@ -341,9 +348,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
 
   void _onDescriptionChanged() {}
 
-  void _onProjectChanged() {
-
-  }
+  void _onProjectChanged() {}
 
   void _onContextChanged() {}
 
@@ -354,23 +359,26 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
-  void _onMoveToWaitingFor() {
-
-  }
+  void _onMoveToWaitingFor() {}
 
   void _onFormSubmitted() {
-    _elementBloc.add(AddTitleToElement(_elementInFocus, _summaryController.text ?? null));
-    _elementBloc.add(AddDescriptionToElement(_elementInFocus, _descriptionController.text ?? null));
-    _elementBloc.add(AddProjectToElement(_elementInFocus, _projectController.text ?? null));
+    _elementBloc.add(
+        AddTitleToElement(_elementInFocus, _summaryController.text ?? null));
+    _elementBloc.add(AddDescriptionToElement(
+        _elementInFocus, _descriptionController.text ?? null));
+    _elementBloc.add(
+        AddProjectToElement(_elementInFocus, _projectController.text ?? null));
     String contexts = "";
     Text label;
-    contextList.forEach((chip) => {
-      label = chip.label as Text,
-      contexts += label.data + ","
-    });
+    contextList.forEach(
+        (chip) => {label = chip.label as Text, contexts += label.data + ","});
     _elementBloc.add(AddContextToElement(_elementInFocus, contexts));
     _elementBloc.add(AddDateToElement(_elementInFocus, _dateController.text));
     // _elementBloc.add(AddImageToElement());
+    if (isRecurrent) {
+      _elementBloc.add(AddRecurrencyToElement(
+          _elementInFocus, dropdownDayValue, dropdownPeriod));
+    }
     _elementBloc.add(Process(_elementInFocus));
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
@@ -429,6 +437,9 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
           onChanged: (String newValue) {
             setState(() {
               dropdownPeriodValue = newValue;
+              dropdownPeriod = dropdownPeriodValue == 'Semanas'
+                  ? DatePeriod.WEEK
+                  : DatePeriod.DAY;
             });
           },
           items: <String>['Dias', 'Semanas']

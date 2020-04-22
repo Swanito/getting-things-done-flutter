@@ -19,10 +19,19 @@ class NextCard extends StatefulWidget {
 
 class _NextCardState extends State<NextCard> {
   ElementBloc _elementBloc;
+  int recurrencyInterval;
+  bool isRecurrent = false;
+  String period;
 
   @override
   Widget build(BuildContext context) {
     _elementBloc = BlocProvider.of<ElementBloc>(context);
+
+    if(widget._processedElement.period != null) {
+      recurrencyInterval = _calculateRecurrency(widget._processedElement.repeatInterval, widget._processedElement.period);
+      isRecurrent = true;
+      period = widget._processedElement.period == "WEEK" ? 'semanas' : 'días';
+    }
 
     return Card(
       shape: Border(
@@ -91,6 +100,17 @@ class _NextCardState extends State<NextCard> {
                                 fontSize: 13, color: Colors.grey[600])),
                       ],
                     ),
+                    isRecurrent ? Padding(
+                      padding: const EdgeInsets.only(top: 8.0),
+                      child: Row(
+                        children: <Widget>[
+                          Icon(Icons.replay,
+                                size: 13, color: Colors.grey[600],),
+                          Text('Ocurre cada $recurrencyInterval $period', style: TextStyle(
+                                  fontSize: 13, color: Colors.grey[600]))
+                        ],
+                      ),
+                    ) : Container()
                   ],
                 ),
               ),
@@ -265,5 +285,13 @@ class _NextCardState extends State<NextCard> {
         );
       },
     );
+  }
+
+  int _calculateRecurrency(int timeInterval, String period) {
+    if(period == 'WEEK') {
+      return (timeInterval ~/ 604800).toInt();
+    } else {
+      return (timeInterval ~/ 86400).toInt();
+    }
   }
 }

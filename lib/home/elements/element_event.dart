@@ -172,6 +172,21 @@ class AddDateToElement extends ElementEvent {
       'Process { AddDateToElement: $elementToBeProcessed, date: $date }';
 }
 
+class AddRecurrencyToElement extends ElementEvent {
+  GTDElement elementToBeProcessed;
+  int number;
+  DatePeriod period;
+
+  AddRecurrencyToElement(this.elementToBeProcessed, this.number, this.period);
+
+  @override
+  List<Object> get props => [elementToBeProcessed, number, period];
+
+  @override
+  String toString() =>
+      'Process { AddRecurrencyToElement: $elementToBeProcessed, occurs every: $number  $period}';
+}
+
 class AddProjectToElement extends ElementEvent {
   GTDElement elementToBeProcessed;
   String projectTitle;

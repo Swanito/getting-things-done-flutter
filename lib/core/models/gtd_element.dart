@@ -1,9 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gtd/core/models/gtd_element_entity.dart';
 import 'package:gtd/core/models/gtd_project.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 class GTDElement {
   final String id;
   String currentStatus;
@@ -16,17 +14,21 @@ class GTDElement {
   String dueDate;
   final Timestamp createdAt = Timestamp.now();
   List<dynamic> contexts;
+  int repeatInterval;
+  String period;
 
   GTDElement(this.summary, 
       {this.id,
-      this.asignee = null,
+      this.asignee,
       this.currentStatus = 'COLLECTED',
-      this.lastStatus = null,
+      this.lastStatus,
       this.description = '',
       this.createdBy,
-      this.project = null,
-      this.dueDate = null,
-      this.contexts = null});
+      this.project,
+      this.dueDate,
+      this.repeatInterval,
+      this.contexts,
+      this.period});
 
   @override
   String toString() {
@@ -45,7 +47,9 @@ class GTDElement {
       currentStatus: currentStatus,
       lastStatus: lastStatus,
       dueDate: dueDate,
-      project: project
+      project: project,
+      repeatInterval: repeatInterval,
+      period: period
     );
   }
 
@@ -59,6 +63,8 @@ class GTDElement {
         asignee: entity.asignee,
         currentStatus: entity.currentStatus,
         lastStatus: entity.lastStatus,
-        createdBy: entity.createdBy);
+        createdBy: entity.createdBy,
+        repeatInterval: entity.repeatInterval,
+        period: entity.period);
   }
 }

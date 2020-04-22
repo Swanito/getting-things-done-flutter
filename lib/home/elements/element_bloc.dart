@@ -9,6 +9,7 @@ import 'package:gtd/core/models/gtd_project_entity.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
+import 'package:gtd/home/procesar/advanced/advanced_process_form.dart';
 import 'package:meta/meta.dart';
 
 part 'element_state.dart';
@@ -64,6 +65,8 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapAddDescriptionToElementToState(event);
     } else if(event is AddTitleToElement) {
       yield* _mapAddTitleToElementToState(event);
+    } else if(event is AddRecurrencyToElement) {
+      yield* _mapAddRecurrencyToElementToState(event);
     }
   }
 
@@ -99,6 +102,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   }
 
   Stream<ElementState> _mapProcessToState(Process event) async* {
+    event.elementToBeProcessed.lastStatus = event.elementToBeProcessed.currentStatus;
     event.elementToBeProcessed.currentStatus = 'PROCESSED';
     _elementRepository.updateElement(event.elementToBeProcessed);
     yield ElementProcessed();
@@ -192,6 +196,20 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
+Stream<ElementState> _mapAddRecurrencyToElementToState(AddRecurrencyToElement event) async* {
+  int timeInterval;
+    if(event.period == DatePeriod.WEEK) {
+      timeInterval = event.number * 604800; //segundo que tiene una semana * numero de repeticiones 
+      event.elementToBeProcessed.period = 'WEEK';
+    } 
+    if(event.period == DatePeriod.DAY) {
+      timeInterval = event.number * 86400; //segundo que tiene un dia * numero de repeticiones 
+      event.elementToBeProcessed.period = 'DAY';
+    }
+
+    event.elementToBeProcessed.repeatInterval = timeInterval;
+    _elementRepository.updateElement(event.elementToBeProcessed);
+  }
   @override
   Future<void> close() {
     _elementSubscription?.cancel();

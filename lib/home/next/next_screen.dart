@@ -71,12 +71,12 @@ class NextScreen extends StatelessWidget {
                         List<GTDElement> filteredElements = state.elements.where((element) => 
                           element.currentStatus == 'PROCESSED',
                         ).toList();
-                        return NextList(filteredElements, completedElementsHidden: true);
+                        return NextList(filteredElements, completedElementsHidden: false);
                       } else {
                         List<GTDElement> filteredElements = state.elements.where((element) => 
                           element.currentStatus == 'PROCESSED' || element.currentStatus == 'COMPLETED',
                         ).toList();
-                        return NextList(filteredElements, completedElementsHidden: false);
+                        return NextList(filteredElements, completedElementsHidden: true);
                       }
                     } else if (state is FailedLoadingElements) {
                       _showErrorSnackbar(context);
