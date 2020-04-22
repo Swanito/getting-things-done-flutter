@@ -6,7 +6,7 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/more/more_screen.dart';
 import 'package:gtd/home/next/next_screen.dart';
 import 'package:gtd/home/procesar/process_screen.dart';
-import 'package:gtd/home/revisar/review_screen.dart';
+import 'package:gtd/home/review/review_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;

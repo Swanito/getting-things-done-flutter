@@ -3,7 +3,6 @@ import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/procesar/process_list.dart';
 
@@ -41,43 +40,45 @@ class ProcessScreen extends StatelessWidget {
       body: Column(
         children: [
           _gtdAppBar,
-          MultiBlocProvider(
-              providers: [
-                BlocProvider<ElementBloc>(
-                  create: (context) {
-                    return ElementBloc(
-                      elementRepository: ElementRepositoryImpl(),
-                    )..add(LoadElements());
-                  },
-                )
-              ],
-              child: BlocBuilder<ElementBloc, ElementState>(
-                  builder: (context, state) {
-                    if (state is LoadingElements) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.orange,
-                          ),
-                        ),
-                      );
-                    } else if (state is SucessLoadingElements) {
-                      return ProcessList(state.elements);
-                    } else if (state is FailedLoadingElements) {
-                      _showErrorSnackbar(context);
-                    } else if (state is ElementProcessed) {
-                      _showSuccessSnackbar(context, 'Elemento procesado correctamente');
-                      BlocProvider.of<ElementBloc>(context).add(LoadElements());
-                    } else if(state is ElementDeleted) {
-                      _showSuccessSnackbar(context, 'Elemento eliminado correctamente');
-                      BlocProvider.of<ElementBloc>(context).add(LoadElements());
-                    }
-                    return Container();
-                  },
-                )
-              )
+          BlocListener<ElementBloc, ElementState>(
+            listener: (context, state) {
+              if (state is FailedLoadingElements) {
+                _showErrorSnackbar(context);
+              } else if (state is ElementProcessed) {
+                BlocProvider.of<ElementBloc>(context).add(LoadElements());
+                _showSuccessSnackbar(
+                    context, 'Elemento procesado correctamente');
+              } else if (state is ElementDeleted) {
+                BlocProvider.of<ElementBloc>(context).add(LoadElements());
+                _showSuccessSnackbar(
+                    context, 'Elemento eliminado correctamente');
+              }
+              return Container();
+            },
+            child: BlocBuilder<ElementBloc, ElementState>(
+                builder: (context, state) {
+              if (state is LoadingElements ||
+                  state is StartingAdvancedProcessing ||
+                  state is StartingBasicProcessing) {
+                return _showLoader(context);
+              } else if (state is SucessLoadingElements) {
+                return ProcessList(state.elements);
+              }
+              return _showLoader(context);
+            }),
+          )
         ],
+      ),
+    );
+  }
+
+  Widget _showLoader(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.orange,
+        ),
       ),
     );
   }
@@ -107,10 +108,7 @@ class ProcessScreen extends StatelessWidget {
         SnackBar(
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(text),
-              Icon(Icons.check)
-            ],
+            children: [Text(text), Icon(Icons.check)],
           ),
           backgroundColor: Colors.green,
         ),
