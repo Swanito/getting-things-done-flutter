@@ -144,7 +144,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
           .push(MaterialPageRoute(builder: (context) => ProjectScreen()));
     } else if (event is GoToSplashScreen) {
       navigatorKey.currentState
-          .push(MaterialPageRoute(builder: (context) => AuthScreen()));
+          .pushReplacement(MaterialPageRoute(builder: (context) => AuthScreen()));
     } else if (event is OpenCamera) {
       final cameras = await availableCameras();
       if (cameras.isNotEmpty) {
