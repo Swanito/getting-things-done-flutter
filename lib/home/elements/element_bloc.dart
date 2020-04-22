@@ -98,7 +98,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       MarkAsCompleted event) async* {
     event.element.currentStatus = 'COMPLETED';
     _elementRepository.updateElement(event.element);
-    yield LoadingElements();
+    yield ElementCompleted(event.element);
   }
 
   Stream<ElementState> _mapProcessToState(Process event) async* {

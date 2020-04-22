@@ -11,6 +11,17 @@ class ElementState extends Equatable {
 class LoadingElements extends ElementState {}
 class ElementProcessed extends ElementState {}
 class ElementDeleted extends ElementState {}
+class ElementCompleted extends ElementState {
+    final GTDElement element;
+
+  const ElementCompleted([this.element]);
+
+  @override
+  List<Object> get props => [element];
+
+  @override
+  String toString() => 'ElementCompleted { completed element: ${element.summary} }';
+}
 
 class SucessLoadingElements extends ElementState {
   final List<GTDElement> elements;

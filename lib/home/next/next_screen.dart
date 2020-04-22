@@ -43,46 +43,47 @@ class NextScreen extends StatelessWidget {
             canSearch: false,
             factor: BarSizeFactor.Small,
           ),
-          MultiBlocProvider(
-              providers: [
-                BlocProvider<ElementBloc>(
-                  create: (context) {
-                    return ElementBloc(
-                      elementRepository: ElementRepositoryImpl(),
-                    )..add(LoadElements());
-                  },
-                )
+          MultiBlocListener(
+              listeners: [
+                BlocListener<ElementBloc, ElementState>(
+                    listener: (context, elementState) {
+                  if (elementState is FailedLoadingElements) {
+                    _showSnackbar(context, 'Error cargando los elementos', isError: true);
+                  } else if (elementState is ElementDeleted) {
+                    _showSnackbar(context, 'Elemento eliminado', isError: true);
+                  } else if (elementState is ElementCompleted) {
+                    _showSnackbar(context, 'Genial! has completado ${elementState.element.summary}!', isError: false);
+                  }
+                }),
               ],
               child: BlocBuilder<ElementBloc, ElementState>(
                 builder: (context, state) {
                   return BlocBuilder<NextBloc, NextState>(
                       builder: (context, nextState) {
                     if (state is LoadingElements) {
-                      return Container(
-                        height: MediaQuery.of(context).size.height / 2,
-                        child: Center(
-                          child: CircularProgressIndicator(
-                            backgroundColor: Colors.orange,
-                          ),
-                        ),
-                      );
+                      return _showLoader(context);
                     } else if (state is SucessLoadingElements) {
                       if (nextState is CompletedElementsHidden) {
-                        List<GTDElement> filteredElements = state.elements.where((element) => 
-                          element.currentStatus == 'PROCESSED',
-                        ).toList();
-                        return NextList(filteredElements, completedElementsHidden: false);
+                        List<GTDElement> filteredElements = state.elements
+                            .where(
+                              (element) => element.currentStatus == 'PROCESSED',
+                            )
+                            .toList();
+                        return NextList(filteredElements,
+                            completedElementsHidden: false);
                       } else {
-                        List<GTDElement> filteredElements = state.elements.where((element) => 
-                          element.currentStatus == 'PROCESSED' || element.currentStatus == 'COMPLETED',
-                        ).toList();
-                        return NextList(filteredElements, completedElementsHidden: true);
+                        List<GTDElement> filteredElements = state.elements
+                            .where(
+                              (element) =>
+                                  element.currentStatus == 'PROCESSED' ||
+                                  element.currentStatus == 'COMPLETED',
+                            )
+                            .toList();
+                        return NextList(filteredElements,
+                            completedElementsHidden: true);
                       }
-                    } else if (state is FailedLoadingElements) {
-                      _showErrorSnackbar(context);
-                      return Container();
                     }
-                    return Container();
+                    return _showLoader(context);
                   });
                 },
               ))
@@ -91,7 +92,18 @@ class NextScreen extends StatelessWidget {
     );
   }
 
-  _showErrorSnackbar(BuildContext context) {
+  Widget _showLoader(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.orange,
+        ),
+      ),
+    );
+  }
+
+  _showSnackbar(BuildContext context, String message, {bool isError}) {
     Scaffold.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -99,12 +111,11 @@ class NextScreen extends StatelessWidget {
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              Text(
-                  'Error recuperarndo los elementos. Intentalo de nuevo más tarde.'),
-              Icon(Icons.error)
+              Text(message),
+              isError ? Icon(Icons.error) : Icon(Icons.check)
             ],
           ),
-          backgroundColor: Colors.red,
+          backgroundColor: isError ? Colors.red : Colors.green,
         ),
       );
   }
