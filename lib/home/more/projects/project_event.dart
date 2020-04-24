@@ -49,10 +49,11 @@ class DeleteProject extends ProjectEvent {
 }
 
 class EditProject extends ProjectEvent {
+  final Project project;
 final String title;
 final String id;
 
-  EditProject({this.id, this.title});
+  EditProject({this.id, this.title, this.project});
 
   @override
   List<Object> get props => [title, id];

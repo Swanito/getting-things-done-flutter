@@ -3,29 +3,31 @@ import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/home/more/projects/new-project-button.dart';
 import 'package:gtd/home/more/projects/project_card.dart';
 
-class ProjectList extends StatelessWidget {
+class ProjectList extends StatefulWidget {
   List<Project> elements = [];
 
   ProjectList(this.elements);
 
   @override
+  _ProjectListState createState() => _ProjectListState();
+}
+
+class _ProjectListState extends State<ProjectList> {
+  @override
   Widget build(BuildContext context) {
-    for (var project in elements) {
-          print(project.title);
-    }
-    if (elements.isNotEmpty) {
+    if (widget.elements.isNotEmpty) {
       return Expanded(
         child: Column(
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                shrinkWrap: true,
-                itemCount: elements.length,
+                // shrinkWrap: true,
+                itemCount: widget.elements.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
                       padding: const EdgeInsets.all(16.0),
                       child: ProjectCard(
-                        project: elements[index],
+                        project: widget.elements[index],
                       ));
                 },
               ),

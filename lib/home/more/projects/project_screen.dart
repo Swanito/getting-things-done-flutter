@@ -7,19 +7,14 @@ import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/home/more/projects/project_list.dart';
 import 'package:gtd/home/more/projects/project_state.dart';
 
-class ProjectScreen extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() {
-    return ProjectScreenState();
-  }
-}
-
-class ProjectScreenState extends State<ProjectScreen> {
-  ProjectBloc _projectBloc =
+class ProjectScreen extends StatelessWidget {
+  final ProjectBloc _projectBloc =
       ProjectBloc(projectRepository: ProjectRepositoryImpl());
 
   @override
   Widget build(BuildContext context) {
+    _projectBloc.add(LoadProjects());
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -43,35 +38,50 @@ class ProjectScreenState extends State<ProjectScreen> {
             canSearch: false,
             factor: BarSizeFactor.Small,
           ),
-          MultiBlocProvider(
-            providers: [
-              BlocProvider<ProjectBloc>(
-                create: (context) {
-                  return _projectBloc..add(LoadProjects());
-                },
-              )
-            ],
-            child: BlocBuilder<ProjectBloc, ProjectState>(
-                builder: (context, state) {
-              if (state is Loading) {
-                return Container(
-                  height: MediaQuery.of(context).size.height / 2,
-                  child: Center(
-                    child: CircularProgressIndicator(
-                      backgroundColor: Colors.orange,
-                    ),
-                  ),
-                );
-              } else if (state is ProjectsSuccessfullyLoaded) {
-                return ProjectList(state.projects);
-              } else if (state is ProjectUpdated) {
-                Scaffold.of(context).showSnackBar(
-                    SnackBar(content: Text('Proyecto actualizado!')));
-              }
-            }),
-          )
+          BlocConsumer<ProjectBloc, ProjectState>(listener: (context, state) {
+            if (state is ProjectUpdated) {
+              _showSnackbar(context, 'Proyecto actualizado.', isError: false);
+            } else if (state is ProjectDeleted) {
+              _showSnackbar(context, 'Proyecto eliminado.', isError: true);
+            }
+          }, builder: (context, state) {
+            if (state is Loading) {
+              return _showLoader(context);
+            } else if (state is ProjectsSuccessfullyLoaded) {
+              return ProjectList(state.projects);
+            }
+            return _showLoader(context);
+          })
         ],
       ),
     );
+  }
+
+  Widget _showLoader(BuildContext context) {
+    return Container(
+      height: MediaQuery.of(context).size.height / 2,
+      child: Center(
+        child: CircularProgressIndicator(
+          backgroundColor: Colors.orange,
+        ),
+      ),
+    );
+  }
+
+  _showSnackbar(BuildContext context, String message, {bool isError}) {
+    Scaffold.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(message),
+              isError ? Icon(Icons.error) : Icon(Icons.check)
+            ],
+          ),
+          backgroundColor: isError ? Colors.red : Colors.green,
+        ),
+      );
   }
 }

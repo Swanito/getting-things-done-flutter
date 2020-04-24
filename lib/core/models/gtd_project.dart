@@ -6,7 +6,7 @@ import 'package:meta/meta.dart';
 @immutable
 class Project {
   final String id;
-  final String title;
+  String title;
   final Timestamp createdAt = Timestamp.now();
   String createdBy;
 

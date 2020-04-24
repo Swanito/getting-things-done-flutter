@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_project.dart';
-import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_event.dart';
 
@@ -12,13 +11,12 @@ class ProjectCard extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return ProjectCardState(project: project);
+    return ProjectCardState();
   }
 }
 
 class ProjectCardState extends State<ProjectCard> {
   TextEditingController _projectEditController;
-  final Project project;
   ProjectBloc _projectBloc;
 
   @override
@@ -27,12 +25,10 @@ class ProjectCardState extends State<ProjectCard> {
     _projectBloc = BlocProvider.of<ProjectBloc>(context);
   }
 
-  ProjectCardState({this.project}): assert(project != null);
-
   @override
   Widget build(BuildContext context) {
 
-    _projectEditController = TextEditingController(text: project.title);
+    _projectEditController = TextEditingController(text: widget.project.title);
 
     return Card(
         child: Column(
@@ -42,7 +38,7 @@ class ProjectCardState extends State<ProjectCard> {
             Padding(
               padding: const EdgeInsets.only(top: 22.0, left: 22.0),
               child: Text(
-                project.title,
+                widget.project.title,
                 style: TextStyle(fontSize: 18),
               ),
             )
@@ -59,7 +55,9 @@ class ProjectCardState extends State<ProjectCard> {
                   FlatButton(
                       onPressed: () {
                         BlocProvider.of<ProjectBloc>(context)
-                            .add(DeleteProject(project));
+                            .add(DeleteProject(widget.project));
+                        // BlocProvider.of<ProjectBloc>(context)
+                        //     .add(LoadProjects());
                       },
                       child: Text('ELIMINAR',
                           style: TextStyle(color: Colors.orange))),
@@ -128,8 +126,9 @@ class ProjectCardState extends State<ProjectCard> {
 
   void _onProjectEdited() {
     _projectBloc.add(EditProject(
+      project: widget.project,
       title: _projectEditController.text,
-      id: project.id
+      id: widget.project.id
     ));
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }

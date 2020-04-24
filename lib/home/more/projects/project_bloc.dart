@@ -42,7 +42,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
 
   Stream<ProjectState> _mapCreateProjectsToState(CreateProject event) async* {
     Project project = Project(event.title);
-    projectRepository.createProject(project: project);
+    await projectRepository.createProject(project: project);
     yield Loading();
   }
 
@@ -51,13 +51,13 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   }
 
   Stream<ProjectState> _mapDeleteProjectToState(DeleteProject event) async* {
-    projectRepository.deleteProject(event.project);
-    yield Loading();
+    await projectRepository.deleteProject(event.project);
+    yield ProjectDeleted();
   }
 
   Stream<ProjectState> _mapEditProjectToState(EditProject event) async* {
-    Project project = Project(event.title);
-    projectRepository.updateProject(project: project, id: event.id);
-    yield Loading();
+    event.project.title = event.title;
+    await projectRepository.updateProject(project: event.project, id: event.id);
+    yield ProjectUpdated();
   }
 }

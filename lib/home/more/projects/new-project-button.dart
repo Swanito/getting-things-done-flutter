@@ -49,6 +49,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
                   keyboardType: TextInputType.text,
                   autovalidate: true,
                   autocorrect: false,
+                  autofocus: true,
                 ),
               ),
             ],

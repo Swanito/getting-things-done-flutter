@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 
 abstract class ProjectState extends Equatable {
@@ -24,3 +23,4 @@ class ProjectsSuccessfullyLoaded extends ProjectState {
 }
 
 class ProjectUpdated extends ProjectState {}
+class ProjectDeleted extends ProjectState {}
