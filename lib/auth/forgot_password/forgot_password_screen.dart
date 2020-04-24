@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/auth/forgot_password/forgot_password_form.dart';
 import 'package:gtd/auth/login/login_barrel.dart';
-import 'package:gtd/auth/login/login_form.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
-class LoginScreen extends StatelessWidget {
+class ForgotPasswordScreen extends StatelessWidget {
   final UserRepository _userRepository;
 
-  LoginScreen({Key key, @required UserRepository userRepository})
+  ForgotPasswordScreen({Key key, @required UserRepository userRepository})
       : assert(userRepository != null),
         _userRepository = userRepository,
         super(key: key);
@@ -35,8 +35,8 @@ class LoginScreen extends StatelessWidget {
                   LoginBloc(userRepository: _userRepository),
               child: Column(
                   children: <Widget>[
-                    Text('Iniciar Sesión', style: TextStyle(color: Colors.white, fontSize: 32), textAlign: TextAlign.left,),
-                    LoginForm(userRepository: _userRepository),
+                    Text('Recuperar Contraseña', style: TextStyle(color: Colors.white, fontSize: 32), textAlign: TextAlign.left,),
+                    ForgotPasswordForm(userRepository: _userRepository),
                   ],
                 ),
             ),

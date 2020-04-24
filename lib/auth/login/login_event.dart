@@ -1,3 +1,4 @@
+import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 
@@ -67,5 +68,21 @@ class LoginWithCredentialsPressed extends LoginEvent {
   @override
   String toString() {
     return 'LoginWithCredentialsPressed { email: $email, password: $password }';
+  }
+}
+
+class ResetPassword extends LoginEvent {
+  final String email;
+  
+    const ResetPassword({
+    @required this.email,
+  });
+
+  @override
+  List<Object> get props => [email];
+
+  @override
+  String toString() {
+    return 'LoginWithCredentialsPressed { email: $email }';
   }
 }

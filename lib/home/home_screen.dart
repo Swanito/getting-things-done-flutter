@@ -12,9 +12,10 @@ class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;
   final String _currentUser;
 
-  HomeScreen({Key key, UserRepository userRepository, String currentUser = "Unknown"})
+  HomeScreen(
+      {Key key, UserRepository userRepository, String currentUser = "Unknown"})
       : assert(userRepository != null),
-      assert(currentUser != null),
+        assert(currentUser != null),
         _userRepository = userRepository,
         _currentUser = currentUser;
 
@@ -35,43 +36,35 @@ class HomeScreenState extends State<HomeScreen> {
   }
 
   @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showGTDLevelDialog(context));
+  }
+
+  @override
   Widget build(BuildContext context) {
     List _pages = [
       NextScreen(userRepository: widget._userRepository),
       ProcessScreen(userRepository: widget._userRepository),
       ReviewScreen(userRepository: widget._userRepository),
-      MoreScreen(userRepository: widget._userRepository, currentUser: widget._currentUser,),
+      MoreScreen(
+        userRepository: widget._userRepository,
+        currentUser: widget._currentUser,
+      ),
     ];
 
-    return BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
+    return BlocListener<LocalStatusBloc, LocalState>(
+        listener: (context, state) {
       if (state is GTDLevelUnknown) {
-        return AlertDialog(
-          content:
-              Text('Antes de empezar, cúal dirías que es tu nivel usando GTD?'),
-          actions: [
-            FlatButton(
-              child: Text('Básico'),
-              onPressed: () {
-                BlocProvider.of<LocalStatusBloc>(context)
-                    .add(SetGTDLevel(level: GTDLevel.Low));
-              },
-            ),
-            FlatButton(
-              child: Text('Avanzado'),
-              onPressed: () {
-                BlocProvider.of<LocalStatusBloc>(context)
-                    .add(SetGTDLevel(level: GTDLevel.High));
-              },
-            ),
-          ],
-        );
+        return _showGTDLevelDialog(context);
       }
+    }, child:
+            BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
       return Scaffold(
         body: Center(child: _pages[_selectedTabIndex]),
         floatingActionButton: FloatingActionButton(
           onPressed: () => {
-            BlocProvider.of<NavigatorBloc>(context)
-                .add(OpenCaptureScreen())
+            BlocProvider.of<NavigatorBloc>(context).add(OpenCaptureScreen())
           },
           backgroundColor: Colors.orange,
           child: Icon(Icons.add),
@@ -88,11 +81,40 @@ class HomeScreenState extends State<HomeScreen> {
                 title: Text('Procesar'), icon: Icon(Icons.store)),
             BottomNavigationBarItem(
                 title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
-            BottomNavigationBarItem(
-                title: Text('Más'), icon: Icon(Icons.menu))
+            BottomNavigationBarItem(title: Text('Más'), icon: Icon(Icons.menu))
           ],
         ),
       );
-    });
+    }));
+  }
+
+  _showGTDLevelDialog(BuildContext context) async {
+    await showDialog<void>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            content: Text(
+                'Antes de empezar, cúal dirías que es tu nivel usando GTD?'),
+            actions: [
+              FlatButton(
+                child: Text('Básico'),
+                onPressed: () {
+                  BlocProvider.of<LocalStatusBloc>(context)
+                      .add(SetGTDLevel(level: GTDLevel.Low));
+                  BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                },
+              ),
+              FlatButton(
+                child: Text('Avanzado'),
+                onPressed: () {
+                  BlocProvider.of<LocalStatusBloc>(context)
+                      .add(SetGTDLevel(level: GTDLevel.High));
+                  BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                },
+              ),
+            ],
+          );
+        });
   }
 }

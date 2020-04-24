@@ -64,4 +64,8 @@ class UserRepository extends Repository {
     final currentUser = await _firebaseAuth.currentUser();
     return currentUser.isEmailVerified;
   }
+
+  Future<void> resetPassword(String email) async {
+    await _firebaseAuth.sendPasswordResetEmail(email: email);
+  }
 }

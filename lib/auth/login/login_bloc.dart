@@ -48,6 +48,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
         email: event.email,
         password: event.password,
       );
+    } else if(event is ResetPassword) {
+      yield* _mapResetPasswordToState(event);
     }
   }
 
@@ -68,6 +70,15 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       await _userRepository.signInWithGoogle();
       yield LoginState.success();
     } catch (_) {
+      yield LoginState.failure();
+    }
+  }
+
+  Stream<LoginState> _mapResetPasswordToState(ResetPassword event) async* {
+    try {
+      await _userRepository.resetPassword(event.email);
+      yield ResetPasswordLinkSent(event.email);
+    } catch (error) {
       yield LoginState.failure();
     }
   }

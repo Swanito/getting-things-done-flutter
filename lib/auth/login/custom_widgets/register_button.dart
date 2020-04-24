@@ -14,7 +14,7 @@ class CreateAccountButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return FlatButton(
       child: Text(
-        'Registrarse',
+        'No tengo cuenta', style: TextStyle(color: Colors.white)
       ),
       onPressed: () {
         Navigator.of(context).push(

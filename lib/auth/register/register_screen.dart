@@ -19,8 +19,7 @@ class RegisterScreen extends StatelessWidget {
       appBar: AppBar(
         leading: GestureDetector(
           onTap: () => {
-            BlocProvider.of<NavigatorBloc>(context)
-                .add(NavigatorActionPop())
+            BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop())
           },
           child: Icon(Icons.arrow_back_ios, color: Colors.white),
         ),
@@ -31,15 +30,24 @@ class RegisterScreen extends StatelessWidget {
         padding: const EdgeInsets.all(30.0),
         child: ListView(
           children: <Widget>[
+            SizedBox(height: (MediaQuery.of(context).size.height / 10)),
             BlocProvider<RegisterBloc>(
-              create: (context) =>
-                  RegisterBloc(userRepository: _userRepository),
-              child: RegisterForm(),
-            ),
+                create: (context) =>
+                    RegisterBloc(userRepository: _userRepository),
+                child: Column(
+                  children: <Widget>[
+                    Text(
+                      'Crear nueva cuenta',
+                      style: TextStyle(color: Colors.white, fontSize: 32),
+                      textAlign: TextAlign.left,
+                    ),
+                    RegisterForm(),
+                  ],
+                )),
           ],
         ),
       ),
-      backgroundColor: Colors.pink[200],
+      backgroundColor: Colors.orange[400],
     );
   }
 }

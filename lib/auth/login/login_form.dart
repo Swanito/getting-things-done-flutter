@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/authentication_bloc.dart';
-import 'package:gtd/auth/login/custom_widgets/google_button.dart';
+import 'package:gtd/auth/login/custom_widgets/forgot_password_button.dart';
 import 'package:gtd/auth/login/custom_widgets/login_button.dart';
 import 'package:gtd/auth/login/custom_widgets/register_button.dart';
 import 'package:gtd/auth/login/login_barrel.dart';
@@ -173,9 +173,8 @@ class _LoginFormState extends State<LoginForm> {
                             ? _onFormSubmitted
                             : null,
                       ),
-                      // GoogleLoginButton(),
-                      // CreateAccountButton(userRepository: _userRepository),
-                      // ForgotPasswordButton(userRepository: _userRepository),
+                      CreateAccountButton(userRepository: _userRepository),
+                      ForgotPasswordButton(userRepository: _userRepository),
                     ],
                   ),
                 ),

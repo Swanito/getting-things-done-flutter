@@ -167,10 +167,15 @@ class _RegisterFormState extends State<RegisterForm> {
                 ),
                 Padding(
                   padding: EdgeInsets.symmetric(vertical: 20),
-                  child: RegisterButton(
-                    onPressed: isRegisterButtonEnabled(state)
-                        ? _onFormSubmitted
-                        : null,
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.stretch,
+                    children: <Widget>[
+                      RegisterButton(
+                        onPressed: isRegisterButtonEnabled(state)
+                            ? _onFormSubmitted
+                            : null,
+                      ),
+                    ],
                   ),
                 ),
               ],
