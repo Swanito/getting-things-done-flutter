@@ -12,7 +12,8 @@ abstract class ElementRepository {
   Future<void> createElement(GTDElement element);
   Future<void> updateElement(GTDElement element);
   Future<void> deleteElement(GTDElement element);
-  Future uploadFile(File file);
+  Future uploadFile(File file, String uuid);
+  Future downloadFileUrl(GTDElement element);
   Future<String> getCurrentUserId();
 }
 

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
+import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 
 class CaptureEvent extends Equatable {
@@ -15,7 +18,7 @@ class Capture extends CaptureEvent {
   final String summary;
   final String description;
   final String project;
-  final Image attachedImage;
+  final File attachedImage;
 
   const Capture({@required this.summary, @required this.description, @required this.project, @required this.attachedImage});
 
@@ -31,8 +34,9 @@ class Capture extends CaptureEvent {
 class AttachImage extends CaptureEvent {
   final Image takenImage;
   final String fileName;
-
-  const AttachImage({@required this.takenImage, @required this.fileName});
+  final File imageFile;
+  
+  const AttachImage({@required this.takenImage, @required this.fileName, @required this.imageFile});
 
   @override
   // TODO: implement props
@@ -45,15 +49,17 @@ class AttachImage extends CaptureEvent {
 }
 
 class DeleteAttachedImage extends CaptureEvent {
-  DeleteAttachedImage();
+  final GTDElement element;
+
+  DeleteAttachedImage(@required this.element);
 
   @override
   // TODO: implement props
-  List<Object> get props => [];
+  List<Object> get props => [element];
 
     @override
   String toString() {
-    return 'DeleteAttachedImage {  }';
+    return 'DeleteAttachedImage { Deleting image from: ${element.summary} }';
   }
 }
 
@@ -67,5 +73,20 @@ class ClearForm extends CaptureEvent {
     @override
   String toString() {
     return 'ClearForm {  }';
+  }
+}
+
+class DownloadAttachedImage extends CaptureEvent {
+  final GTDElement element;
+
+  DownloadAttachedImage(@required this.element);
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [element];
+
+    @override
+  String toString() {
+    return 'DownloadAttachedImage { Downloading image from: ${element.imageRemotePath} }';
   }
 }

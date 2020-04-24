@@ -33,9 +33,7 @@ class ProjectCardState extends State<ProjectCard> {
   Widget build(BuildContext context) {
 
     _projectEditController = TextEditingController(text: project.title);
-    // _projectEditController = TextEditingController();
-    print('Creating card for ' + project.title);
-    print('Input Cntroller' + _projectEditController.text);
+
     return Card(
         child: Column(
       children: [

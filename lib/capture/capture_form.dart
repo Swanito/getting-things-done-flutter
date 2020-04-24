@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
@@ -39,7 +41,7 @@ class CaptureFormState extends State<CaptureForm> {
   bool _isEditing;
   int dropdownDayValue;
   String dropdownPeriodValue;
-  Image _attachedImage;
+  File _attachedImage;
   List<Chip> contextList = [];
   DateTime selectedDate = DateTime.now();
 
@@ -88,9 +90,9 @@ class CaptureFormState extends State<CaptureForm> {
             leading: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
-                  BlocProvider.of<CaptureBloc>(context).add(ClearForm());
                   BlocProvider.of<NavigatorBloc>(context)
                       .add(NavigatorActionPop());
+                  BlocProvider.of<CaptureBloc>(context).add(ClearForm());
                 }),
           ),
           body: Padding(
@@ -236,13 +238,14 @@ class CaptureFormState extends State<CaptureForm> {
         description: _descriptionController.text,
         project: _projectController.text,
         attachedImage: _attachedImage));
-    BlocProvider.of<NavigatorBloc>(context)
-        .add(NavigatorActionPop());
+    BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
   Widget showTakenPicture(ImageAttached state) {
-    _attachedImage = state.attachedImage;
-    return AttachedImageCard(image: state.attachedImage, fileName: state.fileName);
+    _attachedImage = state.imageFile;
+    return AttachedImageCard(
+      image: state.attachedImage,
+      fileName: state.fileName,
+    );
   }
-
 }

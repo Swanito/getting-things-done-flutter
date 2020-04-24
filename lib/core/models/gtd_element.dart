@@ -16,6 +16,7 @@ class GTDElement {
   List<dynamic> contexts;
   int repeatInterval;
   String period;
+  String imageRemotePath;
 
   GTDElement(this.summary, 
       {this.id,
@@ -28,7 +29,8 @@ class GTDElement {
       this.dueDate,
       this.repeatInterval,
       this.contexts,
-      this.period});
+      this.period,
+      this.imageRemotePath});
 
   @override
   String toString() {
@@ -49,7 +51,8 @@ class GTDElement {
       dueDate: dueDate,
       project: project,
       repeatInterval: repeatInterval,
-      period: period
+      period: period,
+      imageRemotePath: imageRemotePath
     );
   }
 
@@ -65,6 +68,7 @@ class GTDElement {
         lastStatus: entity.lastStatus,
         createdBy: entity.createdBy,
         repeatInterval: entity.repeatInterval,
-        period: entity.period);
+        period: entity.period,
+        imageRemotePath: entity.imageRemotePath);
   }
 }

@@ -120,7 +120,8 @@ class DisplayPictureScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    Image thumbnail = Image.file(File(imagePath));
+    File imageFile = File(imagePath);
+    Image thumbnail = Image.file(imageFile);
 
     return Scaffold(
       appBar: AppBar(title: Text('Adjuntamos esta imagen?'), backgroundColor: Colors.orange,),
@@ -135,7 +136,7 @@ class DisplayPictureScreen extends StatelessWidget {
           onPressed: () {
             BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
             BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
-            BlocProvider.of<CaptureBloc>(context).add(AttachImage(takenImage: thumbnail, fileName: fileName));
+            BlocProvider.of<CaptureBloc>(context).add(AttachImage(takenImage: thumbnail, fileName: fileName, imageFile: imageFile));
           },
           child: Text('Adjuntar imagen', style: TextStyle(color: Colors.white),),
         )

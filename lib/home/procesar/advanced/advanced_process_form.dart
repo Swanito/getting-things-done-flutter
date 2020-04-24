@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
@@ -27,17 +29,11 @@ class AdvancedProcessForm extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() {
-    return AdvancedProcessFormState(
-        userRepository: _userRepository,
-        isEditing: _isEditing,
-        elementInFocus: _element);
+    return AdvancedProcessFormState();
   }
 }
 
 class AdvancedProcessFormState extends State<AdvancedProcessForm> {
-  final UserRepository _userRepository;
-  final GTDElement _elementInFocus;
-
   final TextEditingController _summaryController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _projectController = TextEditingController();
@@ -45,44 +41,47 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   final TextEditingController _dateController = TextEditingController();
 
   ElementBloc _elementBloc;
+  CaptureBloc _captureBloc;
 
   bool isRecurrent = false;
+  bool isClosing = false;
   int dropdownDayValue;
   String dropdownPeriodValue;
   Image _attachedImage;
   List<Chip> contextList = [];
   DateTime selectedDate = DateTime.now();
   DatePeriod dropdownPeriod;
+  String _imageFileName;
+  File _imageFile;
 
   Chip newContextChip;
 
   bool get isPopulated => _summaryController.text.isNotEmpty;
   bool get isContextPopulated => _contextController.text.isNotEmpty;
 
-  AdvancedProcessFormState(
-      {@required userRepository, @required isEditing, @required elementInFocus})
-      : assert(userRepository != null),
-        assert(isEditing != null),
-        assert(elementInFocus != null),
-        _userRepository = userRepository,
-        _elementInFocus = elementInFocus;
-
   @override
   void initState() {
     super.initState();
     _elementBloc = BlocProvider.of<ElementBloc>(context);
+    _captureBloc = BlocProvider.of<CaptureBloc>(context);
     _summaryController.addListener(_onSummaryChanged);
     _descriptionController.addListener(_onDescriptionChanged);
     _projectController.addListener(_onProjectChanged);
     _contextController.addListener(_onContextChanged);
     _dateController.addListener(_onDateChanged);
-    _summaryController.text = _elementInFocus.summary;
-    _descriptionController.text = _elementInFocus.description;
+    _summaryController.text = widget._element.summary;
+    _descriptionController.text = widget._element.description;
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CaptureBloc, CaptureState>(builder: (context, state) {
+      
+      
+      if ((state is EmptyState || state is Captured) && widget._element.imageRemotePath != null && !isClosing) {
+        _captureBloc.add(DownloadAttachedImage(widget._element));
+      }
+
       return Container(
         decoration: BoxDecoration(
           gradient: LinearGradient(
@@ -103,6 +102,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
             leading: IconButton(
                 icon: Icon(Icons.close),
                 onPressed: () {
+                  isClosing = true;
                   BlocProvider.of<CaptureBloc>(context).add(ClearForm());
                   BlocProvider.of<NavigatorBloc>(context)
                       .add(NavigatorActionPop());
@@ -198,9 +198,11 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                       Spacer(),
                     ],
                   ),
+                  state is ImageDownloaded
+                      ? _showDownloadedImage(state)
+                      : Container(),
                   state is ImageAttached
-                      ? AttachedImageCard(
-                          image: state.attachedImage, fileName: state.fileName)
+                      ? _showAttachedImage(state)
                       : Container(),
                   SizedBox(
                     height: 20,
@@ -355,7 +357,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   void _onDateChanged() {}
 
   void _onMoveToReference() {
-    BlocProvider.of<ElementBloc>(context).add(MoveToReference(_elementInFocus));
+    BlocProvider.of<ElementBloc>(context).add(MoveToReference(widget._element));
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
@@ -363,23 +365,24 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
 
   void _onFormSubmitted() {
     _elementBloc.add(
-        AddTitleToElement(_elementInFocus, _summaryController.text ?? null));
+        AddTitleToElement(widget._element, _summaryController.text ?? null));
     _elementBloc.add(AddDescriptionToElement(
-        _elementInFocus, _descriptionController.text ?? null));
+        widget._element, _descriptionController.text ?? null));
     _elementBloc.add(
-        AddProjectToElement(_elementInFocus, _projectController.text ?? null));
+        AddProjectToElement(widget._element, _projectController.text ?? null));
     String contexts = "";
     Text label;
     contextList.forEach(
         (chip) => {label = chip.label as Text, contexts += label.data + ","});
-    _elementBloc.add(AddContextToElement(_elementInFocus, contexts));
-    _elementBloc.add(AddDateToElement(_elementInFocus, _dateController.text));
-    // _elementBloc.add(AddImageToElement());
+    _elementBloc.add(AddContextToElement(widget._element, contexts));
+    _elementBloc.add(AddDateToElement(widget._element, _dateController.text));
+    _elementBloc.add(AddImageToElement(fileName: _imageFileName, imageFile: _imageFile, takenImage: _attachedImage, element: widget._element));
     if (isRecurrent) {
       _elementBloc.add(AddRecurrencyToElement(
-          _elementInFocus, dropdownDayValue, dropdownPeriod));
+          widget._element, dropdownDayValue, dropdownPeriod));
     }
-    _elementBloc.add(Process(_elementInFocus));
+    _elementBloc.add(Process(widget._element));
+    _captureBloc.add(ClearForm());
     BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
   }
 
@@ -402,6 +405,28 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   void _checkBoxMarked(bool newValue) => setState(() {
         isRecurrent = newValue;
       });
+
+  Widget _showAttachedImage(ImageAttached imageState) {
+    _attachedImage = imageState.attachedImage;
+    _imageFileName = imageState.fileName;
+    _imageFile = imageState.imageFile;
+    return AttachedImageCard(
+      image: imageState.attachedImage,
+      fileName: imageState.fileName,
+      element: widget._element,
+    );
+  }
+
+    Widget _showDownloadedImage(ImageDownloaded imageState) {
+    _attachedImage = imageState.attachedImage;
+    _imageFileName = imageState.fileName;
+    _imageFile = imageState.imageFile;
+    return AttachedImageCard(
+      image: imageState.attachedImage,
+      fileName: imageState.fileName,
+      element: widget._element,
+    );
+  }
 
   Widget _showRecurrentField() {
     var list = new List<int>.generate(31, (i) => i + 1);

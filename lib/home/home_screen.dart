@@ -89,7 +89,7 @@ class HomeScreenState extends State<HomeScreen> {
             BottomNavigationBarItem(
                 title: Text('Revisar'), icon: Icon(Icons.youtube_searched_for)),
             BottomNavigationBarItem(
-                title: Text('Más'), icon: Icon(Icons.settings))
+                title: Text('Más'), icon: Icon(Icons.menu))
           ],
         ),
       );

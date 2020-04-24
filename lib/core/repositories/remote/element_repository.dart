@@ -49,14 +49,28 @@ class ElementRepositoryImpl implements ElementRepository {
   }
 
   @override
-  Future uploadFile(File file) async {    
+  Future uploadFile(File file, String uuid) async {    
     uid = await getCurrentUserId();
-
+    String remotePath = 'elements/$uid/$uuid';
     StorageReference storageReference = FirebaseStorage.instance    
         .ref()    
-        .child('elements/${uid+file.path}}');    
-    storageReference.putFile(file);       
+        .child(remotePath);    
+    storageReference.putFile(file);
+    return remotePath;       
   }  
+
+  @override
+  Future downloadFileUrl(GTDElement element) async {
+    try {
+      StorageReference storageReference = FirebaseStorage.instance    
+          .ref()    
+          .child(element.imageRemotePath);    
+      String url = await storageReference.getDownloadURL();
+      return url;
+    } catch (error) {
+      print(error);
+    }
+  }
   
   @override
   Future<String> getCurrentUserId() async {

@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:io';
+import 'package:uuid/uuid.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -34,14 +35,17 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
     } else if(event is AttachImage) {
       yield* _mapAttachImageToState(event);
     } else if(event is DeleteAttachedImage) {
-      yield* _mapDeleteAttachedImageToState();
+      yield* _mapDeleteAttachedImageToState(event);
     } else if (event is ClearForm) {
       yield EmptyState();
+    } else if (event is DownloadAttachedImage) {
+      yield* _mapDownloadAttachedImageToState(event);
     }
   }
 
   Stream<CaptureState> _mapCaptureToState(Capture event) async* {
-          Project newProject;
+    Project newProject;
+    String imageRemotePath;
 
     if (event.project != "") {
       Future<QuerySnapshot> projectsSnapshot =
@@ -58,21 +62,30 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
           return Project.fromEntity(ProjectEntity.fromJson(projectFromJson));
         }
       });
-
+      // Create new project if it doesn't exist
       if (newProject == null) {
         newProject = Project(event.project);
-        await _projectRepository.createProject(project: newProject);
+        try{
+          await _projectRepository.createProject(project: newProject);
+        }catch (error) {
+          yield ErrorCapturing();
+        }
       }
     }
 
+    //Upload taken image to Firebase Storage
     if (event.attachedImage != null) {
-
-      // _elementRepository.uploadFile();
+      try{
+        var uuid = Uuid();
+        imageRemotePath = await _elementRepository.uploadFile(event.attachedImage, uuid.v4());
+      } catch(error) {
+        yield ErrorCapturing();
+      }
     }
 
     try {
       GTDElement element = GTDElement(event.summary,
-          description: event.description, project: newProject);
+          description: event.description, project: newProject, imageRemotePath: imageRemotePath);
       _elementRepository.createElement(element);
       yield Captured();
     } catch (error) {
@@ -82,13 +95,22 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
   }
 
   Stream<CaptureState> _mapAttachImageToState(AttachImage event) async* {
-    print('aqui viene lo dificil');
-    print(state);
-    yield ImageAttached(attachedImage: event.takenImage, fileName: event.fileName);
-    print(state);
+    yield ImageAttached(attachedImage: event.takenImage, fileName: event.fileName, imageFile: event.imageFile);
   }
 
-  Stream<CaptureState> _mapDeleteAttachedImageToState() async* {
+  Stream<CaptureState> _mapDeleteAttachedImageToState(DeleteAttachedImage event) async* {
+    event.element.imageRemotePath = null;
+    _elementRepository.updateElement(event.element);
     yield EmptyState();
+  }
+
+  Stream<CaptureState> _mapDownloadAttachedImageToState(DownloadAttachedImage event) async* {
+    try {
+      String fileUri = await _elementRepository.downloadFileUrl(event.element);
+      Image image = Image.network(fileUri);
+      yield ImageDownloaded(attachedImage: image, fileName: 'Attached image in ${event.element.summary}');
+    } catch(error) {
+      yield ErrorDownloadingImage();
+    }
   }
 }

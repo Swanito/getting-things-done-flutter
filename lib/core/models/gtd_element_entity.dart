@@ -27,9 +27,10 @@ class GTDElementEntity extends Equatable {
   final List<dynamic> contexts;
   final int repeatInterval;
   final String period;
+  final String imageRemotePath;
 
   GTDElementEntity({this.id, this.currentStatus, this.lastStatus, this.summary, this.description,
-      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy, this.repeatInterval, this.period});
+      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy, this.repeatInterval, this.period, this.imageRemotePath});
 
   Map<String, Object> toJson() {
     return {
@@ -45,7 +46,8 @@ class GTDElementEntity extends Equatable {
       "asignee": asignee,
       "createdBy": createdBy,
       "repeatInterval": repeatInterval,
-      "period": period
+      "period": period,
+      "imageRemotePath": imageRemotePath
     };
   }
 
@@ -62,7 +64,8 @@ class GTDElementEntity extends Equatable {
       "asignee": asignee,
       "createdBy": createdBy,
       "repeatInterval": repeatInterval,
-      "period": period
+      "period": period,
+      "imageRemotePath": imageRemotePath
     };
   }
 
@@ -80,7 +83,8 @@ class GTDElementEntity extends Equatable {
       asignee: json["asignee"] as String,
       createdBy: json["createdBy"] as String,
       repeatInterval: json["repeatInterval"] as int,
-      period: json["period"] as String
+      period: json["period"] as String,
+      imageRemotePath: json["imageRemotePath"] as String
     );
   }
 
@@ -102,6 +106,7 @@ class GTDElementEntity extends Equatable {
       createdBy: snap.data["createdBy"],
       repeatInterval: snap.data["repeatInterval"],
       period: snap.data["period"],
+      imageRemotePath: snap.data["imageRemotePath"]
     );
   }
 

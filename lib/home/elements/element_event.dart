@@ -228,3 +228,21 @@ class AddTitleToElement extends ElementEvent {
   String toString() =>
       'Process { AddTitleToElement: $elementToBeProcessed, title: $title }';
 }
+
+class AddImageToElement extends ElementEvent {
+  final Image takenImage;
+  final String fileName;
+  final File imageFile;
+  final GTDElement element;
+  
+  AddImageToElement({@required this.takenImage, @required this.fileName, @required this.imageFile, @required this.element});
+
+  @override
+  // TODO: implement props
+  List<Object> get props => [takenImage, fileName];
+
+    @override
+  String toString() {
+    return 'AddImageToElement { fileName: $fileName }';
+  }
+}

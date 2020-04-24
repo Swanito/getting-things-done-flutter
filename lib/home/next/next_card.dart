@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/capture/capture_bloc.dart';
+import 'package:gtd/capture/capture_event.dart';
+import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
@@ -19,16 +22,23 @@ class NextCard extends StatefulWidget {
 
 class _NextCardState extends State<NextCard> {
   ElementBloc _elementBloc;
+  CaptureBloc _captureBloc;
   int recurrencyInterval;
   bool isRecurrent = false;
   String period;
 
+  bool get hasAttachedElements =>
+      widget._processedElement.imageRemotePath != null;
+
   @override
   Widget build(BuildContext context) {
     _elementBloc = BlocProvider.of<ElementBloc>(context);
+    _captureBloc = BlocProvider.of<CaptureBloc>(context);
 
-    if(widget._processedElement.period != null) {
-      recurrencyInterval = _calculateRecurrency(widget._processedElement.repeatInterval, widget._processedElement.period);
+    if (widget._processedElement.period != null) {
+      recurrencyInterval = _calculateRecurrency(
+          widget._processedElement.repeatInterval,
+          widget._processedElement.period);
       isRecurrent = true;
       period = widget._processedElement.period == "WEEK" ? 'semanas' : 'días';
     }
@@ -93,24 +103,48 @@ class _NextCardState extends State<NextCard> {
                         Icon(Icons.assignment_ind,
                             size: 13, color: Colors.grey[600]),
                         Text(
-                            widget._processedElement.contexts != null && widget._processedElement.contexts.length > 0
+                            widget._processedElement.contexts != null &&
+                                    widget._processedElement.contexts.length > 0
                                 ? '${widget._processedElement.contexts.first} y ${widget._processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(
                                 fontSize: 13, color: Colors.grey[600])),
                       ],
                     ),
-                    isRecurrent ? Padding(
-                      padding: const EdgeInsets.only(top: 8.0),
-                      child: Row(
-                        children: <Widget>[
-                          Icon(Icons.replay,
-                                size: 13, color: Colors.grey[600],),
-                          Text('Ocurre cada $recurrencyInterval $period', style: TextStyle(
-                                  fontSize: 13, color: Colors.grey[600]))
-                        ],
-                      ),
-                    ) : Container()
+                    isRecurrent
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.replay,
+                                  size: 13,
+                                  color: Colors.grey[600],
+                                ),
+                                Text('Ocurre cada $recurrencyInterval $period',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey[600]))
+                              ],
+                            ),
+                          )
+                        : Container(),
+                    hasAttachedElements
+                        ? Padding(
+                            padding: const EdgeInsets.only(top: 8.0),
+                            child: Row(
+                              children: <Widget>[
+                                Icon(
+                                  Icons.attach_file,
+                                  size: 13,
+                                  color: Colors.grey[600],
+                                ),
+                                Text('Contiene adjuntos',
+                                    style: TextStyle(
+                                        fontSize: 13, color: Colors.grey[600]))
+                              ],
+                            ),
+                          )
+                        : Container(),
                   ],
                 ),
               ),
@@ -162,13 +196,14 @@ class _NextCardState extends State<NextCard> {
                     },
                     child: Text('DETALLES',
                         style: TextStyle(color: Colors.orange))),
-                widget._processedElement.dueDate != null ?
-                FlatButton(
-                    onPressed: () {
-                      _addToCalendar();
-                    },
-                    child: Text('AL CALENDARIO',
-                        style: TextStyle(color: Colors.orange))) : Container(),
+                widget._processedElement.dueDate != null
+                    ? FlatButton(
+                        onPressed: () {
+                          _addToCalendar();
+                        },
+                        child: Text('AL CALENDARIO',
+                            style: TextStyle(color: Colors.orange)))
+                    : Container(),
               ],
             ),
           )
@@ -198,16 +233,26 @@ class _NextCardState extends State<NextCard> {
     _elementBloc.add(MoveToDelete(element));
   }
 
+  bool isNullOrEmpty(dynamic object) {
+    return (object == null || object.isNotEmpty);
+  }
+
   void _onDetailsPressed(BuildContext context) {
+    if (widget._processedElement.imageRemotePath != null) {
+      _captureBloc.add(DownloadAttachedImage(widget._processedElement));
+    }
+
     String elementTitle = widget._processedElement.summary ?? 'Sin título';
     String elementDescription =
-        widget._processedElement.description.isNotEmpty ? widget._processedElement.description : 'Sin descripción';
+        isNullOrEmpty(widget._processedElement.description)
+            ? 'Sin descripción'
+            : widget._processedElement.description;
     String projectTitle = widget._processedElement.project != null
         ? widget._processedElement.project.title
         : 'Sin proyecto';
     List<dynamic> contexts = widget._processedElement.contexts ?? [];
     String dueDate = widget._processedElement.dueDate ?? 'Sin fecha prevista';
-    Timestamp createdAt =
+    dynamic createdAt =
         widget._processedElement.createdAt ?? 'Sin fecha de creación';
 
     List<Widget> list = [];
@@ -221,62 +266,71 @@ class _NextCardState extends State<NextCard> {
         return AlertDialog(
           title: Text('Detalles de $elementTitle'),
           content: Column(
-            mainAxisSize: MainAxisSize.min,
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                'Descripción',
-                textAlign: TextAlign.left,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(elementDescription),
-              ),
-              Text(
-                'Proyecto',
-                textAlign: TextAlign.left,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(projectTitle),
-              ),
-              Text(
-                'Contexto(s)',
-                textAlign: TextAlign.left,
-              ),
-              Row(
-                children: list,
-              ),
-              Text(
-                'Fecha prevista',
-                textAlign: TextAlign.left,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(dueDate),
-              ),
-              Text(
-                'Creado el',
-                textAlign: TextAlign.left,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text(createdAt.toDate().toString()),
-              ),
-              Text(
-                'Archivos adjuntos',
-                textAlign: TextAlign.left,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Text('Sin archivos adjuntos'),
-              )
-            ],
-          ),
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.start,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: <Widget>[
+                Text(
+                  'Descripción',
+                  textAlign: TextAlign.left,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(elementDescription),
+                ),
+                Text(
+                  'Proyecto',
+                  textAlign: TextAlign.left,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(projectTitle),
+                ),
+                Text(
+                  'Contexto(s)',
+                  textAlign: TextAlign.left,
+                ),
+                Row(
+                  children: list,
+                ),
+                Text(
+                  'Fecha prevista',
+                  textAlign: TextAlign.left,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(dueDate),
+                ),
+                Text(
+                  'Creado el',
+                  textAlign: TextAlign.left,
+                ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(createdAt.toDate().toString()),
+                ),
+                Text(
+                  'Archivos adjuntos',
+                  textAlign: TextAlign.left,
+                ),
+                BlocBuilder<CaptureBloc, CaptureState>(
+                  builder: (context, state) {
+                    if (state is ImageDownloaded) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: _showAttachedImage(state.attachedImage),
+          );
+                    } else {
+          return Text('Sin archivos adjuntos');
+                    }
+                  },
+                ),
+              ],
+            ),
           actions: [
             FlatButton(
                 onPressed: () {
+                  _captureBloc.add(ClearForm());
                   BlocProvider.of<NavigatorBloc>(context)
                       .add(NavigatorActionPop());
                 },
@@ -287,8 +341,12 @@ class _NextCardState extends State<NextCard> {
     );
   }
 
+  Widget _showAttachedImage(Image image) {
+    return Center(child: Container(child: image, height: 200, width:150));
+  }
+
   int _calculateRecurrency(int timeInterval, String period) {
-    if(period == 'WEEK') {
+    if (period == 'WEEK') {
       return (timeInterval ~/ 604800).toInt();
     } else {
       return (timeInterval ~/ 86400).toInt();

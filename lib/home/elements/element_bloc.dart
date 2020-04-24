@@ -1,7 +1,10 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
@@ -11,6 +14,7 @@ import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/procesar/advanced/advanced_process_form.dart';
 import 'package:meta/meta.dart';
+import 'package:uuid/uuid.dart';
 
 part 'element_state.dart';
 part 'element_event.dart';
@@ -67,6 +71,8 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       yield* _mapAddTitleToElementToState(event);
     } else if(event is AddRecurrencyToElement) {
       yield* _mapAddRecurrencyToElementToState(event);
+    } else if(event is AddImageToElement) {
+      yield* _mapAddImageToElementToState(event);
     }
   }
 
@@ -98,6 +104,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       MarkAsCompleted event) async* {
     event.element.currentStatus = 'COMPLETED';
     _elementRepository.updateElement(event.element);
+    HapticFeedback.mediumImpact();
     yield ElementCompleted(event.element);
   }
 
@@ -210,6 +217,17 @@ Stream<ElementState> _mapAddRecurrencyToElementToState(AddRecurrencyToElement ev
     event.elementToBeProcessed.repeatInterval = timeInterval;
     _elementRepository.updateElement(event.elementToBeProcessed);
   }
+
+  Stream<ElementState> _mapAddImageToElementToState(AddImageToElement event) async* {
+    String imageRemotePath;
+    if (event.takenImage != null) {
+        var uuid = Uuid();
+        imageRemotePath = await _elementRepository.uploadFile(event.imageFile, uuid.v4());
+    }
+    event.element.imageRemotePath = imageRemotePath;
+    _elementRepository.updateElement(event.element);
+  }
+
   @override
   Future<void> close() {
     _elementSubscription?.cancel();

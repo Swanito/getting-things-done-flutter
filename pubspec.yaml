@@ -42,6 +42,7 @@ dependencies:
   path:
   app_settings:
   add_2_calendar:
+  uuid:
   
 dev_dependencies:
   flutter_test:
