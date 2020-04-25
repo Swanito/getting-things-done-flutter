@@ -17,6 +17,7 @@ class GTDElement {
   int repeatInterval;
   String period;
   String imageRemotePath;
+  Timestamp completedAt;
 
   GTDElement(this.summary, 
       {this.id,
@@ -30,7 +31,8 @@ class GTDElement {
       this.repeatInterval,
       this.contexts,
       this.period,
-      this.imageRemotePath});
+      this.imageRemotePath,
+      this.completedAt});
 
   @override
   String toString() {
@@ -52,7 +54,8 @@ class GTDElement {
       project: project,
       repeatInterval: repeatInterval,
       period: period,
-      imageRemotePath: imageRemotePath
+      imageRemotePath: imageRemotePath,
+      completedAt: completedAt
     );
   }
 
@@ -69,6 +72,7 @@ class GTDElement {
         createdBy: entity.createdBy,
         repeatInterval: entity.repeatInterval,
         period: entity.period,
-        imageRemotePath: entity.imageRemotePath);
+        imageRemotePath: entity.imageRemotePath,
+        completedAt: entity.completedAt);
   }
 }

@@ -28,9 +28,10 @@ class GTDElementEntity extends Equatable {
   final int repeatInterval;
   final String period;
   final String imageRemotePath;
+  final Timestamp completedAt;
 
   GTDElementEntity({this.id, this.currentStatus, this.lastStatus, this.summary, this.description,
-      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy, this.repeatInterval, this.period, this.imageRemotePath});
+      this.project, this.dueDate, this.createdAt, this.contexts, this.asignee, this.createdBy, this.repeatInterval, this.period, this.imageRemotePath, this.completedAt});
 
   Map<String, Object> toJson() {
     return {
@@ -47,7 +48,8 @@ class GTDElementEntity extends Equatable {
       "createdBy": createdBy,
       "repeatInterval": repeatInterval,
       "period": period,
-      "imageRemotePath": imageRemotePath
+      "imageRemotePath": imageRemotePath,
+      "completedAt": completedAt
     };
   }
 
@@ -65,7 +67,8 @@ class GTDElementEntity extends Equatable {
       "createdBy": createdBy,
       "repeatInterval": repeatInterval,
       "period": period,
-      "imageRemotePath": imageRemotePath
+      "imageRemotePath": imageRemotePath,
+      "completedAt": completedAt
     };
   }
 
@@ -84,8 +87,9 @@ class GTDElementEntity extends Equatable {
       createdBy: json["createdBy"] as String,
       repeatInterval: json["repeatInterval"] as int,
       period: json["period"] as String,
-      imageRemotePath: json["imageRemotePath"] as String
-    );
+      imageRemotePath: json["imageRemotePath"] as String,
+      completedAt: json["completedAt"] as Timestamp
+      );
   }
 
   static GTDElementEntity fromSnapshot(DocumentSnapshot snap) {
@@ -106,7 +110,8 @@ class GTDElementEntity extends Equatable {
       createdBy: snap.data["createdBy"],
       repeatInterval: snap.data["repeatInterval"],
       period: snap.data["period"],
-      imageRemotePath: snap.data["imageRemotePath"]
+      imageRemotePath: snap.data["imageRemotePath"],
+      completedAt: snap.data["completedAt"]
     );
   }
 

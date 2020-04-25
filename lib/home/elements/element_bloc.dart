@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:io';
 
 import 'package:bloc/bloc.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -103,6 +104,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   Stream<ElementState> _mapMarkAsCompletedToState(
       MarkAsCompleted event) async* {
     event.element.currentStatus = 'COMPLETED';
+    event.element.completedAt = Timestamp.now();
     _elementRepository.updateElement(event.element);
     HapticFeedback.mediumImpact();
     yield ElementCompleted(event.element);
@@ -118,6 +120,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   Stream<ElementState> _mapUnmarkAsCompletedToState(
       UnmarkAsCompleted event) async* {
     event.element.currentStatus = 'PROCESSED';
+    event.element.completedAt = null;
     _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }

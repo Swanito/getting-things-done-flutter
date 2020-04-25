@@ -22,5 +22,7 @@ class ProjectsSuccessfullyLoaded extends ProjectState {
   String toString() => 'Loaded: $projects'; 
 }
 
+class FailedLoadingProjects extends ProjectState {}
+
 class ProjectUpdated extends ProjectState {}
 class ProjectDeleted extends ProjectState {}
