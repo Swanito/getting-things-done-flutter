@@ -140,11 +140,13 @@ class _ReviewCardState extends State<ReviewCard> {
 
   _getElementsForProject() {
     filteredElementList = widget.elements.where((element) {
-      if (element.project != null) {
+      if (element.project != null && widget.project != null) {
         return element.project.title == widget.project.title;
       } 
-      else {
-        return widget.project == null;
+      if (element.project == null && widget.project == null) {
+        return true;
+      } else {
+        return false;
       }
     }).toList();
   }
