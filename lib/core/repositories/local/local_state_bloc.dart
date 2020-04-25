@@ -57,6 +57,6 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
   }
 
   Stream<LocalState> _mapLoadLocalSettingsToState() async* {
-    yield SettingsLoaded(gtdLevel: await localRepository.getGTDLevel());
+    yield SettingsLoaded(gtdLevel: await localRepository.getGTDLevel(), reviewNotifications: await localRepository.getNotificationsAllowed());
   }
 }
