@@ -50,6 +50,9 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
     } else if (event is UpdateGTDLevel) {
       await localRepository.setGTDLevel(event.level);
       yield SettingsSaved();
+    } else if (event is SetNotificationsAllowed) {
+      await localRepository.setNotificationsAllowed(event.notificationsAllowed);
+      yield SettingsSaved();
     }
   }
 

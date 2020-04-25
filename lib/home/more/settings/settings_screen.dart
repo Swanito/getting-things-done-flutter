@@ -30,6 +30,7 @@ class SettingsScreenState extends State<SettingsScreen> {
   String selectedGTDLevel;
   String currentGtdLevel;
 
+  bool _notificationsSwitch = false;
 
   @override
   void initState() {
@@ -38,7 +39,6 @@ class SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
 
     return Scaffold(
@@ -76,7 +76,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                     content: Text('Preferencias guardadas con éxito'),
                     backgroundColor: Colors.green,
                   ));
-                  BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
+                  BlocProvider.of<LocalStatusBloc>(context)
+                      .add(LoadLocalSettings());
                 });
               }
               return Column(
@@ -106,6 +107,24 @@ class SettingsScreenState extends State<SettingsScreen> {
                     ),
                   ),
                   Divider(),
+                  ListTile(
+                    title: Text('Activar notificaciones de revisión'),
+                    subtitle: Text(
+                        'Estos activará las notificaciones para realizar las revisiones semanales y mensuales.'),
+                    contentPadding:
+                        EdgeInsets.only(left: 40, right: 40, top: 20),
+                    trailing: Switch(
+                      value: _notificationsSwitch,
+                      onChanged: (value) {
+                        setState(() {
+                          _notificationsSwitch = value;
+                        });
+                      },
+                      activeTrackColor: Colors.orangeAccent,
+                      activeColor: Colors.orange,
+                    ),
+                  ),
+                  Divider(),
                   RaisedButton(
                     onPressed: () {
                       if (selectedGTDLevel.contains('Avanzado')) {
@@ -115,6 +134,8 @@ class SettingsScreenState extends State<SettingsScreen> {
                         BlocProvider.of<LocalStatusBloc>(context)
                             .add(UpdateGTDLevel(level: GTDLevel.Low));
                       }
+                        BlocProvider.of<LocalStatusBloc>(context)
+                            .add(SetNotificationsAllowed(notificationsAllowed: _notificationsSwitch));
                     },
                     child: Text('Guardar cambios'),
                     color: Colors.white,

@@ -22,6 +22,16 @@ class LocalRepository extends Repository {
     return prefs.getString('gtdLevel');
   }
 
+  Future<void> setNotificationsAllowed(bool areAllowed) async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('reviewNotifications', areAllowed);    
+  }
+
+  Future<bool> getNotificationsAllowed() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    return prefs.getBool('reviewNotifications');   
+  }
+
   Future<void> completeOnboard() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     await prefs.setBool('isOnboardingCompleted', true);
@@ -37,6 +47,7 @@ class LocalRepository extends Repository {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     prefs.remove('isOnboardingCompleted');
     prefs.remove('gtdLevel');
+    prefs.remove('reviewNotifications');
     prefs.clear();
   }
 }

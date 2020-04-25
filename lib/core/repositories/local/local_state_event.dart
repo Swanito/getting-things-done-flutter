@@ -38,6 +38,18 @@ class SetGTDLevel extends LocalStatusEvent {
   String toString() => 'Event SetGTDLevel: { GTDLevel: $level }';
 }
 
+class SetNotificationsAllowed extends LocalStatusEvent {
+  final bool notificationsAllowed;
+
+  SetNotificationsAllowed({@required this.notificationsAllowed});
+
+    @override
+  List<Object> get props => [notificationsAllowed];
+
+  @override
+  String toString() => 'Event SetNotificationsAllowed: { SetNotificationsAllowed: $notificationsAllowed }';
+}
+
 class LoadLocalSettings extends LocalStatusEvent {
   
 }
