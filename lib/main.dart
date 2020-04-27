@@ -29,7 +29,7 @@ void main() async {
   final UserRepository _userRepository = UserRepository();
   final LocalRepository _localRepository = LocalRepository.instance;
   final ElementRepository _elementRepository = ElementRepositoryImpl();
-  final ProjectRepositoryImpl _projectRepository = ProjectRepositoryImpl();
+  final ProjectRepository _projectRepository = ProjectRepositoryImpl();
 
   BlocSupervisor.delegate = SimpleBlocDelegate();
 
@@ -48,14 +48,14 @@ class GTD extends StatefulWidget {
   final UserRepository _userRepository;
   final LocalRepository _localRepository;
   final ElementRepository _elementRepository;
-  final ProjectRepositoryImpl _projectRepository;
+  final ProjectRepository _projectRepository;
 
   GTD(
       {Key key,
       @required UserRepository userRepository,
       LocalRepository localRepository,
       ElementRepository elementRepository,
-      ProjectRepositoryImpl projectRepository})
+      ProjectRepository projectRepository})
       : assert(userRepository != null),
         assert(localRepository != null),
         assert(elementRepository != null),

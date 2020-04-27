@@ -1,13 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
+import 'package:gtd/core/keys.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
-import 'package:gtd/core/repositories/remote/element_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
-import 'package:gtd/home/elements/element_bloc.dart';
-import 'package:gtd/home/more/trash/trash_list.dart';
-import 'package:path/path.dart';
 
 class SettingsScreen extends StatefulWidget {
   final UserRepository _userRepository;
@@ -27,19 +24,21 @@ class SettingsScreen extends StatefulWidget {
 }
 
 class SettingsScreenState extends State<SettingsScreen> {
-  String selectedGTDLevel;
-  String currentGtdLevel;
 
-  bool _notificationsSwitch = false;
+  bool _notificationsSwitch;
+
+  LocalStatusBloc _localStatusBloc;
 
   @override
   void initState() {
+    _localStatusBloc = LocalStatusBloc(localStatusKey: GtdKeys.localStatusKey, localRepository: widget._localRepository);
+    _localStatusBloc.add(LoadLocalSettings());
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    BlocProvider.of<LocalStatusBloc>(context).add(LoadLocalSettings());
+      String selectedGTDLevel;
 
     return Scaffold(
       appBar: AppBar(
@@ -65,11 +64,8 @@ class SettingsScreenState extends State<SettingsScreen> {
             factor: BarSizeFactor.Small,
           ),
           BlocBuilder<LocalStatusBloc, LocalState>(
+            bloc: _localStatusBloc,
             builder: (context, state) {
-              if (state is SettingsLoaded) {
-                currentGtdLevel = state.gtdLevel;
-                print('Current GTD level is $currentGtdLevel');
-              }
               if (state is SettingsSaved) {
                 WidgetsBinding.instance.addPostFrameCallback((_) {
                   Scaffold.of(context).showSnackBar(SnackBar(
@@ -80,68 +76,65 @@ class SettingsScreenState extends State<SettingsScreen> {
                       .add(LoadLocalSettings());
                 });
               }
-              return Column(
-                children: <Widget>[
-                  ListTile(
-                    title: Text('Nivel de GTD'),
-                    subtitle:
-                        Text('Esto cambiará la manera de procesar elementos'),
-                    contentPadding:
-                        EdgeInsets.only(left: 40, right: 40, top: 20),
-                    trailing: new DropdownButton<String>(
-                      value: selectedGTDLevel,
-                      items: <String>['Básico', 'Avanzado'].map((String value) {
-                        return new DropdownMenuItem<String>(
-                          value: value,
-                          child: new Text(
-                            value,
-                            style: TextStyle(color: Colors.black),
-                          ),
-                        );
-                      }).toList(),
-                      onChanged: (value) {
-                        setState(() {
-                          selectedGTDLevel = value;
-                        });
-                      },
+              if (state is SettingsLoaded) {
+                selectedGTDLevel = state.gtdLevel;
+                _notificationsSwitch = state.reviewNotifications;
+
+                return Column(
+                  children: <Widget>[
+                    ListTile(
+                      title: Text('Nivel de GTD'),
+                      subtitle:
+                          Text('Esto cambiará la manera de procesar elementos'),
+                      contentPadding:
+                          EdgeInsets.only(left: 40, right: 40, top: 20),
+                      trailing: new DropdownButton<String>(
+                        value: _mapStringToTranslation(selectedGTDLevel),
+                        items:
+                            GTDLevel.values.map((GTDLevel value) {
+                          return new DropdownMenuItem<String>(
+                            value: _mapGTDLevelToString(value),
+                            child: new Text(
+                              _mapGTDLevelToString(value),
+                              style: TextStyle(color: Colors.black),
+                            ),
+                          );
+                        }).toList(),
+                        onChanged: (String value) {
+                          setState(() {
+                            selectedGTDLevel = _mapTranslationToString(value);
+                              BlocProvider.of<LocalStatusBloc>(context)
+                                  .add(UpdateGTDLevel(level: _mapStringToGTDLevel(value)));
+                          });
+                        },
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  ListTile(
-                    title: Text('Activar notificaciones de revisión'),
-                    subtitle: Text(
-                        'Estos activará las notificaciones para realizar las revisiones semanales y mensuales.'),
-                    contentPadding:
-                        EdgeInsets.only(left: 40, right: 40, top: 20),
-                    trailing: Switch(
-                      value: _notificationsSwitch,
-                      onChanged: (value) {
-                        setState(() {
-                          _notificationsSwitch = value;
-                        });
-                      },
-                      activeTrackColor: Colors.orangeAccent,
-                      activeColor: Colors.orange,
+                    Divider(),
+                    ListTile(
+                      title: Text('Activar notificaciones de revisión'),
+                      subtitle: Text(
+                          'Estos activará las notificaciones para realizar las revisiones semanales y mensuales.'),
+                      contentPadding:
+                          EdgeInsets.only(left: 40, right: 40, top: 20),
+                      trailing: Switch(
+                        value: _notificationsSwitch,
+                        onChanged: (value) {
+                          setState(() {
+                            _notificationsSwitch = value;
+                            BlocProvider.of<LocalStatusBloc>(context).add(
+                                SetNotificationsAllowed(
+                                    notificationsAllowed:
+                                        _notificationsSwitch));
+                          });
+                        },
+                        activeTrackColor: Colors.orangeAccent,
+                        activeColor: Colors.orange,
+                      ),
                     ),
-                  ),
-                  Divider(),
-                  RaisedButton(
-                    onPressed: () {
-                      if (selectedGTDLevel.contains('Avanzado')) {
-                        BlocProvider.of<LocalStatusBloc>(context)
-                            .add(UpdateGTDLevel(level: GTDLevel.High));
-                      } else {
-                        BlocProvider.of<LocalStatusBloc>(context)
-                            .add(UpdateGTDLevel(level: GTDLevel.Low));
-                      }
-                        BlocProvider.of<LocalStatusBloc>(context)
-                            .add(SetNotificationsAllowed(notificationsAllowed: _notificationsSwitch));
-                    },
-                    child: Text('Guardar cambios'),
-                    color: Colors.white,
-                  )
-                ],
-              );
+                  ],
+                );
+              }
+              return CircularProgressIndicator();
             },
           )
         ],
@@ -149,21 +142,61 @@ class SettingsScreenState extends State<SettingsScreen> {
     );
   }
 
-  _showErrorSnackbar(BuildContext context) {
+  _showErrorSnackbar(BuildContext context, String message) {
     Scaffold.of(context)
       ..hideCurrentSnackBar()
       ..showSnackBar(
         SnackBar(
           content: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                  'Error recuperarndo los elementos. Intentalo de nuevo más tarde.'),
-              Icon(Icons.error)
-            ],
+            children: [Text(message), Icon(Icons.error)],
           ),
           backgroundColor: Colors.red,
         ),
       );
+  }
+
+  String _mapGTDLevelToString(GTDLevel level) {
+    switch(level) {
+      case GTDLevel.High:
+        return 'Avanzado';
+        break;
+      case GTDLevel.Low:
+        return 'Básico';
+        break;
+    }
+  }
+
+    GTDLevel _mapStringToGTDLevel(String level) {
+    switch(level) {
+      case 'Avanzado':
+        return GTDLevel.High;
+        break;
+      case 'Básico':
+        return GTDLevel.Low;
+        break;
+    }
+  }
+
+    String _mapStringToTranslation(String level) {
+    switch(level) {
+      case 'GTDLevel.High':
+        return 'Avanzado';
+        break;
+      case 'GTDLevel.Low':
+        return 'Básico';
+        break;
+    }
+  }
+
+      String _mapTranslationToString(String level) {
+    switch(level) {
+      case 'Avanzado':
+        return 'GTDLevel.High';
+        break;
+      case 'Básico':
+        return 'GTDLevel.Low';
+        break;
+    }
   }
 }

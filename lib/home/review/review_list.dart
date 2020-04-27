@@ -67,27 +67,7 @@ class _ReviewListState extends State<ReviewList> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Ajustes de revision: '),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: <Widget>[
-              RaisedButton(
-                child: Text(
-                  'Recordatorio \nSemanal',
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () {},
-              ),
-              RaisedButton(
-                child: Text(
-                  'Recordatorio \nMensual',
-                  textAlign: TextAlign.center,
-                ),
-                onPressed: () {},
-              ),
-            ],
-          ),
+          Text('Los recordatorios de revisión están activados. Puedes cambiar tus preferencias en los ajustes. 🙂')
         ],
       ),
     );

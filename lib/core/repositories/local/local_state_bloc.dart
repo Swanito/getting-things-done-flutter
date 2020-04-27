@@ -25,7 +25,6 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
       yield OnboardingCompleted();
     } else if (event is CheckIfOnboardingIsCompleted) {
       bool isCompleted = await localRepository.isOnboardingCompleted();
-      print('Is onboarding completed: $isCompleted');
       if (isCompleted) {
         yield OnboardingCompleted();
       } else {
@@ -36,7 +35,6 @@ class LocalStatusBloc extends Bloc<LocalStatusEvent, LocalState> {
       yield GTDLevelKnown();
     } else if (event is CheckIfGTDLevelIsKnwon) {
       String gtdLevel = await localRepository.getGTDLevel();
-      print('Is gtd level known: $gtdLevel');
       if (gtdLevel != null) {
         yield GTDLevelKnown();
       } else {

@@ -22,7 +22,6 @@ part 'element_event.dart';
 
 class ElementBloc extends Bloc<ElementEvent, ElementState> {
   final ElementRepository _elementRepository;
-  final LocalRepository _localRepository = LocalRepository.instance;
 
   StreamSubscription _elementSubscription;
 

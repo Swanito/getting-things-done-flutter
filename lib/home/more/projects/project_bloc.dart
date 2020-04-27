@@ -11,7 +11,7 @@ class ProjectBloc extends Bloc<ProjectEvent, ProjectState> {
   ProjectRepository projectRepository;
   StreamSubscription _projectSubscription;
 
-  ProjectBloc({@required this.projectRepository});
+  ProjectBloc({@required this.projectRepository, elementRepository});
 
   @override
   // TODO: implement initialState
