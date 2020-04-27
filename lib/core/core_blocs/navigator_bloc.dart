@@ -10,6 +10,7 @@ import 'package:gtd/auth/login/login_screen.dart';
 import 'package:gtd/auth/register/register_screen.dart';
 import 'package:gtd/capture/camera/camera_screen.dart';
 import 'package:gtd/capture/capture_screen.dart';
+import 'package:gtd/common/splash_screen.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
@@ -27,6 +28,7 @@ import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/calendar_screen.dart';
 import 'package:gtd/home/procesar/basic/step_numbers_screen.dart';
 import 'package:gtd/home/procesar/basic/time_screen.dart';
+import 'package:gtd/onboarding/onboarding_screen.dart';
 
 class NavigatorAction extends Equatable {
   const NavigatorAction();
@@ -36,6 +38,12 @@ class NavigatorAction extends Equatable {
 }
 
 class NavigatorActionPop extends NavigatorAction {}
+
+class NavigateToOnboarding extends NavigatorAction {
+  final UserRepository userRepository;
+
+  NavigateToOnboarding({this.userRepository});
+}
 
 class NavigatorActionPopAll extends NavigatorAction {}
 
@@ -66,9 +74,9 @@ class OpenSettings extends NavigatorAction {}
 class OpenSystemSettings extends NavigatorAction {}
 
 class OpenProcessScreen extends NavigatorAction {
-  GTDElement elementToBeProcessed;
+  final GTDElement elementToBeProcessed;
 
-  OpenProcessScreen({@required this.elementToBeProcessed});
+  OpenProcessScreen({this.elementToBeProcessed});
 }
 
 class GoToProcessStepScreen extends NavigatorAction {
@@ -133,6 +141,11 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
           MaterialPageRoute(
             builder: (context) => HomeScreen(userRepository: userRepository)),
           (Route<dynamic> route) => false);
+    } else if (event is NavigateToOnboarding) {
+      navigatorKey.currentState.pushAndRemoveUntil(
+          MaterialPageRoute(
+            builder: (context) => OnboardingScreen(userRepository: event.userRepository,)),
+          (Route<dynamic> route) => false);
     } else if (event is OpenCaptureScreen) {
       navigatorKey.currentState.push(MaterialPageRoute(
           fullscreenDialog: true,
@@ -144,7 +157,7 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
           .push(MaterialPageRoute(builder: (context) => ProjectScreen()));
     } else if (event is GoToSplashScreen) {
       navigatorKey.currentState
-          .pushReplacement(MaterialPageRoute(builder: (context) => AuthScreen()));
+          .pushReplacement(MaterialPageRoute(builder: (context) => SplashScreen()));
     } else if (event is OpenCamera) {
       final cameras = await availableCameras();
       if (cameras.isNotEmpty) {

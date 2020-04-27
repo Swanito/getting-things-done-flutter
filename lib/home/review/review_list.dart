@@ -29,7 +29,11 @@ class _ReviewListState extends State<ReviewList> {
         children: <Widget>[
           BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
             if (state is SettingsLoaded) {
-              return _showNotificationsSettings();
+              if (state.reviewNotifications) {
+                return _showNotificationsSettings();
+              } else {
+                return Container();
+              }
             } else {
               return Container();
             }
@@ -42,13 +46,10 @@ class _ReviewListState extends State<ReviewList> {
                 itemCount: widget.projects.length + 1,
                 itemBuilder: (BuildContext context, int index) {
                   if (index < widget.projects.length) {
-                    print(
-                        'creando tarjeta para el proyecto ${widget.projects[index].title}');
                     return ReviewCard(
                         project: widget.projects[index],
                         elements: widget.elements);
                   } else {
-                    print('creando tarjeta para los elementos sin proyecto');
                     return ReviewCard(project: null, elements: widget.elements);
                   }
                 },
@@ -67,7 +68,8 @@ class _ReviewListState extends State<ReviewList> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          Text('Los recordatorios de revisión están activados. Puedes cambiar tus preferencias en los ajustes. 🙂')
+          Text(
+              'Los recordatorios de revisión están activados. Puedes cambiar tus preferencias en los ajustes. 🙂')
         ],
       ),
     );

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/repositories/remote/element_repository.dart';
-import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
-import 'package:gtd/home/more/projects/project_event.dart';
 import 'package:gtd/home/more/projects/project_state.dart';
 import 'package:gtd/home/review/review_list.dart';
 

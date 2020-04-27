@@ -121,7 +121,7 @@ class MoreScreen extends StatelessWidget {
                           .add(LoggedOut()),
                       BlocProvider.of<LocalStatusBloc>(context).add(Logout()),
                       BlocProvider.of<NavigatorBloc>(context)
-                          .add(GoToSplashScreen())
+                          .add(NavigateToOnboarding(userRepository: _userRepository))
                     },
                   ),
                 ),

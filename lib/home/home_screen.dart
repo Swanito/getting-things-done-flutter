@@ -28,6 +28,7 @@ class HomeScreen extends StatefulWidget {
 
 class HomeScreenState extends State<HomeScreen> {
   int _selectedTabIndex = 0;
+  LocalStatusBloc _localStatusBloc;
 
   _changeIndex(int index) {
     setState(() {
@@ -38,7 +39,8 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) => _showGTDLevelDialog(context));
+    _localStatusBloc = BlocProvider.of<LocalStatusBloc>(context)..add(CheckIfGTDLevelIsKnwon());
+    _localStatusBloc.add(SetNotificationsAllowed(notificationsAllowed: false));
   }
 
   @override
@@ -60,6 +62,7 @@ class HomeScreenState extends State<HomeScreen> {
       }
     }, child:
             BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
+              
       return Scaffold(
         body: Center(child: _pages[_selectedTabIndex]),
         floatingActionButton: FloatingActionButton(
@@ -102,7 +105,8 @@ class HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   BlocProvider.of<LocalStatusBloc>(context)
                       .add(SetGTDLevel(level: GTDLevel.Low));
-                  BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                  BlocProvider.of<NavigatorBloc>(context)
+                      .add(NavigatorActionPop());
                 },
               ),
               FlatButton(
@@ -110,7 +114,8 @@ class HomeScreenState extends State<HomeScreen> {
                 onPressed: () {
                   BlocProvider.of<LocalStatusBloc>(context)
                       .add(SetGTDLevel(level: GTDLevel.High));
-                  BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                  BlocProvider.of<NavigatorBloc>(context)
+                      .add(NavigatorActionPop());
                 },
               ),
             ],

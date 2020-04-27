@@ -80,11 +80,13 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
           return Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              Center(child: Lottie.asset(
-                            lottieUri,
-                            width: constraints.maxWidth / 2,
-                            height: constraints.maxHeight / 2,
-                          ),),
+              Center(
+                child: Lottie.asset(
+                  lottieUri,
+                  width: constraints.maxWidth / 2,
+                  height: constraints.maxHeight / 2,
+                ),
+              ),
               SizedBox(height: 30.0),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -111,83 +113,88 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      body: AnnotatedRegion<SystemUiOverlayStyle>(
-        value: SystemUiOverlayStyle.light,
-        child: Container(
-          decoration: BoxDecoration(color: _bgColors[_currentPage]),
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 40.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                Container(
-                  height: (MediaQuery.of(context).size.height / 10) * 8,
-                  child: PageView(
-                    physics: ClampingScrollPhysics(),
-                    controller: _pageController,
-                    onPageChanged: (int page) {
-                      setState(() {
-                        _currentPage = page;
-                      });
-                    },
-                    children: <Widget>[
-                      _createOnboardingPage(context,
-                          lottieUri: 'assets/onb_capturar.json',
-                          title: 'Captura',
-                          subtitle:
-                              'Escriba, grabe o reúna todo lo que tenga su atención en una herramienta de recopilación.'),
-                      _createOnboardingPage(context,
-                          lottieUri: 'assets/onb_procesar.json',
-                          title: 'Procesa',
-                          subtitle:
-                              '¿Es procesable? Si es así, decida la próxima acción y proyecto (si se requiere más de una acción). De lo contrario, decida si es basura, referencia o algo para poner en espera.'),
-                      _createOnboardingPage(context,
-                          lottieUri: 'assets/onb_organizar.json',
-                          title: 'Organiza',
-                          subtitle:
-                              'Estacione recordatorios de su contenido categorizado en lugares apropiados.'),
-                      _createOnboardingPage(context,
-                          lottieUri: 'assets/onb_revisar.json',
-                          title: 'Revisa',
-                          subtitle:
-                              'Actualice y revise todos los contenidos pertinentes del sistema para recuperar el control y el enfoque.'),
-                    ],
+    return BlocListener<LocalStatusBloc, LocalState>(
+      listener: (context, state) {
+        if (state is OnboardingCompleted) {
+          BlocProvider.of<NavigatorBloc>(context).add(NavigateToAuthEvent());
+        }
+      },
+      child: Scaffold(
+        key: _scaffoldKey,
+        body: AnnotatedRegion<SystemUiOverlayStyle>(
+          value: SystemUiOverlayStyle.light,
+          child: Container(
+            decoration: BoxDecoration(color: _bgColors[_currentPage]),
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 40.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: <Widget>[
+                  Container(
+                    height: (MediaQuery.of(context).size.height / 10) * 8,
+                    child: PageView(
+                      physics: ClampingScrollPhysics(),
+                      controller: _pageController,
+                      onPageChanged: (int page) {
+                        setState(() {
+                          _currentPage = page;
+                        });
+                      },
+                      children: <Widget>[
+                        _createOnboardingPage(context,
+                            lottieUri: 'assets/onb_capturar.json',
+                            title: 'Captura',
+                            subtitle:
+                                'Escriba, grabe o reúna todo lo que tenga su atención en una herramienta de recopilación.'),
+                        _createOnboardingPage(context,
+                            lottieUri: 'assets/onb_procesar.json',
+                            title: 'Procesa',
+                            subtitle:
+                                '¿Es procesable? Si es así, decida la próxima acción y proyecto (si se requiere más de una acción). De lo contrario, decida si es basura, referencia o algo para poner en espera.'),
+                        _createOnboardingPage(context,
+                            lottieUri: 'assets/onb_organizar.json',
+                            title: 'Organiza',
+                            subtitle:
+                                'Estacione recordatorios de su contenido categorizado en lugares apropiados.'),
+                        _createOnboardingPage(context,
+                            lottieUri: 'assets/onb_revisar.json',
+                            title: 'Revisa',
+                            subtitle:
+                                'Actualice y revise todos los contenidos pertinentes del sistema para recuperar el control y el enfoque.'),
+                      ],
+                    ),
                   ),
-                ),
-                Align(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: _buildPageIndicator(),
-                  ),
-                )
-              ],
+                  Align(
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: _buildPageIndicator(),
+                    ),
+                  )
+                ],
+              ),
             ),
           ),
         ),
-      ),
-      bottomSheet: _currentPage == _numPages - 1
-          ? Container(
-              height: 100.0,
-              width: double.infinity,
-              color: Colors.white,
-              child: GestureDetector(
-                onTap: () => {
-                  BlocProvider.of<LocalStatusBloc>(context)
-                      .add(CompleteOnboardingAction()),
-                  // BlocProvider.of<NavigatorBloc>(context)
-                  //     .add(NavigatorAction.NavigateToAuthEvent),
-                },
-                child: Center(
-                  child: Padding(
-                    padding: EdgeInsets.only(bottom: 30.0),
-                    child: Text('Entendido!', style: kTitleStyleOrange),
+        bottomSheet: _currentPage == _numPages - 1
+            ? Container(
+                height: 100.0,
+                width: double.infinity,
+                color: Colors.white,
+                child: GestureDetector(
+                  onTap: () => {
+                    BlocProvider.of<LocalStatusBloc>(context)
+                        .add(CompleteOnboardingAction()),
+                  },
+                  child: Center(
+                    child: Padding(
+                      padding: EdgeInsets.only(bottom: 30.0),
+                      child: Text('Entendido!', style: kTitleStyleOrange),
+                    ),
                   ),
                 ),
-              ),
-            )
-          : Text(''),
+              )
+            : Text(''),
+      ),
     );
   }
 }
