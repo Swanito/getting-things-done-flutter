@@ -89,14 +89,14 @@ void main() {
   );
 
   blocTest(
-    'Logout yields OnboardingNotCompleted',
+    'Logout yields nothing',
     build: () async {
       return LocalStatusBloc(
           localStatusKey: GtdKeys.localStatusKey,
           localRepository: _mockLocalRepository);
     },
     act: (bloc) => bloc.add(Logout()),
-    expect: [OnboardingNotCompleted()],
+    expect: [],
   );
 
   blocTest(

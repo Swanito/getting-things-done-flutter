@@ -114,6 +114,8 @@ class GTDState extends State<GTD> {
         ],
         child: MaterialApp(
           navigatorKey: _navigatorKey,
+          debugShowCheckedModeBanner: false,
+          debugShowMaterialGrid: false,
           title: 'Do Things',
           localizationsDelegates: [
             GlobalMaterialLocalizations.delegate,
