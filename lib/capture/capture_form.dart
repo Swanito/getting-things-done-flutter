@@ -7,27 +7,18 @@ import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/common/attached_image_card.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class CaptureForm extends StatefulWidget {
-  final UserRepository _userRepository;
-  final bool _isEditing;
 
-  CaptureForm({@required userRepository, @required isEditing})
-      : assert(userRepository != null),
-        assert(isEditing != null),
-        _isEditing = isEditing,
-        _userRepository = userRepository;
+  CaptureForm();
 
   @override
   State<StatefulWidget> createState() {
-    return CaptureFormState(
-        userRepository: _userRepository, isEditing: _isEditing);
+    return CaptureFormState();
   }
 }
 
 class CaptureFormState extends State<CaptureForm> {
-  final UserRepository _userRepository;
 
   final TextEditingController _summaryController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
@@ -38,23 +29,18 @@ class CaptureFormState extends State<CaptureForm> {
   CaptureBloc _captureBloc;
 
   bool isRecurrent = false;
-  bool _isEditing;
   int dropdownDayValue;
   String dropdownPeriodValue;
   File _attachedImage;
   List<Chip> contextList = [];
   DateTime selectedDate = DateTime.now();
 
-  Chip newContextChip;
+  Chip ContextChip;
 
   bool get isPopulated => _summaryController.text.isNotEmpty;
   bool get isContextPopulated => _contextController.text.isNotEmpty;
 
-  CaptureFormState({@required userRepository, @required isEditing})
-      : assert(userRepository != null),
-        assert(isEditing != null),
-        _isEditing = isEditing,
-        _userRepository = userRepository;
+  CaptureFormState();
 
   @override
   void initState() {
@@ -105,7 +91,7 @@ class CaptureFormState extends State<CaptureForm> {
                   TextFormField(
                     autofocus: true,
                     controller: _summaryController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     decoration: InputDecoration(
                       icon: Icon(Icons.edit, color: Colors.white),
@@ -113,13 +99,13 @@ class CaptureFormState extends State<CaptureForm> {
                       labelStyle: TextStyle(color: Colors.white),
                       hintStyle: TextStyle(color: Colors.white),
                       errorStyle: TextStyle(color: Colors.white),
-                      errorBorder: new UnderlineInputBorder(
+                      errorBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
                             style: BorderStyle.solid),
                       ),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
@@ -143,7 +129,7 @@ class CaptureFormState extends State<CaptureForm> {
                     height: MediaQuery.of(context).size.height / 6,
                     child: TextFormField(
                       controller: _descriptionController,
-                      style: new TextStyle(
+                      style:  TextStyle(
                           fontWeight: FontWeight.normal, color: Colors.white),
                       maxLines: null,
                       expands: true,
@@ -152,7 +138,7 @@ class CaptureFormState extends State<CaptureForm> {
                         labelText: 'Descripción',
                         labelStyle: TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: new UnderlineInputBorder(
+                        enabledBorder:  UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: Colors.white,
                               width: 1.0,

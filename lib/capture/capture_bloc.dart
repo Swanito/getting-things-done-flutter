@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'package:uuid/uuid.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -11,19 +10,15 @@ import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
 import 'package:gtd/core/repositories/remote/project_repository.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 
 class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
-  final UserRepository _userRepository;
   final ElementRepository _elementRepository;
   final ProjectRepository _projectRepository = ProjectRepositoryImpl();
 
-  CaptureBloc({@required userRepository, @required elementRepository})
-      : assert(userRepository != null),
+  CaptureBloc({@required elementRepository}) :
         assert(elementRepository != null),
-        _elementRepository = elementRepository,
-        _userRepository = userRepository;
+        _elementRepository = elementRepository;
 
   @override
   CaptureState get initialState => EmptyState();
@@ -61,6 +56,7 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
 
           return Project.fromEntity(ProjectEntity.fromJson(projectFromJson));
         }
+        return null;
       });
       // Create new project if it doesn't exist
       if (newProject == null) {
@@ -86,7 +82,7 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
     try {
       GTDElement element = GTDElement(event.summary,
           description: event.description, project: newProject, imageRemotePath: imageRemotePath);
-      _elementRepository.createElement(element);
+      await _elementRepository.createElement(element);
       yield Captured();
     } catch (error) {
       print(error);
@@ -100,7 +96,7 @@ class CaptureBloc extends Bloc<CaptureEvent, CaptureState> {
 
   Stream<CaptureState> _mapDeleteAttachedImageToState(DeleteAttachedImage event) async* {
     event.element.imageRemotePath = null;
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield EmptyState();
   }
 

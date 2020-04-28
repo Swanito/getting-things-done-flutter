@@ -1,9 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gtd/core/models/gtd_element_entity.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
-import 'package:meta/meta.dart';
 
-@immutable
 class Project {
   final String id;
   String title;

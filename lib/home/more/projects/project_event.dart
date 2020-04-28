@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 
 abstract class ProjectEvent extends Equatable {
@@ -11,9 +10,9 @@ abstract class ProjectEvent extends Equatable {
 class LoadProjects extends ProjectEvent {}
 
 class ProjectsLoaded extends ProjectEvent {
-  var projects;
+  final List<Project> projects;
 
-  ProjectsLoaded(@required this.projects);
+  ProjectsLoaded(this.projects);
 
   @override
   // TODO: implement props

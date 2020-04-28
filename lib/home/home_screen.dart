@@ -39,16 +39,17 @@ class HomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-    _localStatusBloc = BlocProvider.of<LocalStatusBloc>(context)..add(CheckIfGTDLevelIsKnwon());
-    _localStatusBloc.add(SetNotificationsAllowed(notificationsAllowed: false));
+    _localStatusBloc = BlocProvider.of<LocalStatusBloc>(context)
+      ..add(SetNotificationsAllowed(notificationsAllowed: false));
+    _localStatusBloc.add(CheckIfGTDLevelIsKnwon());
   }
 
   @override
   Widget build(BuildContext context) {
     List _pages = [
-      NextScreen(userRepository: widget._userRepository),
-      ProcessScreen(userRepository: widget._userRepository),
-      ReviewScreen(userRepository: widget._userRepository),
+      NextScreen(),
+      ProcessScreen(),
+      ReviewScreen(),
       MoreScreen(
         userRepository: widget._userRepository,
         currentUser: widget._currentUser,
@@ -62,7 +63,6 @@ class HomeScreenState extends State<HomeScreen> {
       }
     }, child:
             BlocBuilder<LocalStatusBloc, LocalState>(builder: (context, state) {
-              
       return Scaffold(
         body: Center(child: _pages[_selectedTabIndex]),
         floatingActionButton: FloatingActionButton(

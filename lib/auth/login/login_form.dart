@@ -123,7 +123,7 @@ class _LoginFormState extends State<LoginForm> {
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -147,7 +147,7 @@ class _LoginFormState extends State<LoginForm> {
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,

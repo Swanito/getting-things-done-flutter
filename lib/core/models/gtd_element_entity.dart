@@ -2,7 +2,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:equatable/equatable.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
-import 'package:gtd/home/procesar/advanced/advanced_process_form.dart';
 
 enum ElementProcessStatus {
   COMPLETED,

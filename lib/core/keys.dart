@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
 class GtdKeys {
-  static final navKey = new GlobalKey<NavigatorState>();
-  static final localStatusKey = new GlobalKey<NavigatorState>();
+  static final navKey =  GlobalKey<NavigatorState>();
+  static final localStatusKey =  GlobalKey<NavigatorState>();
 }

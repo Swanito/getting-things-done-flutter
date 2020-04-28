@@ -29,7 +29,7 @@ class _StepNumbersScreenState extends State<StepNumbersScreen> {
 
   Future<void> alternativeFunction(
       {GTDElement element, UserRepository userRepository}) {
-    showCreateProjectDialog(element, userRepository);
+    return showCreateProjectDialog(element, userRepository);
   }
 
   @override
@@ -66,7 +66,7 @@ class _StepNumbersScreenState extends State<StepNumbersScreen> {
                   labelText: 'A qué proyecto?',
                   labelStyle: TextStyle(color: Colors.orange),
                   hintStyle: TextStyle(color: Colors.orange),
-                  enabledBorder: new UnderlineInputBorder(
+                  enabledBorder:  UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Colors.orange,
                         width: 1.0,

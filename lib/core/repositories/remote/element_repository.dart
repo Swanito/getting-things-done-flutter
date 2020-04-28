@@ -25,15 +25,9 @@ class ElementRepositoryImpl implements ElementRepository {
   }
 
   @override
-  Stream<GTDElement> getElement() {
-
-  }
-
-  @override
   Future<Stream<List<GTDElement>>> getElements() async {
 
     uid = await getCurrentUserId();
-    print('Current user uid: ${uid}');
     return elementCollection.where('createdBy', isEqualTo: uid).snapshots().map((event) {
         return event.documents
           .map((e) => GTDElement.fromEntity(GTDElementEntity.fromSnapshot(e)))

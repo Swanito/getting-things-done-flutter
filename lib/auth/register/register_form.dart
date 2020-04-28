@@ -102,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -123,7 +123,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -149,7 +149,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Repite la contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,

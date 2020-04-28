@@ -3,22 +3,18 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:lottie/lottie.dart';
 
 import 'package:gtd/core/styles.dart';
 
 class OnboardingScreen extends StatefulWidget {
-  final UserRepository _userRepository;
 
-  OnboardingScreen({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository,
-        super(key: key);
+  OnboardingScreen({Key key})
+      : super(key: key);
 
   @override
   _OnboardingScreenState createState() =>
-      _OnboardingScreenState(userRepository: _userRepository);
+      _OnboardingScreenState();
 }
 
 class _OnboardingScreenState extends State<OnboardingScreen> {
@@ -34,11 +30,8 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
     Colors.orange[200]
   ];
 
-  final UserRepository _userRepository;
 
-  _OnboardingScreenState({Key key, @required UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  _OnboardingScreenState();
 
   /*
   Builds the page indicator widget

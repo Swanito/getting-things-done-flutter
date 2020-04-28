@@ -1,22 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/procesar/process_list.dart';
 
 class ProcessScreen extends StatelessWidget {
-  final UserRepository _userRepository;
-  GTDAppBar _gtdAppBar = GTDAppBar(
+
+  final GTDAppBar _gtdAppBar = GTDAppBar(
     title: 'Procesar',
     canSearch: false,
     factor: BarSizeFactor.Small,
   );
 
-  ProcessScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  ProcessScreen({Key key});
 
   @override
   Widget build(BuildContext context) {

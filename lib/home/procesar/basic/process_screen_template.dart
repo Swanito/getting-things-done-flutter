@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
-import 'package:gtd/core/styles.dart';
 import 'package:lottie/lottie.dart';
 
 // typedef void ContinueCallback(

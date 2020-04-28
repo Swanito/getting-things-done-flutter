@@ -7,7 +7,6 @@ import 'package:gtd/core/models/gtd_project.dart';
 abstract class Repository {}
 
 abstract class ElementRepository {
-  Stream<GTDElement> getElement();
   Future<Stream<List<GTDElement>>> getElements();
   Future<void> createElement(GTDElement element);
   Future<void> updateElement(GTDElement element);

@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_element.dart';
-import 'package:gtd/core/models/gtd_project.dart';
 
 class CaptureEvent extends Equatable {
  const CaptureEvent();
@@ -51,7 +50,7 @@ class AttachImage extends CaptureEvent {
 class DeleteAttachedImage extends CaptureEvent {
   final GTDElement element;
 
-  DeleteAttachedImage(@required this.element);
+  DeleteAttachedImage(this.element);
 
   @override
   // TODO: implement props
@@ -79,7 +78,7 @@ class ClearForm extends CaptureEvent {
 class DownloadAttachedImage extends CaptureEvent {
   final GTDElement element;
 
-  DownloadAttachedImage(@required this.element);
+  DownloadAttachedImage(this.element);
 
   @override
   // TODO: implement props

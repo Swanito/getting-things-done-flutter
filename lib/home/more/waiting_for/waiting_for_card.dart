@@ -67,7 +67,7 @@ class WaitingForCard extends StatelessWidget {
                         style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      _onCompletePressed;
+                      _onCompletePressed();
                     },
                     child: Text('COMPLETAR',
                         style: TextStyle(color: Colors.orange))),

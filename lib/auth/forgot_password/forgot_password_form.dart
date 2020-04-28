@@ -56,7 +56,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 labelText: 'Email',
                 labelStyle: TextStyle(color: Colors.white),
                 hintStyle: TextStyle(color: Colors.white),
-                enabledBorder: new UnderlineInputBorder(
+                enabledBorder: UnderlineInputBorder(
                   borderSide: BorderSide(
                       color: Colors.white,
                       width: 1.0,

@@ -134,7 +134,7 @@ class RecoverFromTrash extends ElementEvent {
 }
 
 class Process extends ElementEvent {
-  GTDElement elementToBeProcessed;
+  final GTDElement elementToBeProcessed;
 
   Process(this.elementToBeProcessed);
 
@@ -146,8 +146,8 @@ class Process extends ElementEvent {
 }
 
 class AddContextToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  String context;
+  final GTDElement elementToBeProcessed;
+  final String context;
 
   AddContextToElement(this.elementToBeProcessed, this.context);
 
@@ -159,8 +159,8 @@ class AddContextToElement extends ElementEvent {
       'Process { AddContextToElement: $elementToBeProcessed, context: $context }';
 }
 class AddDateToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  String date;
+  final GTDElement elementToBeProcessed;
+  final String date;
 
   AddDateToElement(this.elementToBeProcessed, this.date);
 
@@ -173,8 +173,8 @@ class AddDateToElement extends ElementEvent {
 }
 
 class AddRecurrencyToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  int number;
+  final GTDElement elementToBeProcessed;
+  final int number;
   DatePeriod period;
 
   AddRecurrencyToElement(this.elementToBeProcessed, this.number, this.period);
@@ -188,8 +188,8 @@ class AddRecurrencyToElement extends ElementEvent {
 }
 
 class AddProjectToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  String projectTitle;
+  final GTDElement elementToBeProcessed;
+  final String projectTitle;
 
   AddProjectToElement(this.elementToBeProcessed, this.projectTitle);
 
@@ -202,8 +202,8 @@ class AddProjectToElement extends ElementEvent {
 }
 
 class AddDescriptionToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  String description;
+  final GTDElement elementToBeProcessed;
+  final String description;
 
   AddDescriptionToElement(this.elementToBeProcessed, this.description);
 
@@ -216,8 +216,8 @@ class AddDescriptionToElement extends ElementEvent {
 }
 
 class AddTitleToElement extends ElementEvent {
-  GTDElement elementToBeProcessed;
-  String title;
+  final GTDElement elementToBeProcessed;
+  final String title;
 
   AddTitleToElement(this.elementToBeProcessed, this.title);
 

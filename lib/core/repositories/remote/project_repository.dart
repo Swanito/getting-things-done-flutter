@@ -29,7 +29,6 @@ class ProjectRepositoryImpl implements ProjectRepository {
   @override
   Future<Stream<List<Project>>> getProjects() async {
     uid = await getCurrentUserId();
-    print('Current user uid: ${uid}');
     return projectCollection
         .where('createdBy', isEqualTo: uid)
         .snapshots()

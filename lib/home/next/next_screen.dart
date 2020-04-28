@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/models/gtd_element.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/next/next_bloc.dart';
 import 'package:gtd/home/next/next_list.dart';
 import 'package:gtd/home/next/next_state.dart';
 
 class NextScreen extends StatelessWidget {
-  final UserRepository _userRepository;
 
-  NextScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  NextScreen({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +26,6 @@ class NextScreen extends StatelessWidget {
                 Colors.orange[600],
                 Colors.orange[400],
                 Colors.orange[200],
-                // Colors.orange[100],
               ]),
         )),
       ),

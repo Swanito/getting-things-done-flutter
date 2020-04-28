@@ -1,4 +1,3 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
@@ -104,7 +103,7 @@ class _NextCardState extends State<NextCard> {
                             size: 13, color: Colors.grey[600]),
                         Text(
                             widget._processedElement.contexts != null &&
-                                    widget._processedElement.contexts.length > 0
+                                    widget._processedElement.contexts.isNotEmpty
                                 ? '${widget._processedElement.contexts.first} y ${widget._processedElement.contexts.length - 1} más'
                                 : 'Sin contexto',
                             style: TextStyle(

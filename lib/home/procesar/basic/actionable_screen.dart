@@ -4,9 +4,7 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
-import 'package:gtd/home/procesar/basic/basic_process.dart';
 import 'package:gtd/home/procesar/basic/process_screen_template.dart';
-import 'package:lottie/lottie.dart';
 
 class ActionableScreen extends StatefulWidget {
   final GTDElement element;

@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/waiting_for/waiting_for_list.dart';
 
 class WaitingForScreen extends StatelessWidget {
-  final UserRepository _userRepository;
 
-  WaitingForScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  WaitingForScreen({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +24,6 @@ class WaitingForScreen extends StatelessWidget {
                 Colors.orange[600],
                 Colors.orange[400],
                 Colors.orange[200],
-                // Colors.orange[100],
               ]),
         )),
       ),
@@ -62,6 +57,7 @@ class WaitingForScreen extends StatelessWidget {
                     _showErrorSnackbar(context);
                     return Container();
                   }
+                  return Container();
                 },
               ))
         ],

@@ -8,24 +8,18 @@ import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/common/attached_image_card.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 
 enum DatePeriod { WEEK, DAY }
 
 class AdvancedProcessForm extends StatefulWidget {
-  final UserRepository _userRepository;
-  final bool _isEditing;
+
   final GTDElement _element;
 
   AdvancedProcessForm(
-      {@required userRepository, @required isEditing, @required element})
-      : assert(userRepository != null),
-        assert(isEditing != null),
-        assert(element != null),
-        _element = element,
-        _isEditing = isEditing,
-        _userRepository = userRepository;
+      {@required element})
+      : assert(element != null),
+        _element = element;
 
   @override
   State<StatefulWidget> createState() {
@@ -54,7 +48,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   String _imageFileName;
   File _imageFile;
 
-  Chip newContextChip;
+  Chip ContextChip;
 
   bool get isPopulated => _summaryController.text.isNotEmpty;
   bool get isContextPopulated => _contextController.text.isNotEmpty;
@@ -117,7 +111,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                 children: [
                   TextFormField(
                     controller: _summaryController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     decoration: InputDecoration(
                       icon: Icon(Icons.edit, color: Colors.white),
@@ -125,13 +119,13 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                       labelStyle: TextStyle(color: Colors.white),
                       hintStyle: TextStyle(color: Colors.white),
                       errorStyle: TextStyle(color: Colors.white),
-                      errorBorder: new UnderlineInputBorder(
+                      errorBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
                             style: BorderStyle.solid),
                       ),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
@@ -153,7 +147,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                   ),
                   TextFormField(
                     controller: _descriptionController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     maxLines: null,
                     decoration: InputDecoration(
@@ -161,7 +155,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                       labelText: 'Descripción',
                       labelStyle: TextStyle(color: Colors.white),
                       hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
@@ -209,14 +203,14 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                   ),
                   TextFormField(
                     controller: _projectController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     decoration: InputDecoration(
                       icon: Icon(Icons.lightbulb_outline, color: Colors.white),
                       labelText: 'Proyecto',
                       labelStyle: TextStyle(color: Colors.white),
                       hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
@@ -232,14 +226,14 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                   ),
                   TextFormField(
                     controller: _contextController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     decoration: InputDecoration(
                         icon: Icon(Icons.dialpad, color: Colors.white),
                         labelText: 'Contexto',
                         labelStyle: TextStyle(color: Colors.white),
                         hintStyle: TextStyle(color: Colors.white),
-                        enabledBorder: new UnderlineInputBorder(
+                        enabledBorder:  UnderlineInputBorder(
                           borderSide: BorderSide(
                               color: Colors.white,
                               width: 1.0,
@@ -270,14 +264,14 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
                   ),
                   TextFormField(
                     controller: _dateController,
-                    style: new TextStyle(
+                    style:  TextStyle(
                         fontWeight: FontWeight.normal, color: Colors.white),
                     decoration: InputDecoration(
                       icon: Icon(Icons.calendar_today, color: Colors.white),
                       labelText: 'Fecha ocurrencia',
                       labelStyle: TextStyle(color: Colors.white),
                       hintStyle: TextStyle(color: Colors.white),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.white,
                             width: 1.0,
@@ -365,11 +359,11 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
 
   void _onFormSubmitted() {
     _elementBloc.add(
-        AddTitleToElement(widget._element, _summaryController.text ?? null));
+        AddTitleToElement(widget._element, _summaryController.text));
     _elementBloc.add(AddDescriptionToElement(
-        widget._element, _descriptionController.text ?? null));
+        widget._element, _descriptionController.text));
     _elementBloc.add(
-        AddProjectToElement(widget._element, _projectController.text ?? null));
+        AddProjectToElement(widget._element, _projectController.text));
     String contexts = "";
     Text label;
     contextList.forEach(
@@ -387,23 +381,23 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   }
 
   void _addChip(String chipLabel) => setState(() => {
-        newContextChip = Chip(
+        ContextChip = Chip(
             label: Text(chipLabel),
             backgroundColor: Colors.white,
             deleteIconColor: Colors.orange,
             onDeleted: () {
               setState(() {
-                contextList.removeWhere((entryChip) {
-                  entryChip.label == chipLabel;
+                contextList.removeWhere((Chip entryChip) {
+                  return (entryChip.label as Text).toString() == chipLabel;
                 });
               });
             }),
-        contextList.add(newContextChip),
+        contextList.add(ContextChip),
         _contextController.clear()
       });
 
-  void _checkBoxMarked(bool newValue) => setState(() {
-        isRecurrent = newValue;
+  void _checkBoxMarked(bool Value) => setState(() {
+        isRecurrent = Value;
       });
 
   Widget _showAttachedImage(ImageAttached imageState) {
@@ -429,7 +423,7 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
   }
 
   Widget _showRecurrentField() {
-    var list = new List<int>.generate(31, (i) => i + 1);
+    var list =  List<int>.generate(31, (i) => i + 1);
 
     return Row(
       children: <Widget>[
@@ -440,9 +434,9 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
             height: 2,
             color: Colors.white,
           ),
-          onChanged: (int newValue) {
+          onChanged: (int Value) {
             setState(() {
-              dropdownDayValue = newValue;
+              dropdownDayValue = Value;
             });
           },
           items: list.map<DropdownMenuItem<int>>((int value) {
@@ -459,9 +453,9 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
             height: 2,
             color: Colors.white,
           ),
-          onChanged: (String newValue) {
+          onChanged: (String Value) {
             setState(() {
-              dropdownPeriodValue = newValue;
+              dropdownPeriodValue = Value;
               dropdownPeriod = dropdownPeriodValue == 'Semanas'
                   ? DatePeriod.WEEK
                   : DatePeriod.DAY;
@@ -486,10 +480,11 @@ class AdvancedProcessFormState extends State<AdvancedProcessForm> {
         locale: const Locale('es', 'ES'),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
         _dateController.text = selectedDate.toLocal().toString().split(' ')[0];
       });
+    }
   }
 }

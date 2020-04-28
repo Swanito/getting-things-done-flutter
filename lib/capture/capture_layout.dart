@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:gtd/capture/capture_screen.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
-import 'package:gtd/core/repositories/repository.dart';
 
 class CaptureLayout extends ModalRoute {
 
@@ -24,15 +21,12 @@ class CaptureLayout extends ModalRoute {
       this.right});
 
   @override
-  // TODO: implement barrierColor
   Color get barrierColor => Colors.orange;
 
   @override
-  // TODO: implement barrierDismissible
   bool get barrierDismissible => true;
 
   @override
-  // TODO: implement barrierLabel
   String get barrierLabel => 'Barrie Label';
 
 @override

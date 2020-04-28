@@ -25,12 +25,12 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
 
   Future<void> continueFunction(
       {GTDElement element, UserRepository userRepository}) {
-    showCalendarDialog(element, userRepository);
+    return showCalendarDialog(element, userRepository);
   }
 
   Future<void> alternativeFunction(
       {GTDElement element, UserRepository userRepository}) {
-    showAlternativeDialog(element, userRepository);
+    return showAlternativeDialog(element, userRepository);
   }
 
   @override
@@ -68,7 +68,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
                   labelText: 'Contextos',
                   labelStyle: TextStyle(color: Colors.orange),
                   hintStyle: TextStyle(color: Colors.orange),
-                  enabledBorder: new UnderlineInputBorder(
+                  enabledBorder:  UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Colors.orange,
                         width: 1.0,
@@ -132,7 +132,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
                   labelText: 'Fecha',
                   labelStyle: TextStyle(color: Colors.orange),
                   hintStyle: TextStyle(color: Colors.orange),
-                  enabledBorder: new UnderlineInputBorder(
+                  enabledBorder:  UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Colors.orange,
                         width: 1.0,
@@ -186,10 +186,11 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
         locale: const Locale('es', 'ES'),
         firstDate: DateTime(2015, 8),
         lastDate: DateTime(2101));
-    if (picked != null && picked != selectedDate)
+    if (picked != null && picked != selectedDate) {
       setState(() {
         selectedDate = picked;
         _dateController.text = selectedDate.toLocal().toString().split(' ')[0];
       });
+    }
   }
 }

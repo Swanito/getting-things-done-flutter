@@ -19,7 +19,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
     _projectBloc = BlocProvider.of<ProjectBloc>(context);
   }
 
-  _showNewProjectPopUp(BuildContext context) {
+  _showProjectPopUp(BuildContext context) {
     showDialog<void>(
       context: context,
       builder: (BuildContext context) {
@@ -39,7 +39,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
                     labelText: 'Nombre del proyecto',
                     labelStyle: TextStyle(color: Colors.orange),
                     hintStyle: TextStyle(color: Colors.orange),
-                    enabledBorder: new UnderlineInputBorder(
+                    enabledBorder:  UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.orange,
                           width: 1.0,
@@ -72,7 +72,7 @@ class _NewProjectButtonState extends State<NewProjectButton> {
   Widget build(BuildContext context) {
     return BlocBuilder<ProjectBloc, ProjectState>(builder: (context, state) {
       return FlatButton(
-        onPressed: () => {_showNewProjectPopUp(context)},
+        onPressed: () => {_showProjectPopUp(context)},
         child: Text(
           'Nuevo Proyecto',
           style: TextStyle(

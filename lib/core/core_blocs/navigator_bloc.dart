@@ -144,14 +144,12 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
     } else if (event is NavigateToOnboarding) {
       navigatorKey.currentState.pushAndRemoveUntil(
           MaterialPageRoute(
-            builder: (context) => OnboardingScreen(userRepository: event.userRepository,)),
+            builder: (context) => OnboardingScreen()),
           (Route<dynamic> route) => false);
     } else if (event is OpenCaptureScreen) {
       navigatorKey.currentState.push(MaterialPageRoute(
           fullscreenDialog: true,
-          builder: (context) => CaptureScreen(
-              userRepository: userRepository,
-              elementRepository: elementRepository)));
+          builder: (context) => CaptureScreen()));
     } else if (event is NavigateToProjects) {
       navigatorKey.currentState
           .push(MaterialPageRoute(builder: (context) => ProjectScreen()));
@@ -169,21 +167,18 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
       }
     } else if (event is NavigateToTrash) {
       navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (context) => TrashScreen(userRepository: userRepository)));
+          builder: (context) => TrashScreen()));
     } else if (event is NavigateToReferenced) {
       navigatorKey.currentState.push(MaterialPageRoute(
           builder: (context) =>
-              ReferencedScreen(userRepository: userRepository)));
+              ReferencedScreen()));
     } else if (event is NavigateToWaitingFor) {
       navigatorKey.currentState.push(MaterialPageRoute(
           builder: (context) =>
-              WaitingForScreen(userRepository: userRepository)));
+              WaitingForScreen()));
     }else if (event is OpenSettings) {
       navigatorKey.currentState.push(MaterialPageRoute(
-          builder: (context) => SettingsScreen(
-                userRepository: userRepository,
-                localRepository: localRepository,
-              )));
+          builder: (context) => SettingsScreen()));
     } else if (event is OpenSystemSettings) {
       AppSettings.openAppSettings();
     } else if (event is OpenProcessScreen) {
@@ -203,8 +198,6 @@ class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
         navigatorKey.currentState.push(MaterialPageRoute(
             fullscreenDialog: true,
             builder: (context) => AdvancedProcess(
-                userRepository: userRepository,
-                isEditing: false,
                 element: event.elementToBeProcessed)));
       } else {
         print('Invalid GTD Level state');

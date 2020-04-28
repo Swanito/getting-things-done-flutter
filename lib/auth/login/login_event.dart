@@ -1,4 +1,3 @@
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:meta/meta.dart';
 import 'package:equatable/equatable.dart';
 

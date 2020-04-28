@@ -6,9 +6,9 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 
 class AttachedImageCard extends StatelessWidget {
-  Image image;
-  String fileName;
-  GTDElement element;
+  final Image image;
+  final String fileName;
+  final GTDElement element;
 
   AttachedImageCard({@required this.image, @required this.fileName, this.element});
 

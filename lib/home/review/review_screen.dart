@@ -1,18 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/projects/project_bloc.dart';
 import 'package:gtd/home/more/projects/project_state.dart';
 import 'package:gtd/home/review/review_list.dart';
 
 class ReviewScreen extends StatelessWidget {
-  final UserRepository _userRepository;
 
-  ReviewScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  ReviewScreen({Key key});
 
   @override
   Widget build(BuildContext context) {

@@ -2,16 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/remote/element_repository.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 import 'package:gtd/home/more/referenced/referenced_list.dart';
 
 class ReferencedScreen extends StatelessWidget {
-  final UserRepository _userRepository;
 
-  ReferencedScreen({Key key, UserRepository userRepository})
-      : assert(userRepository != null),
-        _userRepository = userRepository;
+  ReferencedScreen({Key key});
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +58,7 @@ class ReferencedScreen extends StatelessWidget {
                     _showErrorSnackbar(context);
                     return Container();
                   }
+                  return Container();
                 },
               ))
         ],

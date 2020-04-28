@@ -12,7 +12,6 @@ class ProcessBloc extends Bloc<ProcessEvent, ProcessState> {
         _elementRepository = elementRepository;
 
   @override
-  // TODO: implement initialState
   ProcessState get initialState => NotProcessed();
 
   @override
@@ -25,7 +24,7 @@ class ProcessBloc extends Bloc<ProcessEvent, ProcessState> {
   Stream<ProcessState> _mapProcessElementToState(ProcessElement event) async* {
     event.element.currentStatus = 'PROCESSED';
     try {
-      _elementRepository.updateElement(event.element);
+      await _elementRepository.updateElement(event.element);
       yield ProcessedSuccessfully();
     } catch (error) {
       yield ErrorProcessing();

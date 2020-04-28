@@ -10,7 +10,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/core/models/gtd_project_entity.dart';
-import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/project_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
 import 'package:gtd/home/procesar/advanced/advanced_process_form.dart';
@@ -30,7 +29,6 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
         _elementRepository = elementRepository;
 
   @override
-  // TODO: implement initialState
   get initialState => LoadingElements();
 
   @override
@@ -77,22 +75,22 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
   }
 
   Stream<ElementState> _mapLoadEventsToState() async* {
-    _elementSubscription?.cancel();
+    await _elementSubscription?.cancel();
     _elementSubscription = await _elementRepository.getElements().then(
           (value) => value.listen((elements) => add(ElementsUpdated(elements))),
         );
   }
 
   Stream<ElementState> _mapCreateElementToState(CreateElement event) async* {
-    _elementRepository.createElement(event.element);
+    await _elementRepository.createElement(event.element);
   }
 
   Stream<ElementState> _mapDeleteElementToState(DeleteElement event) async* {
-    _elementRepository.deleteElement(event.element);
+    await _elementRepository.deleteElement(event.element);
   }
 
   Stream<ElementState> _mapUpdateElementToState(UpdateElement event) async* {
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
   }
 
   Stream<ElementState> _mapElementsUpdatedToState(
@@ -104,15 +102,15 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       MarkAsCompleted event) async* {
     event.element.currentStatus = 'COMPLETED';
     event.element.completedAt = Timestamp.now();
-    _elementRepository.updateElement(event.element);
-    HapticFeedback.mediumImpact();
+    await _elementRepository.updateElement(event.element);
+    await HapticFeedback.mediumImpact();
     yield ElementCompleted(event.element);
   }
 
   Stream<ElementState> _mapProcessToState(Process event) async* {
     event.elementToBeProcessed.lastStatus = event.elementToBeProcessed.currentStatus;
     event.elementToBeProcessed.currentStatus = 'PROCESSED';
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
     yield ElementProcessed();
   }
 
@@ -120,28 +118,28 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       UnmarkAsCompleted event) async* {
     event.element.currentStatus = 'PROCESSED';
     event.element.completedAt = null;
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }
 
   Stream<ElementState> _mapRecoverFromTrashToState(
       RecoverFromTrash event) async* {
     event.element.currentStatus = event.element.lastStatus;
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield LoadingElements();
   }
 
   Stream<ElementState> _mapMoveToDeleteToState(MoveToDelete event) async* {
     event.element.lastStatus = event.element.currentStatus;
     event.element.currentStatus = 'DELETED';
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield ElementDeleted();
   }
 
   Stream<ElementState> _mapMoveToReferenceToState(
       MoveToReference event) async* {
     event.element.currentStatus = 'REFERENCED';
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield ElementProcessed();
   }
 
@@ -149,7 +147,7 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       MoveToWaintingFor event) async* {
     event.element.currentStatus = 'WAITINGFOR';
     event.element.asignee = event.asignee;
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
     yield ElementProcessed();
   }
 
@@ -162,12 +160,12 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
       arrayWithoutSpaces.add(context.trim());
     }
     event.elementToBeProcessed.contexts = arrayWithoutSpaces;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   Stream<ElementState> _mapAddDateToElement(AddDateToElement event) async* {
     event.elementToBeProcessed.dueDate = event.date != "" ? event.date : null;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   Stream<ElementState> _mapAddProjectToElementToState(
@@ -192,17 +190,17 @@ class ElementBloc extends Bloc<ElementEvent, ElementState> {
     }
 
     event.elementToBeProcessed.project = projectToBeAdded;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   Stream<ElementState> _mapAddDescriptionToElementToState(AddDescriptionToElement event) async* {
     event.elementToBeProcessed.description = event.description != "" ? event.description : null;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   Stream<ElementState> _mapAddTitleToElementToState(AddTitleToElement event) async* {
     event.elementToBeProcessed.summary = event.title != "" ? event.title : null;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
 Stream<ElementState> _mapAddRecurrencyToElementToState(AddRecurrencyToElement event) async* {
@@ -217,7 +215,7 @@ Stream<ElementState> _mapAddRecurrencyToElementToState(AddRecurrencyToElement ev
     }
 
     event.elementToBeProcessed.repeatInterval = timeInterval;
-    _elementRepository.updateElement(event.elementToBeProcessed);
+    await _elementRepository.updateElement(event.elementToBeProcessed);
   }
 
   Stream<ElementState> _mapAddImageToElementToState(AddImageToElement event) async* {
@@ -227,7 +225,7 @@ Stream<ElementState> _mapAddRecurrencyToElementToState(AddRecurrencyToElement ev
         imageRemotePath = await _elementRepository.uploadFile(event.imageFile, uuid.v4());
     }
     event.element.imageRemotePath = imageRemotePath;
-    _elementRepository.updateElement(event.element);
+    await _elementRepository.updateElement(event.element);
   }
 
   @override

@@ -50,7 +50,7 @@ String _asignee = "";
                   labelText: 'Quién tiene que hacerlo?',
                   labelStyle: TextStyle(color: Colors.orange),
                   hintStyle: TextStyle(color: Colors.orange),
-                  enabledBorder: new UnderlineInputBorder(
+                  enabledBorder:  UnderlineInputBorder(
                     borderSide: BorderSide(
                         color: Colors.orange,
                         width: 1.0,

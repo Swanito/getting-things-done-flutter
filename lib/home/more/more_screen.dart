@@ -5,7 +5,6 @@ import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
-import 'package:gtd/main.dart';
 
 class MoreScreen extends StatelessWidget {
   final UserRepository _userRepository;

@@ -144,5 +144,5 @@ class LoginState {
 class ResetPasswordLinkSent extends LoginState {
   final String email;
 
-  ResetPasswordLinkSent(@required this.email);
+  ResetPasswordLinkSent(this.email);
 }

@@ -55,18 +55,18 @@ class AuthenticationBloc
 
   Stream<AuthenticationState> _mapLoggedOutToState() async* {
     yield Unauthenticated();
-    _userRepository.signOut();
+    await _userRepository.signOut();
   }
 
   Stream<AuthenticationState> _mapRegisterCompletedEvent() async* {
     yield Unauthenticated();
     final user = await _userRepository.getUserProfile();
-    _userRepository.sendEmailVerificationLink(user);
+    await _userRepository.sendEmailVerificationLink(user);
   } 
 
   Stream<AuthenticationState> _mapResendVerificationEmailEvent() async* {
     yield Unauthenticated();
     final user = await _userRepository.getUserProfile();
-    _userRepository.sendEmailVerificationLink(user);
+    await _userRepository.sendEmailVerificationLink(user);
   } 
 }

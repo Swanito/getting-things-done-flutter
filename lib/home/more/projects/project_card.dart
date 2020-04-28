@@ -96,7 +96,7 @@ class ProjectCardState extends State<ProjectCard> {
                       labelText: 'Nombre del proyecto',
                       labelStyle: TextStyle(color: Colors.orange),
                       hintStyle: TextStyle(color: Colors.orange),
-                      enabledBorder: new UnderlineInputBorder(
+                      enabledBorder:  UnderlineInputBorder(
                         borderSide: BorderSide(
                             color: Colors.orange,
                             width: 1.0,

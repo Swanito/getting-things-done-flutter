@@ -5,7 +5,7 @@ import '../repository.dart';
 
 class LocalRepository extends Repository {
 
-  LocalRepository._privateConstructor() {}
+  LocalRepository._privateConstructor();
 
   static final LocalRepository _instance =
       LocalRepository._privateConstructor();
@@ -45,9 +45,9 @@ class LocalRepository extends Repository {
 
   Future<void> logout() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    prefs.remove('isOnboardingCompleted');
-    prefs.remove('gtdLevel');
-    prefs.remove('reviewNotifications');
-    prefs.clear();
+    await prefs.remove('isOnboardingCompleted');
+    await prefs.remove('gtdLevel');
+    await prefs.remove('reviewNotifications');
+    await prefs.clear();
   }
 }

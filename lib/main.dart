@@ -88,8 +88,7 @@ class GTDState extends State<GTD> {
         localRepository: widget._localRepository);
     ProjectBloc projectBloc =
         ProjectBloc(projectRepository: widget._projectRepository);
-    CaptureBloc captureBloc = CaptureBloc(
-        userRepository: widget._userRepository, elementRepository: widget._elementRepository);
+    CaptureBloc captureBloc = CaptureBloc(elementRepository: widget._elementRepository);
     ElementBloc elementBloc = ElementBloc(elementRepository: widget._elementRepository);
     NextBloc nextBloc = NextBloc();
 
@@ -138,7 +137,7 @@ class GTDState extends State<GTD> {
                     return SplashScreen();
                   }
                   if (localState is OnboardingNotCompleted) {
-                    return OnboardingScreen(userRepository: widget._userRepository);
+                    return OnboardingScreen();
                   }
                   if (localState is OnboardingCompleted) {
                     return AuthScreen();
@@ -150,7 +149,7 @@ class GTDState extends State<GTD> {
             if (state is Authenticated) {
                 return HomeScreen(userRepository: widget._userRepository, currentUser: state.displayName);
             }
-            return OnboardingScreen(userRepository: widget._userRepository);
+            return OnboardingScreen();
           }),
         ));
   }

@@ -1,23 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
-import 'package:gtd/core/keys.dart';
-import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
-import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class SettingsScreen extends StatefulWidget {
-  final UserRepository _userRepository;
-  final LocalRepository _localRepository;
 
   bool _notificationsSwitch;
   String selectedGTDLevel;
+
   SettingsScreen(
-      {Key key, UserRepository userRepository, LocalRepository localRepository})
-      : assert(userRepository != null),
-        assert(localRepository != null),
-        _localRepository = localRepository,
-        _userRepository = userRepository;
+      {Key key});
 
   @override
   State<StatefulWidget> createState() {
@@ -83,13 +75,13 @@ class SettingsScreenState extends State<SettingsScreen> {
                             'Esto cambiará la manera de procesar elementos'),
                         contentPadding:
                             EdgeInsets.only(left: 40, right: 40, top: 20),
-                        trailing: new DropdownButton<String>(
+                        trailing:  DropdownButton<String>(
                           value:
                               _mapStringToTranslation(widget.selectedGTDLevel),
                           items: GTDLevel.values.map((GTDLevel value) {
-                            return new DropdownMenuItem<String>(
+                            return  DropdownMenuItem<String>(
                               value: _mapGTDLevelToString(value),
-                              child: new Text(
+                              child:  Text(
                                 _mapGTDLevelToString(value),
                                 style: TextStyle(color: Colors.black),
                               ),
@@ -161,6 +153,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         return 'Básico';
         break;
     }
+    return 'Básico';
   }
 
   GTDLevel _mapStringToGTDLevel(String level) {
@@ -172,6 +165,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         return GTDLevel.Low;
         break;
     }
+    return GTDLevel.Low;
   }
 
   String _mapStringToTranslation(String level) {
@@ -183,6 +177,7 @@ class SettingsScreenState extends State<SettingsScreen> {
         return 'Básico';
         break;
     }
+    return 'Básico';
   }
 
   String _mapTranslationToString(String level) {
@@ -194,5 +189,6 @@ class SettingsScreenState extends State<SettingsScreen> {
         return 'GTDLevel.Low';
         break;
     }
+    return 'GTDLevel.Low';
   }
 }
