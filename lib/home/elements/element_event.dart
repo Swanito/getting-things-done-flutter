@@ -175,7 +175,7 @@ class AddDateToElement extends ElementEvent {
 class AddRecurrencyToElement extends ElementEvent {
   final GTDElement elementToBeProcessed;
   final int number;
-  DatePeriod period;
+  final DatePeriod period;
 
   AddRecurrencyToElement(this.elementToBeProcessed, this.number, this.period);
 

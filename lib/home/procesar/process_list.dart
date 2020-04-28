@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/procesar/process_card.dart';
-
+// ignore: must_be_immutable
 class ProcessList extends StatefulWidget {
 
   List<GTDElement> elements = [];

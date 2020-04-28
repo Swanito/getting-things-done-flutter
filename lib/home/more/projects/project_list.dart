@@ -3,6 +3,7 @@ import 'package:gtd/core/models/gtd_project.dart';
 import 'package:gtd/home/more/projects/new-project-button.dart';
 import 'package:gtd/home/more/projects/project_card.dart';
 
+// ignore: must_be_immutable
 class ProjectList extends StatefulWidget {
   List<Project> elements = [];
 

@@ -5,6 +5,7 @@ import 'package:gtd/home/next/next_bloc.dart';
 import 'package:gtd/home/next/next_card.dart';
 import 'package:gtd/home/next/next_event.dart';
 
+// ignore: must_be_immutable
 class NextList extends StatefulWidget {
   List<GTDElement> elements = [];
   bool completedElementsHidden;

@@ -10,6 +10,7 @@ enum ElementProcessStatus {
   COLLECTED
 }
 
+// ignore: must_be_immutable
 class ProjectEntity extends Equatable {
   final String id;
   final String title;

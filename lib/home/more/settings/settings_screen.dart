@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/common/gtd_app_bar.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 
+// ignore: must_be_immutable
 class SettingsScreen extends StatefulWidget {
 
   bool _notificationsSwitch;

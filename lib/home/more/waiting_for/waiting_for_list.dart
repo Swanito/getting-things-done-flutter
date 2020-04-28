@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/more/waiting_for/waiting_for_card.dart';
 
+// ignore: must_be_immutable
 class WaitingForList extends StatelessWidget {
   List<GTDElement> elements = [];
   List<GTDElement> filteredList = [];

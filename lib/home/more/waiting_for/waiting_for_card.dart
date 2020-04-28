@@ -4,6 +4,7 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 
+// ignore: must_be_immutable
 class WaitingForCard extends StatelessWidget {
   final GTDElement _deletedElement;
   ElementBloc _elementBloc;
