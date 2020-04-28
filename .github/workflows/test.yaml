@@ -37,7 +37,7 @@ jobs:
     if: github.event_name != 'pull_request'
     runs-on: macos-latest
     #Identifies any jobs that must complete successfully before this job will run.
-    needs: [drive_ios,drive_android,test]
+    needs: [test]
     name: Build ipa and desktop
     steps:
       - uses: actions/checkout@v1
