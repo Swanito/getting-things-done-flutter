@@ -19,3 +19,4 @@ Patrón estructural:
 Para empezar a trabajar con Flutter, ver la [documentación online](https://flutter.dev/docs), donde hay tutoriales, ejemplos, guías de desarrollo móvil y una referencia completa de la API.
 
 ## Screenshots
+
