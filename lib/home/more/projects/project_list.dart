@@ -22,7 +22,6 @@ class _ProjectListState extends State<ProjectList> {
           children: <Widget>[
             Expanded(
               child: ListView.builder(
-                // shrinkWrap: true,
                 itemCount: widget.elements.length,
                 itemBuilder: (BuildContext context, int index) {
                   return Padding(
@@ -42,14 +41,15 @@ class _ProjectListState extends State<ProjectList> {
       );
     } else {
       return Column(children: [
-        Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text('No tienes ningún proyecto creado aún.'),
-            ),
+        Container(
+        height: MediaQuery.of(context).size.height / 2,
+        child: Center(
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text('No hay ningún proyecto creado.'),
           ),
         ),
+      ),
         NewProjectButton()
       ]);
     }

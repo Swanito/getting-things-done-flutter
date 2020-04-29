@@ -1,16 +1,19 @@
-# gtd
+# Do Things! ![Test, build and deploy](https://github.com/Swanito/gettingThingsDone/workflows/Test,%20build%20and%20deploy/badge.svg)[![Codemagic build status](https://api.codemagic.io/apps/5ea9a84b76654b209b42629c/5ea9a84b76654b209b42629b/status_badge.svg)](https://codemagic.io/apps/5ea9a84b76654b209b42629c/5ea9a84b76654b209b42629b/latest_build)[![codecov](https://codecov.io/gh/Swanito/gettingThingsDone/branch/master/graph/badge.svg)](https://codecov.io/gh/Swanito/gettingThingsDone)[![Codacy Badge](https://api.codacy.com/project/badge/Grade/91a258b66b3c41f49a459d11733a47ed)](https://www.codacy.com/manual/Swanito/gettingThingsDone?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=Swanito/gettingThingsDone&amp;utm_campaign=Badge_Grade)
 
-A new Flutter project.
+Trabajo de fin de grado de ingeniería informática en la Universidad Oberta de Catalunya. Aplicación para trabajar con Getting Things Done® en dispositivos móviles iOS.
+
+Aplicación desarrollada en Dart con el SDK de Google Flutter.
 
 ## Getting Started
 
-This project is a starting point for a Flutter application.
+Tecnologías usadas en el proyecto:
 
-A few resources to get you started if this is your first Flutter project:
+- [Flutter](https://flutter.dev/)
+- [Firebase](http://firebase.google.com/)
 
-- [Lab: Write your first Flutter app](https://flutter.dev/docs/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://flutter.dev/docs/cookbook)
+Patrón estructural:
 
-For help getting started with Flutter, view our
-[online documentation](https://flutter.dev/docs), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- [Librería Flutter BLoC](https://bloclibrary.dev/#/)
+
+
+Para empezar a trabajar con Flutter, ver la [documentación online](https://flutter.dev/docs), donde hay tutoriales, ejemplos, guías de desarrollo móvil y una referencia completa de la API.

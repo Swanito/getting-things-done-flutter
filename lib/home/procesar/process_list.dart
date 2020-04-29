@@ -40,11 +40,9 @@ class _ProcessListState extends State<ProcessList> {
       return Container(
         height: MediaQuery.of(context).size.height / 2,
         child: Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text('No has creado ningún elemento todavía.'),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text('Aquí aparecerán los elementos pendiente de procesar.'),
           ),
         ),
       );

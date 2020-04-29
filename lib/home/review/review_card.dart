@@ -1,20 +1,24 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 
-class ReviewCard extends StatefulWidget {
-  final List<GTDElement> elements;
-  final Project project;
+// class ReviewCard extends StatefulWidget {
+//   final List<GTDElement> elements;
+//   final Project project;
 
-  ReviewCard({@required this.project, @required this.elements});
+//   ReviewCard({@required this.project, @required this.elements});
 
-  @override
-  _ReviewCardState createState() => _ReviewCardState();
-}
+//   @override
+//   _ReviewCardState createState() => _ReviewCardState();
+// }
 
-class _ReviewCardState extends State<ReviewCard> {
+class ReviewCard extends StatelessWidget{
   List<GTDElement> filteredElementList = [];
   List<GTDElement> _completedList = [];
+  List<GTDElement> elements;
+  Project project;
   int _completedElements = 0;
   int _totalElements = 0;
   double _progressIndicator = 0;
@@ -22,14 +26,13 @@ class _ReviewCardState extends State<ReviewCard> {
   String _projectCreationDate;
   String _projectTitle;
 
-  @override
-  void initState() {
-    _calculateProjectInfo();
-    super.initState();
-  }
+    ReviewCard({@required this.project, @required this.elements});
 
   @override
   Widget build(BuildContext context) {
+
+    _calculateProjectInfo();
+
     return Card(
       shape: Border(
           left: BorderSide(
@@ -98,12 +101,11 @@ class _ReviewCardState extends State<ReviewCard> {
               mainAxisAlignment: MainAxisAlignment.end,
               children: [
                 FlatButton(
-                    onPressed: () {},
-                    child: Text('ACTION 1',
-                        style: TextStyle(color: Colors.orange))),
-                FlatButton(
-                    onPressed: () {},
-                    child: Text('ACTION 2',
+                    onPressed: () {
+                      _onShowElementsPressed(
+                          context: context, elementsForProject: filteredElementList, project: project);
+                    },
+                    child: Text('VER ELEMENTOS',
                         style: TextStyle(color: Colors.orange))),
               ],
             ),
@@ -139,11 +141,11 @@ class _ReviewCardState extends State<ReviewCard> {
   }
 
   _getElementsForProject() {
-    filteredElementList = widget.elements.where((element) {
-      if (element.project != null && widget.project != null) {
-        return element.project.title == widget.project.title;
-      } 
-      if (element.project == null && widget.project == null) {
+    filteredElementList = elements.where((element) {
+      if (element.project != null && project != null) {
+        return element.project.title == project.title;
+      }
+      if (element.project == null && project == null) {
         return true;
       } else {
         return false;
@@ -152,12 +154,14 @@ class _ReviewCardState extends State<ReviewCard> {
   }
 
   _getProjectTitle() {
-    _projectTitle = widget.project != null ? widget.project.title : 'Sin Proyecto Asignado';
+    _projectTitle =
+        project != null ? project.title : 'Sin Proyecto Asignado';
   }
 
   _getProjectCreationDate() {
-    if (widget.project != null) {
-      _projectCreationDate = 'Creado el ${widget.project.createdAt.toDate().toString().split(' ')[0]}';
+    if (project != null) {
+      _projectCreationDate =
+          'Creado el ${project.createdAt.toDate().toString().split(' ')[0]}';
     }
   }
 
@@ -190,5 +194,36 @@ class _ReviewCardState extends State<ReviewCard> {
         _averageTime += completedAt.difference(createdAt).inDays;
       }
     }
+  }
+
+Future<void> _onShowElementsPressed({BuildContext context, List<GTDElement> elementsForProject, Project project}) {
+    return showDialog<void>(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: project != null ? Text('Elementos de ${project.title}') : Text('Elementos sin proyecto'),
+        content: Container(
+          width: double.maxFinite,
+          height: 150,
+          child: ListView.builder(
+                itemCount: elementsForProject.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(
+                      title: Text('Elemento: ' + elementsForProject[index].summary),
+                      subtitle: Text('Creado el ' + elementsForProject[index].createdAt.toDate().toString().split(' ')[0]),);
+                },
+              ),
+        ),
+        actions: <Widget>[
+          FlatButton(
+            child: Text('Ok'),
+            onPressed: () {
+              BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+            },
+          ),
+        ],
+      );
+    },
+  );
   }
 }

@@ -50,7 +50,21 @@ class _ReviewListState extends State<ReviewList> {
                         project: widget.projects[index],
                         elements: widget.elements);
                   } else {
-                    return ReviewCard(project: null, elements: widget.elements);
+                    if (widget.elements.isNotEmpty) {
+                      return ReviewCard(
+                          project: null, elements: widget.elements);
+                    } else {
+                      return Container(
+                        height: MediaQuery.of(context).size.height / 2,
+                        child: Center(
+                          child: Padding(
+                            padding: const EdgeInsets.all(20.0),
+                            child: Text(
+                                'Aquí aparecerá información relevante sobre tus proyectos en curso.', textAlign: TextAlign.center,),
+                          ),
+                        ),
+                      );
+                    }
                   }
                 },
               ),

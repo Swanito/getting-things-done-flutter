@@ -90,12 +90,13 @@ class _NextListState extends State<NextList> {
                 ],
               ),
             ),
-            Center(
-              child: Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+            Container(
+              height: MediaQuery.of(context).size.height / 2,
+              child: Padding(
+                padding: const EdgeInsets.all(20.0),
+                child: Center(
                   child: Text(
-                    'Genial! 😃 \n No tienes ningún elemento pendiente de completar! \n 👏👏👏👏',
+                    'Aquí aparecerán los elementos una vez procesados.',
                     textAlign: TextAlign.center,
                   ),
                 ),

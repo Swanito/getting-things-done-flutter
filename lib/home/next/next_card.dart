@@ -265,67 +265,67 @@ class _NextCardState extends State<NextCard> {
         return AlertDialog(
           title: Text('Detalles de $elementTitle'),
           content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: <Widget>[
-                Text(
-                  'Descripción',
-                  textAlign: TextAlign.left,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(elementDescription),
-                ),
-                Text(
-                  'Proyecto',
-                  textAlign: TextAlign.left,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(projectTitle),
-                ),
-                Text(
-                  'Contexto(s)',
-                  textAlign: TextAlign.left,
-                ),
-                Row(
-                  children: list,
-                ),
-                Text(
-                  'Fecha prevista',
-                  textAlign: TextAlign.left,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(dueDate),
-                ),
-                Text(
-                  'Creado el',
-                  textAlign: TextAlign.left,
-                ),
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text(createdAt.toDate().toString()),
-                ),
-                Text(
-                  'Archivos adjuntos',
-                  textAlign: TextAlign.left,
-                ),
-                BlocBuilder<CaptureBloc, CaptureState>(
-                  builder: (context, state) {
-                    if (state is ImageDownloaded) {
-          return Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: _showAttachedImage(state.attachedImage),
-          );
-                    } else {
-          return Text('Sin archivos adjuntos');
-                    }
-                  },
-                ),
-              ],
-            ),
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: <Widget>[
+              Text(
+                'Descripción',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(elementDescription),
+              ),
+              Text(
+                'Proyecto',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(projectTitle),
+              ),
+              Text(
+                'Contexto(s)',
+                textAlign: TextAlign.left,
+              ),
+              Row(
+                children: list,
+              ),
+              Text(
+                'Fecha prevista',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(dueDate),
+              ),
+              Text(
+                'Creado el',
+                textAlign: TextAlign.left,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Text(createdAt.toDate().toString()),
+              ),
+              Text(
+                'Archivos adjuntos',
+                textAlign: TextAlign.left,
+              ),
+              BlocBuilder<CaptureBloc, CaptureState>(
+                builder: (context, state) {
+                  if (state is ImageDownloaded) {
+                    return Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: _showAttachedImage(state.attachedImage),
+                    );
+                  } else {
+                    return Text('Sin archivos adjuntos');
+                  }
+                },
+              ),
+            ],
+          ),
           actions: [
             FlatButton(
                 onPressed: () {
@@ -341,7 +341,7 @@ class _NextCardState extends State<NextCard> {
   }
 
   Widget _showAttachedImage(Image image) {
-    return Center(child: Container(child: image, height: 200, width:150));
+    return Center(child: Container(child: image, height: 200, width: 150));
   }
 
   int _calculateRecurrency(int timeInterval, String period) {

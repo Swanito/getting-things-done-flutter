@@ -32,11 +32,9 @@ class TrashList extends StatelessWidget {
       return Container(
         height: MediaQuery.of(context).size.height / 2,
         child: Center(
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(20.0),
-              child: Text('No tienes ningún elemento pendiente de completar!'),
-            ),
+          child: Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: Text('La papelera está vacía.'),
           ),
         ),
       );
