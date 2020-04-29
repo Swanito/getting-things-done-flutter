@@ -8,16 +8,14 @@ import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class MoreScreen extends StatelessWidget {
   final UserRepository _userRepository;
-  final String _currentUser;
 
-  MoreScreen({Key key, UserRepository userRepository, String currentUser})
+  MoreScreen({Key key, UserRepository userRepository})
       : assert(userRepository != null),
-        assert(currentUser != null),
-        _currentUser = currentUser,
         _userRepository = userRepository;
 
   @override
   Widget build(BuildContext context) {
+
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -31,16 +29,20 @@ class MoreScreen extends StatelessWidget {
                 Colors.orange[600],
                 Colors.orange[400],
                 Colors.orange[200],
-                // Colors.orange[100],
               ]),
         )),
       ),
       body: Column(
         children: [
-          GTDAppBar(
-            title: 'Más',
-            factor: BarSizeFactor.Small,
-            currentUser: _currentUser,
+          FutureBuilder(
+            future: _userRepository.getUser(),
+            builder: (context, snap) {
+              return GTDAppBar(
+                title: 'Más',
+                factor: BarSizeFactor.Small,
+                currentUser: snap.data,
+              );
+            },
           ),
           Flexible(
             child: ListView(
@@ -119,8 +121,8 @@ class MoreScreen extends StatelessWidget {
                       BlocProvider.of<AuthenticationBloc>(context)
                           .add(LoggedOut()),
                       BlocProvider.of<LocalStatusBloc>(context).add(Logout()),
-                      BlocProvider.of<NavigatorBloc>(context)
-                          .add(NavigateToOnboarding(userRepository: _userRepository))
+                      BlocProvider.of<NavigatorBloc>(context).add(
+                          NavigateToOnboarding(userRepository: _userRepository))
                     },
                   ),
                 ),

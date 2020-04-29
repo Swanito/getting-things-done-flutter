@@ -10,18 +10,14 @@ import 'package:gtd/home/review/review_screen.dart';
 
 class HomeScreen extends StatefulWidget {
   final UserRepository _userRepository;
-  final String _currentUser;
 
   HomeScreen(
-      {Key key, UserRepository userRepository, String currentUser = "Unknown"})
+      {Key key, UserRepository userRepository})
       : assert(userRepository != null),
-        assert(currentUser != null),
-        _userRepository = userRepository,
-        _currentUser = currentUser;
+        _userRepository = userRepository;
 
   @override
   State<StatefulWidget> createState() {
-    print('Current user is $_currentUser');
     return HomeScreenState();
   }
 }
@@ -52,7 +48,6 @@ class HomeScreenState extends State<HomeScreen> {
       ReviewScreen(),
       MoreScreen(
         userRepository: widget._userRepository,
-        currentUser: widget._currentUser,
       ),
     ];
 
