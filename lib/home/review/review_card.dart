@@ -4,16 +4,7 @@ import 'package:gtd/core/core_blocs/navigator_bloc.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/core/models/gtd_project.dart';
 
-// class ReviewCard extends StatefulWidget {
-//   final List<GTDElement> elements;
-//   final Project project;
-
-//   ReviewCard({@required this.project, @required this.elements});
-
-//   @override
-//   _ReviewCardState createState() => _ReviewCardState();
-// }
-
+// ignore: must_be_immutable
 class ReviewCard extends StatelessWidget{
   List<GTDElement> filteredElementList = [];
   List<GTDElement> _completedList = [];
