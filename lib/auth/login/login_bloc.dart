@@ -50,6 +50,8 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       );
     } else if(event is ResetPassword) {
       yield* _mapResetPasswordToState(event);
+    } else if (event is ResendVerificationEmail) {
+      yield* _mapResendVerificationEmailEvent();
     }
   }
 
@@ -77,7 +79,7 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
   Stream<LoginState> _mapResetPasswordToState(ResetPassword event) async* {
     try {
       await _userRepository.resetPassword(event.email);
-      yield ResetPasswordLinkSent(event.email);
+      yield LoginState.recoveryEmailSent();
     } catch (error) {
       yield LoginState.failure();
     }
@@ -104,4 +106,10 @@ class LoginBloc extends Bloc<LoginEvent, LoginState> {
       }
     }
   }
+
+    Stream<LoginState> _mapResendVerificationEmailEvent() async* {
+    final user = await _userRepository.getUserProfile();
+    await _userRepository.sendEmailVerificationLink(user);
+    yield LoginState.recoveryEmailSent();
+  } 
 }

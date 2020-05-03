@@ -35,17 +35,23 @@ class WaitingForCard extends StatelessWidget {
                   padding: const EdgeInsets.only(bottom: 8.0),
                   child: Row(
                     children: <Widget>[
-                      Text(
-                        _deletedElement.summary,
-                        style: TextStyle(fontSize: 18),
+                      Container(
+                        width: MediaQuery.of(context).size.width / 1.75,
+                        child: Text(
+                          _deletedElement.summary,
+                          style: TextStyle(fontSize: 18),
+                        ),
                       ),
                     ],
                   ),
                 ),
                 Row(
                   children: <Widget>[
-                    Icon(Icons.assignment_ind,size: 13,
-                          color: Colors.grey[600],),
+                    Icon(
+                      Icons.assignment_ind,
+                      size: 13,
+                      color: Colors.grey[600],
+                    ),
                     Text(
                       'En espera por ${_deletedElement.asignee}',
                       style: TextStyle(fontSize: 13, color: Colors.grey[600]),
@@ -90,14 +96,16 @@ class WaitingForCard extends StatelessWidget {
             FlatButton(
               child: Text('Cancelar'),
               onPressed: () {
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
               },
             ),
             FlatButton(
               child: Text('Borrar'),
               onPressed: () {
-                    _elementBloc.add(DeleteElement(element));
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                _elementBloc.add(DeleteElement(element));
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
               },
             ),
           ],

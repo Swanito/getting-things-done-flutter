@@ -72,14 +72,17 @@ class _NextCardState extends State<NextCard> {
                       padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
                       child: Row(
                         children: [
-                          Text(widget._processedElement.summary,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  decoration:
-                                      widget._processedElement.currentStatus ==
-                                              'COMPLETED'
-                                          ? TextDecoration.lineThrough
-                                          : null))
+                          Container(
+                            width: MediaQuery.of(context).size.width / 1.75,
+                            child: Text(widget._processedElement.summary,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    decoration: widget._processedElement
+                                                .currentStatus ==
+                                            'COMPLETED'
+                                        ? TextDecoration.lineThrough
+                                        : null)),
+                          )
                         ],
                       ),
                     ),

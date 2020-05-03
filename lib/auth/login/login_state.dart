@@ -9,6 +9,7 @@ class LoginState {
   final bool isFailure;
   final bool areCredentialsValid;
   final bool isEmailVerified;
+  final bool hasSentRecoveryEmail;
 
   bool get isFormValid => isEmailValid && isPasswordValid;
 
@@ -19,78 +20,91 @@ class LoginState {
       @required this.isSuccess,
       @required this.isFailure,
       @required this.isEmailVerified,
-      @required this.areCredentialsValid});
+      @required this.areCredentialsValid,
+      @required this.hasSentRecoveryEmail});
 
   factory LoginState.empty() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: false,
-      isEmailVerified: false,
-      areCredentialsValid: true,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: false,
+        isEmailVerified: false,
+        areCredentialsValid: true,
+        hasSentRecoveryEmail: false);
   }
 
   factory LoginState.loading() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: true,
-      isSuccess: false,
-      isFailure: false,
-      isEmailVerified: false,
-      areCredentialsValid: true,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: true,
+        isSuccess: false,
+        isFailure: false,
+        isEmailVerified: false,
+        areCredentialsValid: true,
+        hasSentRecoveryEmail: false);
   }
 
   factory LoginState.failure() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: true,
-      isEmailVerified: false,
-      areCredentialsValid: true,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: true,
+        isEmailVerified: false,
+        areCredentialsValid: true,
+        hasSentRecoveryEmail: false);
   }
 
   factory LoginState.invalidCredentials() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: false,
-      isFailure: true,
-      isEmailVerified: false,
-      areCredentialsValid: false,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: false,
+        isFailure: true,
+        isEmailVerified: false,
+        areCredentialsValid: false,
+        hasSentRecoveryEmail: false);
   }
 
   factory LoginState.success() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: true,
-      isFailure: false,
-      isEmailVerified: true,
-      areCredentialsValid: true,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: true,
+        isFailure: false,
+        isEmailVerified: true,
+        areCredentialsValid: true,
+        hasSentRecoveryEmail: false);
   }
 
   factory LoginState.emailNotVerified() {
     return LoginState(
-      isEmailValid: true,
-      isPasswordValid: true,
-      isSubmitting: false,
-      isSuccess: true,
-      isFailure: false,
-      isEmailVerified: false,
-      areCredentialsValid: true,
-    );
+        isEmailValid: true,
+        isPasswordValid: true,
+        isSubmitting: false,
+        isSuccess: true,
+        isFailure: false,
+        isEmailVerified: false,
+        areCredentialsValid: true,
+        hasSentRecoveryEmail: false);
+  }
+
+  factory LoginState.recoveryEmailSent() {
+    return LoginState(
+        isEmailValid: true,
+        isPasswordValid: false,
+        isSubmitting: false,
+        isSuccess: true,
+        isFailure: false,
+        isEmailVerified: false,
+        areCredentialsValid: false,
+        hasSentRecoveryEmail: true);
   }
 
   LoginState update({
@@ -115,16 +129,18 @@ class LoginState {
     bool isSuccess,
     bool isFailure,
     bool isEmailVerified,
+    bool hasSentRecoveryEmail,
   }) {
     return LoginState(
-      isEmailValid: isEmailValid ?? this.isEmailValid,
-      isPasswordValid: isPasswordValid ?? this.isPasswordValid,
-      isSubmitting: isSubmitting ?? this.isSubmitting,
-      isSuccess: isSuccess ?? this.isSuccess,
-      isFailure: isFailure ?? this.isFailure,
-      isEmailVerified: isEmailVerified ?? this.isEmailVerified,
-      areCredentialsValid: areCredentialsValid ?? this.areCredentialsValid,
-    );
+        isEmailValid: isEmailValid ?? this.isEmailValid,
+        isPasswordValid: isPasswordValid ?? this.isPasswordValid,
+        isSubmitting: isSubmitting ?? this.isSubmitting,
+        isSuccess: isSuccess ?? this.isSuccess,
+        isFailure: isFailure ?? this.isFailure,
+        isEmailVerified: isEmailVerified ?? this.isEmailVerified,
+        areCredentialsValid: areCredentialsValid ?? this.areCredentialsValid,
+        hasSentRecoveryEmail:
+            hasSentRecoveryEmail ?? this.hasSentRecoveryEmail);
   }
 
   @override
@@ -136,13 +152,8 @@ class LoginState {
       isSuccess: $isSuccess,
       isFailure: $isFailure,
       isEmailVerified: $isEmailVerified,
-      areCredentialsValid: $areCredentialsValid
+      areCredentialsValid: $areCredentialsValid,
+      hasSentRecoveryEmail: $hasSentRecoveryEmail,
     }''';
   }
-}
-
-class ResetPasswordLinkSent extends LoginState {
-  final String email;
-
-  ResetPasswordLinkSent(this.email);
 }

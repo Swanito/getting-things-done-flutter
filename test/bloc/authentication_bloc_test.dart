@@ -61,13 +61,4 @@ void main() {
     act: (bloc) => bloc.add(RegisterCompleted()),
     expect: [Unauthenticated()],
   );
-
-  blocTest(
-    'ResendVerificationEmail yields Unauthenticated',
-    build: () async {
-      return AuthenticationBloc(userRepository: _mockUserRepository);
-    },
-    act: (bloc) => bloc.add(ResendVerificationEmail()),
-    expect: [Unauthenticated()],
-  );
 }

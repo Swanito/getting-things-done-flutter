@@ -85,3 +85,19 @@ class ResetPassword extends LoginEvent {
     return 'LoginWithCredentialsPressed { email: $email }';
   }
 }
+
+class ResendVerificationEmail extends LoginEvent {
+    final String email;
+  
+    const ResendVerificationEmail({
+    @required this.email,
+  });
+
+  @override
+  List<Object> get props => [email];
+
+  @override
+  String toString() {
+    return 'ResendVerificationEmail { email: $email }';
+  }
+}

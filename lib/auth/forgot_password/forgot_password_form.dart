@@ -36,8 +36,8 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
   Widget build(BuildContext context) {
 
     return BlocListener<LoginBloc, LoginState>(listener: (context, state) {
-      if(state is ResetPasswordLinkSent) {
-        _showSnackbar(context, 'Email enviado a ${state.email}', isError: false);
+      if(state.hasSentRecoveryEmail) {
+        _showSnackbar(context, 'Te hemos envíado un email de recuperación.', isError: false);
       } else if (state.isFailure) {
         _showSnackbar(context, 'Error enviando el mail', isError: true);
       }

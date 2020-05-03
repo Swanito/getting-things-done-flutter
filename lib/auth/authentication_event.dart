@@ -9,7 +9,7 @@ class AppStarted extends AuthenticationEvent {}
 
 class RegisterCompleted extends AuthenticationEvent {}
 
-class ResendVerificationEmail extends AuthenticationEvent {}
+// class ResendVerificationEmail extends AuthenticationEvent {}
 
 class LoggedIn extends AuthenticationEvent {}
 

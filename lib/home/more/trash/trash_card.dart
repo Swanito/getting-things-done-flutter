@@ -29,9 +29,12 @@ class TrashCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 22.0, left: 30.0),
             child: Row(
               children: [
-                Text(
-                  _deletedElement.summary,
-                  style: TextStyle(fontSize: 18),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.75,
+                  child: Text(
+                    _deletedElement.summary,
+                    style: TextStyle(fontSize: 18),
+                  ),
                 )
               ],
             ),
@@ -49,7 +52,7 @@ class TrashCard extends StatelessWidget {
                         style: TextStyle(color: Colors.orange))),
                 FlatButton(
                     onPressed: () {
-                      try{
+                      try {
                         _onRecoverPressed(_deletedElement);
                         _showSucessSnackbar(context);
                       } catch (error) {
@@ -76,14 +79,16 @@ class TrashCard extends StatelessWidget {
             FlatButton(
               child: Text('Cancelar'),
               onPressed: () {
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
               },
             ),
             FlatButton(
               child: Text('Borrar'),
               onPressed: () {
-                    _elementBloc.add(DeleteElement(element));
-                BlocProvider.of<NavigatorBloc>(context).add(NavigatorActionPop());
+                _elementBloc.add(DeleteElement(element));
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigatorActionPop());
               },
             ),
           ],
@@ -97,10 +102,16 @@ class TrashCard extends StatelessWidget {
   }
 
   void _showSucessSnackbar(BuildContext context) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text('Elemento recuperado con éxito.'),));
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('Elemento recuperado con éxito.'),
+      backgroundColor: Colors.green,
+    ));
   }
 
-    void _showErrorSnackbar(BuildContext context) {
-    Scaffold.of(context).showSnackBar(SnackBar(content: Text('No se pudo recuperar el elemento.'),));
+  void _showErrorSnackbar(BuildContext context) {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text('No se pudo recuperar el elemento.'),
+      backgroundColor: Colors.red,
+    ));
   }
 }

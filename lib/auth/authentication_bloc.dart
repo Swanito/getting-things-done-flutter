@@ -30,9 +30,7 @@ class AuthenticationBloc
       yield* _mapLoggedOutToState();
     } else if(event is RegisterCompleted) {
       yield* _mapRegisterCompletedEvent();
-    } else if (event is ResendVerificationEmail) {
-      yield* _mapResendVerificationEmailEvent();
-    }
+    } 
   }
 
   Stream<AuthenticationState> _mapAppStartedToState() async* {
@@ -59,12 +57,6 @@ class AuthenticationBloc
   }
 
   Stream<AuthenticationState> _mapRegisterCompletedEvent() async* {
-    yield Unauthenticated();
-    final user = await _userRepository.getUserProfile();
-    await _userRepository.sendEmailVerificationLink(user);
-  } 
-
-  Stream<AuthenticationState> _mapResendVerificationEmailEvent() async* {
     yield Unauthenticated();
     final user = await _userRepository.getUserProfile();
     await _userRepository.sendEmailVerificationLink(user);

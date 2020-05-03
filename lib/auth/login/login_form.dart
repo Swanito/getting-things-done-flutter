@@ -97,8 +97,8 @@ class _LoginFormState extends State<LoginForm> {
             );
         }
         if (state.isSuccess && !state.isEmailVerified) {
-          BlocProvider.of<AuthenticationBloc>(context)
-              .add(ResendVerificationEmail());
+          BlocProvider.of<LoginBloc>(context)
+              .add(ResendVerificationEmail(email: _emailController.text));
           _showVerificationEmailSentDialog();
         }
         if (state.isSuccess && state.isEmailVerified) {

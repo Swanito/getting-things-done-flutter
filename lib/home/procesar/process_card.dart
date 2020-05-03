@@ -25,9 +25,12 @@ class ProcessCard extends StatelessWidget {
             padding: const EdgeInsets.only(top: 22.0, left: 30.0),
             child: Row(
               children: [
-                Text(
-                  _collectedElement.summary,
-                  style: TextStyle(fontSize: 18),
+                Container(
+                  width: MediaQuery.of(context).size.width / 1.75,
+                  child: Text(
+                    _collectedElement.summary,
+                    style: TextStyle(fontSize: 18),
+                  ),
                 )
               ],
             ),
@@ -62,6 +65,7 @@ class ProcessCard extends StatelessWidget {
   }
 
   void _onProcessPressed(GTDElement element, BuildContext context) {
-    BlocProvider.of<NavigatorBloc>(context).add(OpenProcessScreen(elementToBeProcessed: element));
+    BlocProvider.of<NavigatorBloc>(context)
+        .add(OpenProcessScreen(elementToBeProcessed: element));
   }
 }
