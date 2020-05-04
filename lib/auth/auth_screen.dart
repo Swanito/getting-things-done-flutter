@@ -29,15 +29,19 @@ class AuthScreen extends StatelessWidget {
             Center(child: lottie),
             SizedBox(height: size.height / 12),
             Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
-                mainAxisAlignment: MainAxisAlignment.center,
-                mainAxisSize: MainAxisSize.max,
-                children: <Widget>[
-                  loginButton,
-                  SizedBox(height: 15),
-                  registerButton
-                ],
+              child: Padding(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16.0, vertical: 32),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  mainAxisSize: MainAxisSize.max,
+                  children: <Widget>[
+                    loginButton,
+                    SizedBox(height: 15),
+                    registerButton
+                  ],
+                ),
               ),
             ),
             Container(
@@ -57,28 +61,33 @@ class AuthScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Widget loginButton = ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width - 100,
+        minWidth: MediaQuery.of(context).size.width - 100,
         child: RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-      color: Colors.orange,
-      onPressed: () => {
-        BlocProvider.of<NavigatorBloc>(context).add(NavigateToLoginEvent()),
-      },
-      child: Text('Iniciar Sesión',
-          style: TextStyle(color: Colors.white, fontSize: 18)),
-    ));
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+          color: Colors.orange,
+          onPressed: () => {
+            BlocProvider.of<NavigatorBloc>(context).add(NavigateToLoginEvent()),
+          },
+          child: Text('Iniciar Sesión',
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+        ));
 
     final Widget registerButton = ButtonTheme(
-      minWidth: MediaQuery.of(context).size.width - 100,
+        minWidth: MediaQuery.of(context).size.width - 100,
         child: RaisedButton(
-      padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
-      color: Colors.orange,
-      onPressed: () => {
-        BlocProvider.of<NavigatorBloc>(context).add(NavigateToRegisterEvent()),
-      },
-      child: Text('Crear cuenta',
-          style: TextStyle(color: Colors.white, fontSize: 18)),
-    ));
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+          padding: EdgeInsets.symmetric(vertical: 16.0, horizontal: 24.0),
+          color: Colors.orange,
+          onPressed: () => {
+            BlocProvider.of<NavigatorBloc>(context)
+                .add(NavigateToRegisterEvent()),
+          },
+          child: Text('Crear cuenta',
+              style: TextStyle(color: Colors.white, fontSize: 18)),
+        ));
 
     return Scaffold(
       backgroundColor: Colors.orange[200],

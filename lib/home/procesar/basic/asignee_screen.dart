@@ -95,7 +95,7 @@ String _asignee = "";
     return ProcessScreenTemplate(
         title: 'Es tu responsabilidad hacerlo?',
         lottie: 'assets/pro_asignee.json',
-        description: 'Descripcion de tiempo',
+        description: 'Es posible que estés anotando una tarea que no sea tu responsabilidad o simplemente estás pendiente de que otra persona realice otra acción.',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,

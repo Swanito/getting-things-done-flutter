@@ -43,9 +43,10 @@ class ProcessScreenTemplate extends StatelessWidget {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: Container(
-              height: MediaQuery.of(context).size.height / 15,
-              width: MediaQuery.of(context).size.width - 100,
+            child: FittedBox(
+              fit: BoxFit.contain,
+              // height: MediaQuery.of(context).size.height / 15,
+              // width: MediaQuery.of(context).size.width - 100,
               child: Center(child: Text(title, style: TextStyle(fontSize: 26), textAlign: TextAlign.center,))
             ),
           ),

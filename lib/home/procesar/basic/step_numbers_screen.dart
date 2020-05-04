@@ -37,7 +37,7 @@ class _StepNumbersScreenState extends State<StepNumbersScreen> {
     return ProcessScreenTemplate(
         title: 'Se puede realizar en un solo paso?',
         lottie: 'assets/pro_steps.json',
-        description: 'Descripcion de accionable',
+        description: 'Una tarea se puede realizar en un solo paso si no necesitas nada más para realizarla y tiene sentido por sí misma.',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,

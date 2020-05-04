@@ -38,7 +38,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
     return ProcessScreenTemplate(
         title: 'Tiene fecha límite?',
         lottie: 'assets/pro_calendar.json',
-        description: 'Descripcion de tiempo',
+        description: 'Dinos si la tarea tiene fecha límite y la annadiremos al calendario.',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,
@@ -51,7 +51,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Veamos...'),
+          title: Text('Una cosa más...'),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
@@ -154,7 +154,7 @@ class _CalendarStepScreenState extends State<CalendarStepScreen> {
           ),
           actions: <Widget>[
             FlatButton(
-              child: Text('Procesar'),
+              child: Text('Listo'),
               onPressed: () {
                 BlocProvider.of<ElementBloc>(context)
                     .add(AddDateToElement(element, _dateController.text));

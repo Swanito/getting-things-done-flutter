@@ -63,7 +63,7 @@ class _TimeStepScreenState extends State<TimeStepScreen> {
     return ProcessScreenTemplate(
         title: 'Tardarías más de dos minutos en hacerlo?',
         lottie: 'assets/pro_chrono.json',
-        description: 'Descripcion de tiempo',
+        description: '2 minutos es el tiempo máximo que te debería llevar la tarea para realizarla de inmediato.',
         alternativeFunction: alternativeFunction,
         continueFunction: continueFunction,
         userRepository: widget.userRepository,

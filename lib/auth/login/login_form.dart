@@ -103,9 +103,9 @@ class _LoginFormState extends State<LoginForm> {
         }
         if (state.isSuccess && state.isEmailVerified) {
           BlocProvider.of<AuthenticationBloc>(context).add(LoggedIn());
-          BlocProvider.of<LocalStatusBloc>(context).add(CheckIfGTDLevelIsKnwon());
-          BlocProvider.of<NavigatorBloc>(context)
-              .add(NavigateToHome());
+          BlocProvider.of<LocalStatusBloc>(context)
+              .add(CheckIfGTDLevelIsKnwon());
+          BlocProvider.of<NavigatorBloc>(context).add(NavigateToHome());
         }
       },
       child: BlocBuilder<LoginBloc, LoginState>(
@@ -123,13 +123,14 @@ class _LoginFormState extends State<LoginForm> {
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder:  UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
                           style: BorderStyle.solid),
                     ),
                   ),
+                  style: TextStyle(color: Colors.white),
                   keyboardType: TextInputType.emailAddress,
                   autovalidate: true,
                   autocorrect: false,
@@ -147,7 +148,7 @@ class _LoginFormState extends State<LoginForm> {
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder:  UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -157,6 +158,7 @@ class _LoginFormState extends State<LoginForm> {
                   obscureText: true,
                   autovalidate: true,
                   autocorrect: false,
+                  style: TextStyle(color: Colors.white),
                   validator: (_) {
                     return !state.isPasswordValid
                         ? 'Contraseña no válida.'

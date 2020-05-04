@@ -64,6 +64,7 @@ class _ForgotPasswordFormState extends State<ForgotPasswordForm> {
                 ),
               ),
               keyboardType: TextInputType.emailAddress,
+              style: TextStyle(color: Colors.white),
               autovalidate: true,
               autocorrect: false,
               validator: (_) {

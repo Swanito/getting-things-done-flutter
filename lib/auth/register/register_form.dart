@@ -58,36 +58,36 @@ class _RegisterFormState extends State<RegisterForm> {
         if (state.isFailure) {
           if (state.isEmailAlreadyExists) {
             Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('La dirección de email ya está siendo utilizada.'),
-                    Icon(Icons.error),
-                  ],
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text('La dirección de email ya está siendo utilizada.'),
+                      Icon(Icons.error),
+                    ],
+                  ),
+                  backgroundColor: Colors.red,
                 ),
-                backgroundColor: Colors.red,
-              ),
-            );
+              );
           } else {
             Scaffold.of(context)
-            ..hideCurrentSnackBar()
-            ..showSnackBar(
-              SnackBar(
-                content: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text('Fallo en el registro. Intentelo de nuevo más tarde.'),
-                    Icon(Icons.error),
-                  ],
+              ..hideCurrentSnackBar()
+              ..showSnackBar(
+                SnackBar(
+                  content: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                          'Fallo en el registro. Intentelo de nuevo más tarde.'),
+                      Icon(Icons.error),
+                    ],
+                  ),
+                  backgroundColor: Colors.red,
                 ),
-                backgroundColor: Colors.red,
-              ),
-            );
+              );
           }
-          
         }
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(
@@ -102,7 +102,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Email',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder:  UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -112,6 +112,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   keyboardType: TextInputType.emailAddress,
                   autocorrect: false,
                   autovalidate: true,
+                  style: TextStyle(color: Colors.white),
                   validator: (_) {
                     return !state.isEmailValid ? 'Email inválido.' : null;
                   },
@@ -123,7 +124,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder:  UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -133,6 +134,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   obscureText: true,
                   autocorrect: false,
                   autovalidate: true,
+                  style: TextStyle(color: Colors.white),
                   validator: (_) {
                     return !state.isPasswordValid
                         ? 'Contraseña no válida.'
@@ -149,7 +151,7 @@ class _RegisterFormState extends State<RegisterForm> {
                     labelText: 'Repite la contraseña',
                     labelStyle: TextStyle(color: Colors.white),
                     hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder:  UnderlineInputBorder(
+                    enabledBorder: UnderlineInputBorder(
                       borderSide: BorderSide(
                           color: Colors.white,
                           width: 1.0,
@@ -159,6 +161,7 @@ class _RegisterFormState extends State<RegisterForm> {
                   obscureText: true,
                   autovalidate: true,
                   autocorrect: false,
+                  style: TextStyle(color: Colors.white),
                   validator: (_) {
                     return !state.isPasswordTheSame
                         ? 'Las contraseñas no coinciden'
@@ -224,21 +227,23 @@ class _RegisterFormState extends State<RegisterForm> {
 
   Future<void> _showRegistrationCompletedDialog() {
     return showDialog<void>(
-    context: context,
-    builder: (BuildContext context) {
-      return AlertDialog(
-        title: Text('Genial!'),
-        content: const Text('Te hemos enviado un correo a tu dirección de email para completar el registro.'),
-        actions: <Widget>[
-          FlatButton(
-            child: Text('Ok'),
-            onPressed: () {
-              BlocProvider.of<NavigatorBloc>(context).add(NavigateToAuthEvent());
-            },
-          ),
-        ],
-      );
-    },
-  );
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Genial!'),
+          content: const Text(
+              'Te hemos enviado un correo a tu dirección de email para completar el registro.'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('Ok'),
+              onPressed: () {
+                BlocProvider.of<NavigatorBloc>(context)
+                    .add(NavigateToAuthEvent());
+              },
+            ),
+          ],
+        );
+      },
+    );
   }
 }
