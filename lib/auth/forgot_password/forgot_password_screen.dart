@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/auth/forgot_password/forgot_password_form.dart';
 import 'package:gtd/auth/login/login_barrel.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
 class ForgotPasswordScreen extends StatelessWidget {

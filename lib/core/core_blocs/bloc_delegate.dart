@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 
+/// Custom implementation of BlocDelegate in order to print in console all the errors, events and transitions.
 class SimpleBlocDelegate extends BlocDelegate {
   @override
   void onEvent(Bloc bloc, Object event) {

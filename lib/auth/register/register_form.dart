@@ -4,6 +4,7 @@ import 'package:gtd/auth/authentication_bloc.dart';
 import 'package:gtd/auth/register/custom_widgets/register_button.dart';
 import 'package:gtd/auth/register/register_barrel.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 
 class RegisterForm extends StatefulWidget {
   State<RegisterForm> createState() => _RegisterFormState();
@@ -92,96 +93,99 @@ class _RegisterFormState extends State<RegisterForm> {
       },
       child: BlocBuilder<RegisterBloc, RegisterState>(
         builder: (context, state) {
-          return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.email, color: Colors.white),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  autocorrect: false,
-                  autovalidate: true,
-                  style: TextStyle(color: Colors.white),
-                  validator: (_) {
-                    return !state.isEmailValid ? 'Email inválido.' : null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    icon: Icon(Icons.lock, color: Colors.white),
-                    labelText: 'Contraseña',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
-                  obscureText: true,
-                  autocorrect: false,
-                  autovalidate: true,
-                  style: TextStyle(color: Colors.white),
-                  validator: (_) {
-                    return !state.isPasswordValid
-                        ? 'Contraseña no válida.'
-                        : null;
-                  },
-                ),
-                TextFormField(
-                  controller: _confirmPassController,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.lock,
-                      color: Colors.white,
-                    ),
-                    labelText: 'Repite la contraseña',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
-                  obscureText: true,
-                  autovalidate: true,
-                  autocorrect: false,
-                  style: TextStyle(color: Colors.white),
-                  validator: (_) {
-                    return !state.isPasswordTheSame
-                        ? 'Las contraseñas no coinciden'
-                        : null;
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      RegisterButton(
-                        onPressed: isRegisterButtonEnabled(state)
-                            ? _onFormSubmitted
-                            : null,
+          return Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.email, color: Colors.white),
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
                       ),
-                    ],
+                    ),
+                    keyboardType: TextInputType.emailAddress,
+                    autocorrect: false,
+                    autovalidate: true,
+                    style: TextStyle(color: Colors.white),
+                    validator: (_) {
+                      return !state.isEmailValid ? 'Email inválido.' : null;
+                    },
                   ),
-                ),
-              ],
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(Icons.lock, color: Colors.white),
+                      labelText: 'Contraseña',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                    ),
+                    obscureText: true,
+                    autocorrect: false,
+                    autovalidate: true,
+                    style: TextStyle(color: Colors.white),
+                    validator: (_) {
+                      return !state.isPasswordValid
+                          ? 'Contraseña no válida.'
+                          : null;
+                    },
+                  ),
+                  TextFormField(
+                    controller: _confirmPassController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.lock,
+                        color: Colors.white,
+                      ),
+                      labelText: 'Repite la contraseña',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                    ),
+                    obscureText: true,
+                    autovalidate: true,
+                    autocorrect: false,
+                    style: TextStyle(color: Colors.white),
+                    validator: (_) {
+                      return !state.isPasswordTheSame
+                          ? 'Las contraseñas no coinciden'
+                          : null;
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        RegisterButton(
+                          onPressed: isRegisterButtonEnabled(state)
+                              ? _onFormSubmitted
+                              : null,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

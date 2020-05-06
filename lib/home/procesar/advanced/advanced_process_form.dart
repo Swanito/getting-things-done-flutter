@@ -7,6 +7,7 @@ import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/capture/capture_state.dart';
 import 'package:gtd/common/attached_image_card.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:gtd/core/models/gtd_element.dart';
 import 'package:gtd/home/elements/element_bloc.dart';
 

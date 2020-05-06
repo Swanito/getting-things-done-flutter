@@ -1,6 +1,5 @@
 import 'package:app_settings/app_settings.dart';
 import 'package:camera/camera.dart';
-import 'package:equatable/equatable.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -11,7 +10,7 @@ import 'package:gtd/auth/register/register_screen.dart';
 import 'package:gtd/capture/camera/camera_screen.dart';
 import 'package:gtd/capture/capture_screen.dart';
 import 'package:gtd/common/splash_screen.dart';
-import 'package:gtd/core/models/gtd_element.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:gtd/core/repositories/local/local_repository.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 import 'package:gtd/core/repositories/repository.dart';
@@ -29,79 +28,6 @@ import 'package:gtd/home/procesar/basic/calendar_screen.dart';
 import 'package:gtd/home/procesar/basic/step_numbers_screen.dart';
 import 'package:gtd/home/procesar/basic/time_screen.dart';
 import 'package:gtd/onboarding/onboarding_screen.dart';
-
-class NavigatorAction extends Equatable {
-  const NavigatorAction();
-
-  @override
-  List<Object> get props => null;
-}
-
-class NavigatorActionPop extends NavigatorAction {}
-
-class NavigateToOnboarding extends NavigatorAction {
-  final UserRepository userRepository;
-
-  NavigateToOnboarding({this.userRepository});
-}
-
-class NavigatorActionPopAll extends NavigatorAction {}
-
-class NavigateToAuthEvent extends NavigatorAction {}
-
-class NavigateToLoginEvent extends NavigatorAction {}
-
-class NavigateToRegisterEvent extends NavigatorAction {}
-
-class NavigateToHome extends NavigatorAction {}
-
-class OpenCaptureScreen extends NavigatorAction {}
-
-class NavigateToProjects extends NavigatorAction {}
-
-class GoToSplashScreen extends NavigatorAction {}
-
-class OpenCamera extends NavigatorAction {}
-
-class NavigateToTrash extends NavigatorAction {}
- 
-class NavigateToWaitingFor extends NavigatorAction {}
-
-class NavigateToReferenced extends NavigatorAction {}
-
-class OpenSettings extends NavigatorAction {}
-
-class OpenSystemSettings extends NavigatorAction {}
-
-class OpenProcessScreen extends NavigatorAction {
-  final GTDElement elementToBeProcessed;
-
-  OpenProcessScreen({this.elementToBeProcessed});
-}
-
-class GoToProcessStepScreen extends NavigatorAction {
-  final GTDElement elementBeingProcessed;
-  final UserRepository userRepository;
-  GoToProcessStepScreen({this.elementBeingProcessed, this.userRepository});
-}
-
-class GoToTimeStepScreen extends NavigatorAction {
-  final GTDElement elementBeingProcessed;
-  final UserRepository userRepository;
-  GoToTimeStepScreen({this.elementBeingProcessed, this.userRepository});
-}
-
-class GoToAsigneeStepScreen extends NavigatorAction {
-  final GTDElement elementBeingProcessed;
-  final UserRepository userRepository;
-  GoToAsigneeStepScreen({this.elementBeingProcessed, this.userRepository});
-}
-
-class GoToCalendarStepScreen extends NavigatorAction {
-  final GTDElement elementBeingProcessed;
-  final UserRepository userRepository;
-  GoToCalendarStepScreen({this.elementBeingProcessed, this.userRepository});
-}
 
 class NavigatorBloc extends Bloc<NavigatorAction, dynamic> {
   final GlobalKey<NavigatorState> navigatorKey;

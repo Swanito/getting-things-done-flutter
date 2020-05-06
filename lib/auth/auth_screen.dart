@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:lottie/lottie.dart';
 
 class AuthScreen extends StatelessWidget {
@@ -12,7 +13,7 @@ class AuthScreen extends StatelessWidget {
       child: Padding(
         padding: EdgeInsets.all(40.0),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             SizedBox(height: size.height / 12),
             Text(
@@ -27,7 +28,6 @@ class AuthScreen extends StatelessWidget {
             ),
             SizedBox(height: size.height / 12),
             Center(child: lottie),
-            SizedBox(height: size.height / 12),
             Expanded(
               child: Padding(
                 padding:
@@ -49,7 +49,7 @@ class AuthScreen extends StatelessWidget {
               child: Text(
                 'Utilizando el servicio de Do Things aceptas los términos y condiciones del servicio.',
                 style: TextStyle(fontSize: 12),
-                textAlign: TextAlign.center,
+                textAlign: TextAlign.center
               ),
             ),
           ],

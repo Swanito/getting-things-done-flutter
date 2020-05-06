@@ -6,6 +6,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gtd/capture/capture_bloc.dart';
 import 'package:gtd/capture/capture_event.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 

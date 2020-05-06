@@ -1,27 +1,13 @@
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:gtd/core/repositories/repository.dart';
 
-class UserRepository extends Repository {
+class UserRepository extends UserAbstractRepository {
   final FirebaseAuth _firebaseAuth;
-  final GoogleSignIn _googleSignIn;
 
-  UserRepository({FirebaseAuth firebaseAuth, GoogleSignIn googleSignin})
-      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance,
-        _googleSignIn = googleSignin ?? GoogleSignIn();
+  UserRepository({FirebaseAuth firebaseAuth})
+      : _firebaseAuth = firebaseAuth ?? FirebaseAuth.instance;
 
-  Future<FirebaseUser> signInWithGoogle() async {
-    final GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    final GoogleSignInAuthentication googleAuth =
-        await googleUser.authentication;
-    final AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    await _firebaseAuth.signInWithCredential(credential);
-    return _firebaseAuth.currentUser();
-  }
-
+  /// Performs a login in Firebase using the email and password
   Future<void> signInWithCredentials(String email, String password) {
     return _firebaseAuth.signInWithEmailAndPassword(
       email: email,
@@ -29,6 +15,7 @@ class UserRepository extends Repository {
     );
   }
 
+  /// Creates an account in Firebase using the email and password
   Future<void> signUp({String email, String password}) async {
     return await _firebaseAuth.createUserWithEmailAndPassword(
       email: email,
@@ -36,35 +23,41 @@ class UserRepository extends Repository {
     );
   }
 
+  /// Sends the verification email to the given `FirebaseUser`
   Future<void> sendEmailVerificationLink(FirebaseUser user) async {
     return await user.sendEmailVerification();
   }
 
+  /// Ends the Firebase sessions
   Future<void> signOut() async {
     return Future.wait([
       _firebaseAuth.signOut(),
-      _googleSignIn.signOut(),
     ]);
   }
 
+  /// Returns `true` if the user is logged in, `false` if not.
   Future<bool> isSignedIn() async {
     final currentUser = await _firebaseAuth.currentUser();
     return currentUser != null;
   }
 
+  /// Get the email from the current user
   Future<String> getUser() async {
     return (await _firebaseAuth.currentUser()).email;
   }
 
+  /// Get the full profile from the current user.
   Future<FirebaseUser> getUserProfile() async {
     return (await _firebaseAuth.currentUser());
   }
 
+  /// Returns `true` if the email is verified, `false` if not.
   Future<bool> isEmailVerified() async {
     final currentUser = await _firebaseAuth.currentUser();
     return currentUser.isEmailVerified;
   }
 
+  /// Send the password reset email.
   Future<void> resetPassword(String email) async {
     await _firebaseAuth.sendPasswordResetEmail(email: email);
   }

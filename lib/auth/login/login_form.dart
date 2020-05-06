@@ -6,6 +6,7 @@ import 'package:gtd/auth/login/custom_widgets/login_button.dart';
 import 'package:gtd/auth/login/custom_widgets/register_button.dart';
 import 'package:gtd/auth/login/login_barrel.dart';
 import 'package:gtd/core/core_blocs/navigator_bloc.dart';
+import 'package:gtd/core/core_blocs/navigator_event.dart';
 import 'package:gtd/core/repositories/local/local_state_bloc.dart';
 import 'package:gtd/core/repositories/remote/user_repository.dart';
 
@@ -110,77 +111,80 @@ class _LoginFormState extends State<LoginForm> {
       },
       child: BlocBuilder<LoginBloc, LoginState>(
         builder: (context, state) {
-          return Form(
-            child: Column(
-              children: <Widget>[
-                TextFormField(
-                  controller: _emailController,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.email,
-                      color: Colors.white,
-                    ),
-                    labelText: 'Email',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
-                  style: TextStyle(color: Colors.white),
-                  keyboardType: TextInputType.emailAddress,
-                  autovalidate: true,
-                  autocorrect: false,
-                  validator: (_) {
-                    return !state.isEmailValid ? 'Email no válido.' : null;
-                  },
-                ),
-                TextFormField(
-                  controller: _passwordController,
-                  decoration: InputDecoration(
-                    icon: Icon(
-                      Icons.lock,
-                      color: Colors.white,
-                    ),
-                    labelText: 'Contraseña',
-                    labelStyle: TextStyle(color: Colors.white),
-                    hintStyle: TextStyle(color: Colors.white),
-                    enabledBorder: UnderlineInputBorder(
-                      borderSide: BorderSide(
-                          color: Colors.white,
-                          width: 1.0,
-                          style: BorderStyle.solid),
-                    ),
-                  ),
-                  obscureText: true,
-                  autovalidate: true,
-                  autocorrect: false,
-                  style: TextStyle(color: Colors.white),
-                  validator: (_) {
-                    return !state.isPasswordValid
-                        ? 'Contraseña no válida.'
-                        : null;
-                  },
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: <Widget>[
-                      LoginButton(
-                        onPressed: isLoginButtonEnabled(state)
-                            ? _onFormSubmitted
-                            : null,
+          return Padding(
+            padding: const EdgeInsets.all(30.0),
+            child: Form(
+              child: Column(
+                children: <Widget>[
+                  TextFormField(
+                    controller: _emailController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.email,
+                        color: Colors.white,
                       ),
-                      CreateAccountButton(userRepository: _userRepository),
-                      ForgotPasswordButton(userRepository: _userRepository),
-                    ],
+                      labelText: 'Email',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                    ),
+                    style: TextStyle(color: Colors.white),
+                    keyboardType: TextInputType.emailAddress,
+                    autovalidate: true,
+                    autocorrect: false,
+                    validator: (_) {
+                      return !state.isEmailValid ? 'Email no válido.' : null;
+                    },
                   ),
-                ),
-              ],
+                  TextFormField(
+                    controller: _passwordController,
+                    decoration: InputDecoration(
+                      icon: Icon(
+                        Icons.lock,
+                        color: Colors.white,
+                      ),
+                      labelText: 'Contraseña',
+                      labelStyle: TextStyle(color: Colors.white),
+                      hintStyle: TextStyle(color: Colors.white),
+                      enabledBorder: UnderlineInputBorder(
+                        borderSide: BorderSide(
+                            color: Colors.white,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                      ),
+                    ),
+                    obscureText: true,
+                    autovalidate: true,
+                    autocorrect: false,
+                    style: TextStyle(color: Colors.white),
+                    validator: (_) {
+                      return !state.isPasswordValid
+                          ? 'Contraseña no válida.'
+                          : null;
+                    },
+                  ),
+                  Padding(
+                    padding: EdgeInsets.symmetric(vertical: 20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: <Widget>[
+                        LoginButton(
+                          onPressed: isLoginButtonEnabled(state)
+                              ? _onFormSubmitted
+                              : null,
+                        ),
+                        CreateAccountButton(userRepository: _userRepository),
+                        ForgotPasswordButton(userRepository: _userRepository),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
             ),
           );
         },

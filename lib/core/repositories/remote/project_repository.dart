@@ -8,6 +8,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
   final projectCollection = Firestore.instance.collection('projects');
   String uid;
 
+  /// Creates a [Project] in the Firestore instance.
   @override
   Future<void> createProject({Project project}) async {
     await FirebaseAuth.instance.currentUser().then(
@@ -16,16 +17,19 @@ class ProjectRepositoryImpl implements ProjectRepository {
     return projectCollection.add(project.toEntity().toDocument());
   }
 
+  /// Deletes a [Project] from the Firebase instance.
   @override
   Future<void> deleteProject(Project project) {
     return projectCollection.document(project.id).delete();
   }
 
+  /// Returns the [Project] that matches the given `String` summary. If no [Project] matches an empty `QuerySnapshot` is returned.
   @override
   Future<QuerySnapshot> getProject(String summary) {
     return projectCollection.where('title', isEqualTo: summary).getDocuments();
   }
 
+  /// Returns a `Future` of `Stream` with the `List` of `Project`s for the current user, filtered by the users uid.
   @override
   Future<Stream<List<Project>>> getProjects() async {
     uid = await getCurrentUserId();
@@ -39,6 +43,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
     });
   }
 
+  /// Updates a [Project]
   @override
   Future<void> updateProject({Project project, String id}) {
     return projectCollection
@@ -46,6 +51,7 @@ class ProjectRepositoryImpl implements ProjectRepository {
         .updateData(project.toEntity().toDocument());
   }
 
+  /// Get current users id
   Future<String> getCurrentUserId() async {
     await FirebaseAuth.instance
         .currentUser()
